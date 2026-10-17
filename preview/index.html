@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261018-000803"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261018-001132"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -98,8 +98,10 @@ a { color: var(--ink); text-underline-offset: 3px; }
   position: relative; overflow: hidden; background: var(--ink); color: #fff; min-height: 100vh;
   display: flex; flex-direction: column; justify-content: space-between; padding: 36px 40px 0;
 }
-.login-art .photo { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.login-art .photo { position: absolute; inset: 0; background-size: cover; background-position: center; animation: fadeIn .6s ease-out; }
+.login-art .photo:not([style*="url"]) { display: none; }
 .login-art .photo::after { content: ''; position: absolute; inset: 0; background: rgba(59, 94, 69, .62); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 .login-art > * { position: relative; }
 .login-art .wordmark { height: 30px; color: #fff; }
 .login .login-art .tag { font-weight: 300; font-size: 14px; color: rgba(255,255,255,.8); margin: 10px 0 0; letter-spacing: .3px; }
@@ -559,7 +561,7 @@ const store = {
 const API_URL = window.HUB_API || '';
 const VIA_FETCH = !(window.google && window.google.script && window.google.script.run) && !!API_URL;
 const READ_ACTIONS = { boot: 1, bootstrap: 1, overview: 1, project: 1, activity: 1, previewConnect: 1 };
-function handleRaw(action, raw) {
+function handleRaw(action, raw, sentToken) {
   let res;
   try { res = JSON.parse(raw); } catch (e) {
     throw new Error(VIA_FETCH ? 'Respons server tidak terbaca. Pastikan deploy Apps Script aksesnya "Anyone".' : 'Respons server tidak terbaca.');
@@ -567,7 +569,8 @@ function handleRaw(action, raw) {
   if (res.ok) return res.data;
   const err = new Error(res.message || 'Terjadi kesalahan.');
   err.code = res.code; err.data = res.data;
-  if (res.code === 'AUTH' && action !== 'login') { forceLogout('Sesi habis. Silakan masuk lagi.'); }
+  // sesi habis: cuma kalau permintaan ini dikirim dengan sesi yang masih dipakai (bukan sisa setelah keluar)
+  if (res.code === 'AUTH' && action !== 'login' && action !== 'loginInfo' && S.token && S.token === sentToken) { forceLogout('Sesi habis. Silakan masuk lagi.'); }
   throw err;
 }
 function fetchApi(action, payload, attempt) {
@@ -584,10 +587,11 @@ function fetchApi(action, payload, attempt) {
   });
 }
 function call(action, payload) {
-  if (VIA_FETCH) return fetchApi(action, payload).then(raw => handleRaw(action, raw));
+  const tok = S.token;
+  if (VIA_FETCH) return fetchApi(action, payload).then(raw => handleRaw(action, raw, tok));
   return new Promise((resolve, reject) => {
     google.script.run
-      .withSuccessHandler(raw => { try { resolve(handleRaw(action, raw)); } catch (e) { reject(e); } })
+      .withSuccessHandler(raw => { try { resolve(handleRaw(action, raw, tok)); } catch (e) { reject(e); } })
       .withFailureHandler(e => reject(new Error((e && e.message) || 'Gagal terhubung ke server.')))
       .api(action, payload || {}, S.token);
   });
@@ -756,13 +760,15 @@ function emptyState(title, text, actionHtml, n) {
 // ---------- Login ----------
 function renderLogin(message) {
   document.title = S.studio;
-  const photos = window.HUB_LOGIN_PHOTOS || [];
-  const photo = photos.length ? photos[Math.floor(Math.random() * photos.length)] : '';
+  // foto login (tab Settings > LOGIN_PHOTOS): pakai yang terakhir diketahui, lalu dicek ulang
+  let photos = [];
+  try { photos = JSON.parse(store.get('loginPhotos') || '[]'); } catch (e) {}
+  const photo = photos.length ? coverUrl(photos[Math.floor(Math.random() * photos.length)], 1800) : '';
   const crowd = [[1, 'b-s'], [8, 'b-m'], [3, 'b-s'], [11, 'b-dog'], [6, 'b-s'], [2, 'b-m'], [10, 'b-s']];
   $('#app').innerHTML =
     '<main class="login">' +
       '<section class="login-art" aria-hidden="true">' +
-        (photo ? '<div class="photo" style="background-image:url(\'' + esc(photo) + '\')"></div>' : '') +
+        '<div class="photo"' + (photo ? ' style="background-image:url(\'' + esc(photo) + '\')"' : '') + '></div>' +
         '<div>' + wordmarkSvg(S.studio) + '<p class="tag">Project Hub</p></div>' +
         '<div class="crowd">' + crowd.map(c => buddySvg(c[0], c[1])).join('') + '</div>' +
       '</section>' +
@@ -777,6 +783,18 @@ function renderLogin(message) {
       '</form>' +
       '<div class="login-foot"><span>' + esc(S.studio) + '</span><span>Project Hub</span></div>' +
     '</div></div></main>';
+  call('loginInfo').then(d => {
+    const list = (d && d.photos) || [];
+    store.set('loginPhotos', JSON.stringify(list));
+    const box = $('.login-art .photo');
+    if (!box) return;
+    if (!list.length) { box.style.backgroundImage = ''; return; }
+    if (photo && list.some(u => coverUrl(u, 1800) === photo)) return;
+    const url = coverUrl(list[Math.floor(Math.random() * list.length)], 1800);
+    const img = new Image();
+    img.onload = () => { box.style.backgroundImage = 'url(\'' + url + '\')'; box.classList.add('in'); };
+    img.src = url;
+  }).catch(() => {});
   const email = $('#lg-email');
   (email.value ? $('#lg-pass') : email).focus();
   $('#login-form').addEventListener('submit', async e => {
