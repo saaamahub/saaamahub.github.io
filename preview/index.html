@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-113924"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-115705"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -111,13 +111,22 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .crowd .buddy { flex: none; }
 .crowd .b-s { height: 82%; } .crowd .b-m { height: 92%; } .crowd .b-dog { height: 40%; }
 .login-side { display: grid; place-items: center; padding: 40px 28px; background: var(--paper); }
-.login-box { width: 100%; max-width: 360px; }
+.login-box { width: 100%; max-width: 400px; }
 .login-box .wordmark { height: 24px; color: var(--ink); margin-bottom: 36px; }
 .login h1 { font-size: 32px; line-height: 1.1; font-weight: 700; color: var(--ink); margin: 0 0 8px; letter-spacing: -.4px; }
 .login p { margin: 0 0 26px; color: var(--muted); font-weight: 300; }
 .login form { display: grid; gap: 14px; }
 .login .journey { margin-bottom: 28px; }
 .form-error { color: var(--terra-ink); font-weight: 500; font-size: 14px; min-height: 21px; }
+.auth-tabs { width: 100%; margin: 0 0 18px; }
+.auth-tabs button { flex: 1; padding: 8px 12px; font-size: 14px; }
+.auth-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.auth-grid .field:first-child { grid-column: 1 / -1; }
+.wide-btn { justify-content: center; padding: 10px; width: 100%; }
+.auth-links { display: flex; justify-content: space-between; margin-top: 2px; }
+.link { border: 0; background: none; padding: 0; color: var(--ink); font-weight: 500; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; font-size: 14px; }
+.login .auth-note { font-size: 12px; margin: 6px 0 0; }
+.auth-done { height: 120px; color: var(--ink); margin: 0 0 10px; }
 .login-foot { margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; }
 
 /* ---------- Shell ---------- */
@@ -150,10 +159,15 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .nav-item .pname { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sidebar .muted { color: rgba(255,255,255,.66); }
 .side-foot { margin-top: auto; border-top: 1px solid rgba(255,255,255,.16); padding: 14px 4px 0; display: flex; align-items: center; gap: 10px; }
-.side-foot .who { line-height: 1.25; font-size: 14px; min-width: 0; }
+.side-foot .who { line-height: 1.25; font-size: 14px; min-width: 0; border: 0; background: none; padding: 0; text-align: left; cursor: pointer; color: inherit; }
 .side-foot .who b { display: block; color: #fff; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .me-avatar { border: 0; background: var(--cream); color: var(--ink); width: 40px; height: 40px; border-radius: 50%; flex: none; cursor: pointer; padding: 7px 0 0; overflow: hidden; display: flex; justify-content: center; }
 .me-avatar .buddy { height: 38px; }
+.me-avatar.big { width: 56px; height: 56px; padding-top: 9px; cursor: default; }
+.me-avatar.big .buddy { height: 56px; }
+.profile-head { display: flex; gap: 14px; align-items: center; }
+.profile-head b { display: block; color: var(--ink); font-size: 17px; }
+.profile-head .muted { font-size: 13px; }
 .me-avatar:hover { box-shadow: 0 0 0 3px rgba(255,255,255,.35); }
 .topbar { display: none; }
 .main { min-width: 0; padding: 32px 40px 40px; }
@@ -927,7 +941,7 @@ function emptyState(title, text, actionHtml, n) {
 }
 
 // ---------- Login ----------
-function renderLogin(message) {
+function renderLogin(message, mode, data) {
   document.title = S.studio;
   // foto login (tab Settings > LOGIN_PHOTOS): pakai yang terakhir diketahui, lalu dicek ulang
   let photos = [];
@@ -941,17 +955,8 @@ function renderLogin(message) {
         '<div>' + wordmarkSvg(S.studio) + '<p class="tag">Project Hub</p></div>' +
         '<div class="crowd">' + crowd.map(c => buddySvg(c[0], c[1])).join('') + '</div>' +
       '</section>' +
-      '<div class="login-side"><div class="login-box">' + wordmarkSvg(S.studio) +
-      '<h1>Project Hub</h1>' +
-      '<p>Semua project studio dalam satu tempat. Masuk pakai email yang terdaftar di tim.</p>' +
-      '<form id="login-form" novalidate>' +
-        '<label class="field"><span>Email</span><input class="input" id="lg-email" type="email" autocomplete="email" required value="' + esc(store.get('email') || '') + '"></label>' +
-        '<label class="field"><span>Passcode studio</span><input class="input" id="lg-pass" type="password" autocomplete="current-password" inputmode="numeric" required></label>' +
-        '<div class="form-error" id="lg-error" role="alert">' + esc(message || '') + '</div>' +
-        '<button class="btn primary" type="submit" style="justify-content:center;padding:10px">Masuk</button>' +
-      '</form>' +
-      '<div class="login-foot"><span>' + esc(S.studio) + '</span><span>Project Hub</span></div>' +
-    '</div></div></main>';
+      '<div class="login-side"><div class="login-box" id="auth-box"></div></div></main>';
+  authPanel(mode || 'login', message, data);
   call('loginInfo').then(d => {
     const list = (d && d.photos) || [];
     store.set('loginPhotos', JSON.stringify(list));
@@ -964,21 +969,119 @@ function renderLogin(message) {
     img.onload = () => { box.style.backgroundImage = 'url(\'' + url + '\')'; box.classList.add('in'); };
     img.src = url;
   }).catch(() => {});
-  const email = $('#lg-email');
-  (email.value ? $('#lg-pass') : email).focus();
-  $('#login-form').addEventListener('submit', async e => {
-    e.preventDefault();
-    const btn = e.target.querySelector('button[type=submit]');
-    btn.disabled = true; btn.textContent = 'Memeriksa…';
-    try {
-      const res = await call('login', { email: email.value, passcode: $('#lg-pass').value });
-      S.token = res.token; store.set('token', res.token); store.set('email', email.value.trim());
-      await boot();
-    } catch (err) {
-      $('#lg-error').textContent = err.message;
-      btn.disabled = false; btn.textContent = 'Masuk';
+}
+const authField = (id, label, type, extra) => '<label class="field"><span>' + label + '</span><input class="input" id="' + id + '" type="' + type + '"' + (extra || '') + '></label>';
+const authFoot = () => '<div class="login-foot"><span>' + esc(S.studio) + '</span><span>Project Hub</span></div>';
+/** Panel di halaman masuk: login | register | registered | forgot | reset | setup */
+function authPanel(mode, message, data) {
+  const box = $('#auth-box');
+  if (!box) return;
+  data = data || {};
+  const err = '<div class="form-error" id="lg-error" role="alert">' + esc(message || '') + '</div>';
+  const tabs = '<div class="seg-ctl auth-tabs" role="tablist"><button type="button" role="tab" data-action="auth" data-mode="login" aria-pressed="' + (mode === 'login') + '">Masuk</button>' +
+    '<button type="button" role="tab" data-action="auth" data-mode="register" aria-pressed="' + (mode === 'register') + '">Daftar</button></div>';
+  let html = '', focus = '';
+  if (mode === 'login') {
+    html = wordmarkSvg(S.studio) + '<h1>Project Hub</h1><p>Semua project studio dalam satu tempat.</p>' + tabs +
+      '<form id="auth-form" novalidate>' +
+        authField('lg-email', 'Email atau username', 'text', ' autocomplete="username" autocapitalize="none" required value="' + esc(data.ident || store.get('ident') || store.get('email') || '') + '"') +
+        authField('lg-pass', 'Password', 'password', ' autocomplete="current-password" required') +
+        err + '<button class="btn primary wide-btn" type="submit">Masuk</button>' +
+        '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="forgot">Lupa password?</button></div>' +
+        '<p class="auth-note">Anggota lama yang belum punya password: masuk sekali pakai email + passcode studio, lalu bikin username & password.</p>' +
+      '</form>';
+    focus = (data.ident || store.get('ident') || store.get('email')) ? '#lg-pass' : '#lg-email';
+  } else if (mode === 'register') {
+    html = wordmarkSvg(S.studio) + '<h1>Daftar akun</h1><p>Setelah daftar, admin studio perlu approve dulu sebelum kamu bisa masuk.</p>' + tabs +
+      '<form id="auth-form" novalidate><div class="auth-grid">' +
+        authField('rg-name', 'Nama lengkap', 'text', ' autocomplete="name" required') +
+        authField('rg-code', 'Inisial (2–4 huruf)', 'text', ' maxlength="4" autocapitalize="characters" placeholder="TOK" required') +
+        authField('rg-username', 'Username', 'text', ' autocomplete="username" autocapitalize="none" placeholder="huruf kecil, tanpa spasi" required') +
+        authField('rg-email', 'Email', 'email', ' autocomplete="email" required') +
+        authField('rg-wa', 'Nomor WhatsApp', 'tel', ' autocomplete="tel" inputmode="tel" placeholder="0812…" required') +
+        authField('rg-pass', 'Password (min. 8 karakter)', 'password', ' autocomplete="new-password" required') +
+        authField('rg-pass2', 'Ulangi password', 'password', ' autocomplete="new-password" required') +
+      '</div>' + err + '<button class="btn primary wide-btn" type="submit">Daftar</button></form>';
+    focus = '#rg-name';
+  } else if (mode === 'registered') {
+    html = wordmarkSvg(S.studio) + '<div class="auth-done">' + buddySvg(2) + '</div><h1>Pendaftaran terkirim</h1>' +
+      '<p>Admin studio akan mengecek dan approve akun kamu. Setelah itu kamu bisa masuk pakai username atau email dan password yang tadi dibuat.</p>' +
+      '<button class="btn primary wide-btn" type="button" data-action="auth" data-mode="login">Kembali ke halaman masuk</button>';
+  } else if (mode === 'forgot') {
+    html = wordmarkSvg(S.studio) + '<h1>Lupa password</h1><p>Kode reset 6 angka akan dikirim ke email akun kamu.</p>' +
+      '<form id="auth-form" novalidate>' + authField('fg-ident', 'Email atau username', 'text', ' autocapitalize="none" required value="' + esc(data.ident || '') + '"') +
+      err + '<button class="btn primary wide-btn" type="submit">Kirim kode</button>' +
+      '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="login">← Kembali</button></div></form>';
+    focus = '#fg-ident';
+  } else if (mode === 'reset') {
+    html = wordmarkSvg(S.studio) + '<h1>Bikin password baru</h1><p>Cek email kamu (juga folder Spam), lalu masukkan kodenya di sini.</p>' +
+      '<form id="auth-form" novalidate>' + authField('rs-code', 'Kode dari email', 'text', ' inputmode="numeric" autocomplete="one-time-code" maxlength="6" required') +
+      authField('rs-pass', 'Password baru (min. 8 karakter)', 'password', ' autocomplete="new-password" required') +
+      authField('rs-pass2', 'Ulangi password baru', 'password', ' autocomplete="new-password" required') +
+      err + '<button class="btn primary wide-btn" type="submit">Simpan password</button>' +
+      '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="forgot" data-ident="' + esc(data.ident || '') + '">Kirim ulang kode</button></div></form>';
+    focus = '#rs-code';
+  } else if (mode === 'setup') {
+    html = wordmarkSvg(S.studio) + '<h1>Halo, ' + esc(firstName(data.user && data.user.name)) + '</h1><p>Sekarang login nggak pakai passcode bersama lagi. Bikin username & password kamu sendiri.</p>' +
+      '<form id="auth-form" novalidate>' +
+      authField('su-username', 'Username', 'text', ' autocomplete="username" autocapitalize="none" required value="' + esc(String((data.user && data.user.email) || '').split('@')[0].toLowerCase().replace(/[^a-z0-9._]/g, '')) + '"') +
+      authField('su-pass', 'Password (min. 8 karakter)', 'password', ' autocomplete="new-password" required') +
+      authField('su-pass2', 'Ulangi password', 'password', ' autocomplete="new-password" required') +
+      err + '<button class="btn primary wide-btn" type="submit">Simpan & masuk</button></form>';
+    focus = '#su-pass';
+  }
+  box.innerHTML = html + authFoot();
+  if (focus && $(focus)) $(focus).focus();
+  const form = $('#auth-form');
+  if (form) form.addEventListener('submit', e => { e.preventDefault(); authSubmit(mode, data, form); });
+}
+async function authSubmit(mode, data, form) {
+  const v = id => ($(id) ? $(id).value : '').trim();
+  const fail = m => { $('#lg-error').textContent = m; btn.disabled = false; btn.textContent = label; };
+  const btn = form.querySelector('button[type=submit]'), label = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Memproses…';
+  try {
+    if (mode === 'login') {
+      const ident = v('#lg-email');
+      if (!ident || !$('#lg-pass').value) return fail('Isi email/username dan password.');
+      const res = await call('login', { ident: ident, password: $('#lg-pass').value });
+      store.set('ident', ident);
+      if (res.needSetup) { authPanel('setup', '', { setupToken: res.setupToken, user: res.user }); return; }
+      return finishLogin(res);
     }
-  });
+    if (mode === 'setup') {
+      if ($('#su-pass').value !== $('#su-pass2').value) return fail('Password dan ulangannya beda.');
+      const res = await call('setupAccount', { setupToken: data.setupToken, username: v('#su-username'), password: $('#su-pass').value });
+      store.set('ident', v('#su-username'));
+      return finishLogin(res);
+    }
+    if (mode === 'register') {
+      if ($('#rg-pass').value !== $('#rg-pass2').value) return fail('Password dan ulangannya beda.');
+      await call('register', { name: v('#rg-name'), code: v('#rg-code'), username: v('#rg-username'), email: v('#rg-email'), whatsapp: v('#rg-wa'), password: $('#rg-pass').value });
+      store.set('ident', v('#rg-username').toLowerCase());
+      authPanel('registered');
+      return;
+    }
+    if (mode === 'forgot') {
+      const ident = v('#fg-ident');
+      if (!ident) return fail('Isi email atau username.');
+      await call('requestReset', { ident: ident });
+      authPanel('reset', '', { ident: ident });
+      return;
+    }
+    if (mode === 'reset') {
+      if ($('#rs-pass').value !== $('#rs-pass2').value) return fail('Password dan ulangannya beda.');
+      const res = await call('resetPassword', { ident: data.ident, code: v('#rs-code'), password: $('#rs-pass').value });
+      if (res.pending) { authPanel('login', 'Password tersimpan. Akun kamu masih menunggu approve admin.', { ident: data.ident }); return; }
+      return finishLogin(res);
+    }
+  } catch (err) { fail(err.message); }
+}
+async function finishLogin(res) {
+  S.token = res.token; store.set('token', res.token);
+  if (res.user && res.user.email) store.set('email', res.user.email);
+  await boot();
+  call('onboard').catch(() => {}); // pertama kali masuk: sheet & folder project otomatis di-share
 }
 function clearLocalData() {
   try { Object.keys(localStorage).filter(k => k.indexOf(PREFIX + 'p:') === 0 || k === PREFIX + 'boot').forEach(k => localStorage.removeItem(k)); } catch (e) {}
@@ -1282,8 +1385,8 @@ function renderSidebar() {
         (S.ui.showArchived ? 'Sembunyikan arsip' : 'Lihat arsip') + '<span class="count num">' + archived.length + '</span></button>' +
         (S.ui.showArchived ? '<nav class="nav">' + archived.map(item).join('') + '</nav>' : '') : '') +
     '</div>' +
-    '<div class="side-foot"><button type="button" class="me-avatar" data-action="pick-buddy" title="Ganti buddy kamu" aria-label="Ganti buddy kamu">' + buddySvg(memberBuddy(S.user.code)) + '</button>' +
-      '<span class="who"><b>' + esc(S.user.name) + '</b><span class="muted">' + esc(S.user.role || 'Tim') + '</span></span>' +
+    '<div class="side-foot"><button type="button" class="me-avatar" data-action="pick-buddy" title="Profil kamu" aria-label="Buka profil">' + buddySvg(memberBuddy(S.user.code)) + '</button>' +
+      '<button type="button" class="who" data-action="pick-buddy"><b>' + esc(S.user.name) + '</b><span class="muted">' + esc(S.user.code) + (S.user.role ? ' · ' + esc(S.user.role) : '') + '</span></button>' +
       '<button type="button" class="btn small ghost" data-action="logout" style="margin-left:auto">Keluar</button></div>' +
     '<label class="theme-pick">Tampilan<select data-change="theme" aria-label="Mode tampilan">' +
       THEMES.map(t => '<option value="' + t[0] + '"' + (themePref() === t[0] ? ' selected' : '') + '>' + t[1] + '</option>').join('') + '</select></label>';
@@ -2739,14 +2842,70 @@ function openColorPop(btn) {
 document.addEventListener('click', e => { if (!e.target.closest('#color-pop, [data-action=pick-color]')) closeColorPop(); });
 
 // ---------- Pilih buddy (avatar) ----------
-function openBuddyPicker() {
-  const cur = memberBuddy(S.user.code);
-  mountDrawer('Pilih buddy kamu',
-    '<p class="wide muted" style="margin:0">Buddy ini muncul di samping kode ' + esc(S.user.code) + ' di semua project, beban kerja, dan aktivitas.</p>' +
+// ---------- Profil ----------
+function openProfile() {
+  const u = S.user;
+  const cur = memberBuddy(u.code);
+  const f = (id, label, val, extra) => '<label class="field' + (extra && extra.wide ? ' wide' : '') + '"><span>' + label + '</span><input class="input" id="' + id + '" value="' + esc(val || '') + '"' + ((extra && extra.attrs) || '') + '></label>';
+  const wrap = mountDrawer('Profil kamu',
+    '<div class="wide profile-head"><span class="me-avatar big">' + buddySvg(cur) + '</span><div><b>' + esc(u.name) + '</b><span class="muted">' + esc(u.email) + '</span></div></div>' +
+    f('pf-name', 'Nama', u.name, { wide: 1, attrs: ' autocomplete="name"' }) +
+    f('pf-code', 'Inisial (PIC)', u.code, { attrs: ' maxlength="4" autocapitalize="characters"' }) +
+    f('pf-username', 'Username', u.username, { attrs: ' autocapitalize="none" autocomplete="username"' }) +
+    f('pf-wa', 'Nomor WhatsApp', '', { attrs: ' inputmode="tel" placeholder="Memuat…"' }) +
+    '<label class="field"><span>Email</span><input class="input" value="' + esc(u.email) + '" disabled></label>' +
+    '<p class="wide muted" style="margin:0;font-size:13px">Kalau inisial diganti, semua PIC lama atas nama kamu di setiap sheet project ikut diganti.</p>' +
+    '<p class="sub-head wide">Buddy kamu</p>' +
     '<div class="buddy-grid">' + Array.from({ length: BUDDY_COUNT }, (_, i) => i + 1).map(n =>
-      '<button type="button" class="buddy-opt" data-action="choose-buddy" data-n="' + n + '" aria-pressed="' + (n === cur) + '" aria-label="Buddy ' + n + '">' + buddySvg(n) + '</button>').join('') + '</div>',
-    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Tutup</button>');
-  drawerState = { kind: 'buddy' };
+      '<button type="button" class="buddy-opt" data-action="profile-buddy" data-n="' + n + '" aria-pressed="' + (n === cur) + '" aria-label="Buddy ' + n + '">' + buddySvg(n) + '</button>').join('') + '</div>' +
+    '<p class="sub-head wide">Ganti password</p>' +
+    '<label class="field"><span>Password sekarang</span><input class="input" id="pf-cur" type="password" autocomplete="current-password"></label>' +
+    '<label class="field"><span>Password baru (min. 8)</span><input class="input" id="pf-new" type="password" autocomplete="new-password"></label>' +
+    '<div class="form-error wide" id="pf-error" role="alert"></div>',
+    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Batal</button><button type="submit" class="btn primary">Simpan profil</button>');
+  drawerState = { kind: 'profile', buddy: cur };
+  call('profile').then(p => {
+    const wa = $('#pf-wa');
+    if (wa) { wa.placeholder = '0812…'; if (!wa.value) wa.value = p.whatsapp ? '+' + p.whatsapp : ''; wa.dataset.loaded = '1'; }
+    const un = $('#pf-username'); if (un && !un.value) un.value = p.username || '';
+  }).catch(() => { const wa = $('#pf-wa'); if (wa) wa.placeholder = '0812…'; });
+  wrap.querySelector('form').addEventListener('submit', saveProfile);
+}
+async function saveProfile(e) {
+  e.preventDefault();
+  const u = S.user, st = drawerState || {};
+  const val = id => ($(id) ? $(id).value.trim() : '');
+  const fields = {};
+  if (val('#pf-name') !== u.name) fields.name = val('#pf-name');
+  if (val('#pf-code').toUpperCase() !== u.code) fields.code = val('#pf-code').toUpperCase();
+  if (val('#pf-username').toLowerCase() !== (u.username || '') && val('#pf-username')) fields.username = val('#pf-username').toLowerCase();
+  if ($('#pf-wa') && $('#pf-wa').dataset.loaded) fields.whatsapp = val('#pf-wa');
+  if (st.buddy && st.buddy !== memberBuddy(u.code)) fields.buddy = st.buddy;
+  if ($('#pf-new').value) { fields.newPassword = $('#pf-new').value; fields.currentPassword = $('#pf-cur').value; }
+  const btn = e.target.querySelector('button[type=submit]');
+  btn.disabled = true; btn.textContent = fields.code ? 'Mengganti inisial di semua project…' : 'Menyimpan…';
+  try {
+    const res = await call('updateProfile', { fields: fields });
+    const oldCode = u.code;
+    S.user = Object.assign({}, S.user, res.user);
+    const me = S.team.find(t => t.email === S.user.email || t.code === oldCode);
+    if (me) Object.assign(me, { code: S.user.code, name: S.user.name, buddy: S.user.buddy, username: S.user.username });
+    closeDrawer();
+    if (fields.code) {
+      // PIC di semua project berubah: data project yang tersimpan di browser dibuang dan diambil ulang
+      try { Object.keys(localStorage).filter(k => k.indexOf(PREFIX + 'p:') === 0).forEach(k => localStorage.removeItem(k)); } catch (err) {}
+      S.cache = {}; S.cacheAt = {}; S.overviewAt = 0;
+      const n = (res.renamed && res.renamed.projects || []).reduce((a, x) => a + x.cells, 0);
+      toast('Inisial diganti ke ' + S.user.code + (n ? ' (' + n + ' isian PIC di semua project ikut diganti).' : '.'));
+      refreshBootstrap().catch(() => {});
+      if (S.view === 'project' && S.projectId) openProject(S.projectId, S.tab, true); else repaintOverviewViews(true);
+    } else toast('Profil tersimpan.');
+    saveBootCache(); renderSidebar();
+    if (!fields.code) rerenderView();
+  } catch (err) {
+    btn.disabled = false; btn.textContent = 'Simpan profil';
+    const box = $('#pf-error'); if (box) box.textContent = err.message; else handleError(err);
+  }
 }
 function chooseBuddy(n) {
   if (!n || n === S.user.buddy) { closeDrawer(); return; }
@@ -2861,7 +3020,13 @@ document.addEventListener('click', async e => {
       break;
     }
     case 'close-drawer': closeDrawer(); break;
-    case 'pick-buddy': closeNav(); openBuddyPicker(); break;
+    case 'pick-buddy': closeNav(); openProfile(); break;
+    case 'auth': authPanel(el.dataset.mode, '', { ident: el.dataset.ident || ($('#lg-email') ? $('#lg-email').value.trim() : '') || ($('#fg-ident') ? $('#fg-ident').value.trim() : '') }); break;
+    case 'profile-buddy': {
+      document.querySelectorAll('.buddy-opt').forEach(b => b.setAttribute('aria-pressed', String(b === el)));
+      if (drawerState) drawerState.buddy = Number(el.dataset.n);
+      break;
+    }
     case 'dr-sel': { const k = el.dataset.key; if (DR.sel.has(k)) DR.sel.delete(k); else DR.sel.add(k); renderTab(); break; }
     case 'dr-sel-group': {
       const g = drGroups().find(x => x.name === el.dataset.series);
