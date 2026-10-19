@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-134839"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-135505"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -304,6 +304,12 @@ input[type=range] { accent-color: var(--accent); }
 .swatch[aria-pressed="true"], .swatch:has(input:checked) { box-shadow: 0 0 0 2px var(--paper), 0 0 0 4px var(--ink); }
 .swatch input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
 .color-field { border: 0; padding: 0; margin: 0; }
+.drive-mode { display: grid; gap: 8px; }
+.radio-card { display: flex; gap: 10px; align-items: flex-start; border: 1px solid var(--line-strong); padding: 10px 12px; cursor: pointer; }
+.radio-card:has(input:checked) { border-color: var(--accent); background: var(--cream); }
+.radio-card input { margin-top: 3px; accent-color: var(--accent); }
+.radio-card b { display: block; color: var(--ink); font-weight: 600; font-size: 14px; }
+.radio-card span span { font-size: 13px; color: var(--muted); font-weight: 300; }
 .color-field legend { font-size: 13px; font-weight: 500; color: var(--muted); padding: 0; margin-bottom: 6px; }
 .swatches { display: flex; flex-wrap: wrap; gap: 10px; }
 .pc-sage  { background: #DCE6DD !important; color: #2E4A36 !important; }
@@ -2592,7 +2598,9 @@ const SCHEMA = {
     { k: 'Name', label: 'Nama', t: 'text', req: 1, wide: 1, hint: 'Canva_002_20261013' },
     { k: 'Link', label: 'Link', t: 'url', wide: 1 }, { k: 'PDF', label: 'Link PDF (kalau seksinya punya kolom PDF)', t: 'url', wide: 1 }] },
   newproject: { title: 'project', fields: INFO_FIELDS.filter(f => f.k !== 'Drive Folder')
-    .map(f => f.k === 'Project Code' ? Object.assign({}, f, { hint: 'Kosongkan untuk dibuat otomatis' }) : f) },
+    .map(f => f.k === 'Project Code' ? Object.assign({}, f, { hint: 'Kosongkan untuk dibuat otomatis' }) : f)
+    .concat([{ k: 'Drive Mode', label: 'MAIN DRIVE', t: 'drivemode', wide: 1 },
+      { k: 'Drive Folder', label: 'Link folder MAIN DRIVE yang udah ada', t: 'url', wide: 1, hint: 'https://drive.google.com/drive/folders/…' }]) },
 };
 function schemaFields(kind) { const f = SCHEMA[kind].fields; return typeof f === 'function' ? f() : f; }
 function fieldHtml(f, value) {
@@ -2600,6 +2608,14 @@ function fieldHtml(f, value) {
   const id = 'f-' + f.k.replace(/\W+/g, '-');
   const label = esc(f.label) + (f.req ? ' *' : '');
   let control;
+  if (f.t === 'drivemode') {
+    const cur = v || 'new';
+    return '<fieldset class="field wide color-field drive-mode"><legend>' + label + '</legend>' +
+      [['new', 'Bikin folder baru otomatis', 'Folder NAMA PROJECT di 002 WORKING, isinya salinan 000 FOLDER TEMP'],
+       ['link', 'Pakai folder yang udah ada', 'Tempel link folder project di Drive']].map(o =>
+        '<label class="radio-card"><input type="radio" name="' + esc(f.k) + '" value="' + o[0] + '" data-change="drive-mode"' + (cur === o[0] ? ' checked' : '') + '>' +
+        '<span><b>' + o[1] + '</b><span>' + o[2] + '</span></span></label>').join('') + '</fieldset>';
+  }
   if (f.t === 'color') {
     return '<fieldset class="field' + (f.wide ? ' wide' : '') + ' color-field"><legend>' + label + '</legend><div class="swatches">' +
       [['', 'Tanpa warna']].concat(PROJECT_COLORS).map(c => '<label class="swatch' + (c[0] ? ' pc-' + c[0] : ' none') + '" title="' + esc(c[1]) + '">' +
@@ -2655,13 +2671,14 @@ function openDrawer(kind, row, defaults) {
     '<div class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title"><header><h2 id="drawer-title">' + esc(title) + '</h2>' +
     '<button type="button" class="x" data-action="close-drawer" aria-label="Tutup">×</button></header>' +
     '<form id="drawer-form" novalidate><div class="body">' + schemaFields(kind).map(f => fieldHtml(f, values[f.k])).join('') + datalists() +
-    (kind === 'newproject' ? '<p class="muted wide" style="margin:0;font-size:14px">Sistem akan bikin folder project di 002 WORKING (isi folder dari 000 FOLDER TEMP), menyimpan dashboard GSheets di dalamnya, mengisi link MAIN DRIVE, Site Photo, Dimension, dan Data From Client, lalu share ke semua email tim.</p>' : '') +
+    (kind === 'newproject' ? '<p class="muted wide" id="np-note" style="margin:0;font-size:14px"></p>' : '') +
     '</div><footer>' +
       (isNew ? '' : '<button type="button" class="btn danger ghost" data-action="delete-row">Hapus</button>') +
       '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Batal</button>' +
       '<button type="submit" class="btn primary">' + (kind === 'newproject' ? 'Bikin project' : 'Simpan') + '</button>' +
     '</footer></form></div>';
   document.body.appendChild(wrap);
+  if (kind === 'newproject') driveModeUi();
   const first = wrap.querySelector('.input, .select, .area');
   if (first) first.focus();
   $('#drawer-form').addEventListener('submit', submitDrawer);
@@ -2683,6 +2700,19 @@ function mountDrawer(title, bodyHtml, footerHtml) {
   if (replacing) wrap.querySelector('.drawer').style.animation = 'none';
   document.body.appendChild(wrap);
   return wrap;
+}
+
+/** Form project baru: tampilkan kolom link hanya kalau pakai folder yang sudah ada. */
+function driveModeUi() {
+  const form = $('#drawer-form');
+  if (!form) return;
+  const mode = (form.querySelector('input[name="Drive Mode"]:checked') || { value: 'new' }).value;
+  const link = form.querySelector('#f-Drive-Folder');
+  if (link) link.closest('.field').hidden = mode !== 'link';
+  const note = $('#np-note');
+  if (note) note.textContent = mode === 'link'
+    ? 'Dashboard GSheets disimpan di folder itu. Link MAIN DRIVE diisi, dan subfolder Site Photo, Dimension, Data From Client di dalamnya otomatis ditautkan kalau ketemu. Folder & sheet di-share ke semua email tim.'
+    : 'Sistem akan bikin folder project di 002 WORKING (isi folder dari 000 FOLDER TEMP), menyimpan dashboard GSheets di dalamnya, mengisi link MAIN DRIVE, Site Photo, Dimension, dan Data From Client, lalu share ke semua email tim.';
 }
 
 /** "+ Baru": bikin project dari template, atau import dashboard GSheets yang sudah ada. */
@@ -2997,6 +3027,11 @@ async function submitDrawer(e) {
   btn.disabled = true; btn.textContent = st.kind === 'newproject' ? 'Menyiapkan sheet…' : 'Menyimpan…';
   try {
     if (st.kind === 'newproject') {
+      if (data['Drive Mode'] === 'link' && !/drive\.google\.com\/.*(folders\/|id=)/.test(data['Drive Folder'] || '')) {
+        btn.disabled = false; btn.textContent = 'Bikin project';
+        toast('Tempel link folder Google Drive (yang ada /folders/…).', { error: true }); return;
+      }
+      if (data['Drive Mode'] !== 'link') delete data['Drive Folder'];
       const res = await call('createProject', { fields: data });
       closeDrawer();
       invalidateOverview(); await refreshBootstrap();
@@ -3189,6 +3224,7 @@ document.addEventListener('change', e => {
   } else if (el.dataset.change === 'dr-bulk') { drBulkSet(el.dataset.f, el.value);
   } else if (el.dataset.change === 'dr-move') { if (el.value) { const t = el.value.split('\u0001'); drMove(drSelected(), t[0], t[1], null); }
   } else if (el.dataset.change === 'dr-dup') { drDuplicate(el.value);
+  } else if (el.dataset.change === 'drive-mode') { driveModeUi();
   } else if (el.dataset.change === 'theme') {
     store.set('theme', el.value); applyTheme();
   } else if (el.dataset.change === 'task-pic') {
