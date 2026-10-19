@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <link rel="manifest" href="manifest.webmanifest">
@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-153931"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-194058"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -169,6 +169,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .side-foot { margin-top: auto; border-top: 1px solid rgba(255,255,255,.16); padding: 14px 4px 0; display: flex; align-items: center; gap: 10px; }
 .side-foot .who { line-height: 1.25; font-size: 14px; min-width: 0; border: 0; background: none; padding: 0; text-align: left; cursor: pointer; color: inherit; }
 .side-foot .who b { display: block; color: #fff; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.side-foot .who .muted { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .me-avatar { border: 0; background: var(--cream); color: var(--ink); width: 40px; height: 40px; border-radius: 50%; flex: none; cursor: pointer; padding: 7px 0 0; overflow: hidden; display: flex; justify-content: center; }
 .me-avatar .buddy { height: 38px; }
 .me-avatar.big { width: 56px; height: 56px; padding-top: 9px; cursor: default; }
@@ -237,7 +238,51 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .row .sub { font-size: 13px; color: var(--muted); font-weight: 300; }
 .thead { font-size: 11px; font-weight: 600; color: var(--muted); padding: 0 6px 8px; display: grid; gap: 14px; letter-spacing: 1px; text-transform: uppercase; }
 
-.proj-row, .proj-head { grid-template-columns: minmax(180px, 1.4fr) minmax(220px, 2fr) 90px 80px 80px 60px; }
+.proj-row, .proj-head { grid-template-columns: 112px minmax(160px, 1.3fr) minmax(150px, 1.1fr) 104px 56px minmax(170px, 1.5fr) 72px 44px 44px; }
+.ov-scroll { overflow-x: auto; margin: 0 -6px; padding: 0 6px; }
+.ov-table { min-width: 1024px; }
+.proj-row { align-items: start; }
+.proj-row .journey-wrap { flex-direction: column; align-items: stretch; gap: 6px; padding-top: 4px; }
+.proj-row .journey-wrap .journey { min-width: 0; }
+.proj-row .journey-wrap .stage-name { width: auto; font-weight: 500; }
+.proj-row .c-draw, .proj-row .c-rev, .proj-row .c-late, .proj-row .c-pic { padding-top: 4px; }
+.status-count { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+.status-count span, .nav-group { display: inline-flex; align-items: center; gap: 6px; }
+.sdot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex: none; }
+.notes-btn { all: unset; display: block; width: 100%; cursor: text; border-radius: 4px; padding: 2px 4px; margin: -2px -4px; box-sizing: border-box; }
+.notes-btn:hover { background: var(--hover); }
+.notes-btn:focus-visible { outline: 2px solid var(--accent); }
+.notes-list { margin: 0; padding-left: 16px; font-size: 13px; line-height: 1.45; color: var(--ink); }
+.notes-list li { overflow-wrap: anywhere; }
+.notes-empty { font-size: 13px; opacity: 0; }
+.proj-row:hover .notes-empty, .notes-btn:focus-visible .notes-empty { opacity: 1; }
+.meta-pop { position: absolute; z-index: 70; background: var(--paper); border: 1px solid var(--line-strong); box-shadow: var(--shadow-panel); padding: 12px; width: min(360px, calc(100vw - 16px)); display: grid; gap: 8px; }
+.meta-pop b { color: var(--ink); font-size: 14px; }
+.meta-pop .area { min-height: 120px; }
+.pop-actions { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.pop-actions .spacer { flex: 1; }
+.pill-select.ps, .pill-select.pp { font-weight: 600; font-size: 12.5px; padding-left: 9px; }
+.ps-going { background-color: #D6E8D0 !important; color: #2F6B3A !important; }
+.ps-waiting { background-color: #F1D9E3 !important; color: #8A3B5C !important; }
+.ps-delayed { background-color: #D7E3F2 !important; color: #2F5683 !important; }
+.ps-inactive { background-color: #F0DCCB !important; color: #8A4B22 !important; }
+.ps-completed { background-color: #E3E3DE !important; color: #55554F !important; }
+.sdot.ps-going { background: #4E9A5B !important; } .sdot.ps-waiting { background: #B5577D !important; } .sdot.ps-delayed { background: #4B7BB5 !important; }
+.sdot.ps-inactive { background: #B8692F !important; } .sdot.ps-completed { background: #8C8C84 !important; }
+.pp-very-high { background-color: #F6D3CF !important; color: #A1281B !important; }
+.pp-high { background-color: #F8DFC6 !important; color: #A24B0E !important; }
+.pp-medium { background-color: #F3E6B8 !important; color: #6E5710 !important; }
+.pp-low { background-color: #D6E8D0 !important; color: #2F6B3A !important; }
+.pp-very-low { background-color: #D7E3F2 !important; color: #2F5683 !important; }
+.pp-none { color: var(--muted) !important; }
+.nav-group { font-size: 10.5px; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,.6); margin: 10px 8px 2px; }
+.nav-group:first-child { margin-top: 2px; }
+.side-status { width: calc(100% - 16px); margin: 8px 8px 4px; font-size: 13px; padding: 5px 8px; background-color: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.18); }
+.side-status option { color: #222; }
+.swatch.custom { display: inline-grid; place-items: center; background: conic-gradient(#e57373, #ffd54f, #81c784, #64b5f6, #ba68c8, #e57373); }
+.swatch.custom .plus { color: #fff; font-weight: 700; font-size: 16px; text-shadow: 0 0 3px rgba(0,0,0,.5); pointer-events: none; }
+.swatch.custom[style] .plus { display: none; }
+.swatch.custom input[type=radio] { display: none; }
 .task-row, .task-head { grid-template-columns: 28px minmax(160px, 1fr) 76px 110px 84px 130px; }
 .dl-row { display: flex; align-items: baseline; gap: 12px; }
 .dl-row > div:first-child { min-width: 0; }
@@ -610,6 +655,16 @@ html[data-theme="dark"] .pc-rose, html[data-theme="forest"] .pc-rose { backgroun
 html[data-theme="dark"] .pc-lilac, html[data-theme="forest"] .pc-lilac { background: #332B48 !important; color: #CDBFEF !important; }
 html[data-theme="dark"] .pc-teal, html[data-theme="forest"] .pc-teal { background: #1F3E3A !important; color: #A6DDD4 !important; }
 html[data-theme="dark"] .pc-olive, html[data-theme="forest"] .pc-olive { background: #353A1E !important; color: #D6DD9E !important; }
+html[data-theme="dark"] .ps-going, html[data-theme="forest"] .ps-going { background-color: #2A4430 !important; color: #A9D8B1 !important; }
+html[data-theme="dark"] .ps-waiting, html[data-theme="forest"] .ps-waiting { background-color: #47283A !important; color: #EDB3CB !important; }
+html[data-theme="dark"] .ps-delayed, html[data-theme="forest"] .ps-delayed { background-color: #233650 !important; color: #AFC8EA !important; }
+html[data-theme="dark"] .ps-inactive, html[data-theme="forest"] .ps-inactive { background-color: #4A3021 !important; color: #F0BE96 !important; }
+html[data-theme="dark"] .ps-completed, html[data-theme="forest"] .ps-completed { background-color: #3A3A36 !important; color: #CFCFC6 !important; }
+html[data-theme="dark"] .pp-very-high, html[data-theme="forest"] .pp-very-high { background-color: #4E2420 !important; color: #F4AFA6 !important; }
+html[data-theme="dark"] .pp-high, html[data-theme="forest"] .pp-high { background-color: #4A3020 !important; color: #F3C391 !important; }
+html[data-theme="dark"] .pp-medium, html[data-theme="forest"] .pp-medium { background-color: #45391A !important; color: #EBD58C !important; }
+html[data-theme="dark"] .pp-low, html[data-theme="forest"] .pp-low { background-color: #2A4430 !important; color: #A9D8B1 !important; }
+html[data-theme="dark"] .pp-very-low, html[data-theme="forest"] .pp-very-low { background-color: #233650 !important; color: #AFC8EA !important; }
 html[data-theme="dark"] .me-avatar, html[data-theme="forest"] .me-avatar { background: #DCE3DC; color: #2E4A36; }
 html[data-theme="dark"] .pill-select, html[data-theme="forest"] .pill-select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23bbb' fill='none' stroke-width='1.5'/%3E%3C/svg%3E"); }
 html[data-theme="dark"] .scrim, html[data-theme="forest"] .scrim { background: rgba(0, 0, 0, .55); }
@@ -623,8 +678,6 @@ html[data-theme="dark"] .load .av, html[data-theme="forest"] .load .av { backgro
 @media (max-width: 1080px) {
   .grid-2 { grid-template-columns: 1fr; }
   .meta { grid-template-columns: repeat(3, minmax(0, auto)); }
-  .proj-row, .proj-head { grid-template-columns: minmax(160px, 1.3fr) minmax(160px, 1.6fr) 80px 70px 70px; }
-  .proj-row > :nth-child(6), .proj-head > :nth-child(6) { display: none; }
   .login { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 820px) {
@@ -661,10 +714,15 @@ html[data-theme="dark"] .load .av, html[data-theme="forest"] .load .av { backgro
   .journey.big { grid-template-columns: repeat(3, 1fr); }
   .section { padding: 14px 14px; }
   .thead { display: none; }
+  .ov-table { min-width: 0; }
   .proj-row { grid-template-columns: 1fr auto; gap: 8px 12px; }
+  .proj-row .proj-name { order: 1; }
+  .proj-row .c-status { order: 2; width: 112px; }
   .proj-row .journey-wrap { grid-column: 1 / -1; order: 3; }
-  .proj-row > :nth-child(n+3):not(.journey-wrap) { display: none; }
-  .proj-row .m-stats { display: flex !important; }
+  .proj-row .c-notes { grid-column: 1 / -1; order: 4; }
+  .proj-row .c-prio, .proj-row .c-pic, .proj-row .c-draw, .proj-row .c-rev, .proj-row .c-late { display: none; }
+  .proj-row .m-stats { display: flex !important; order: 5; }
+  .notes-empty { opacity: 1; }
   .task-row { grid-template-columns: 28px 1fr auto; gap: 6px 10px; }
   .task-row > .c-pic, .task-row > .c-prio { display: none; }
   .task-row > .c-date { grid-column: 2; grid-row: 2; font-size: 13px; }
@@ -707,7 +765,7 @@ html[data-theme="dark"] .load .av, html[data-theme="forest"] .load .av { backgro
 </style>
 </head>
 <body>
-<div id="app"><div class="loading">Memuat…</div></div>
+<div id="app"><div class="loading">Loading…</div></div>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <div class="savebar" id="savebar" role="status" aria-live="polite"><i></i><span></span></div>
 
@@ -731,8 +789,8 @@ const TAB_ORDER = [
   ['tasks', 'Tasks'], ['daily', 'Daily Log'], ['drawings', 'Drawings'],
   ['revisions', 'Revisions'], ['meetings', 'Meetings'], ['files', 'Files'], ['info', 'Info'],
 ];
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-const DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 // versi GitHub (preview) punya awalan sendiri supaya cache-nya nggak campur dengan versi utama
 const PREFIX = window.HUB_STORE_PREFIX || 'saaama:';
@@ -743,7 +801,7 @@ const store = {
 };
 
 // ---------- Mode tampilan (per perangkat) ----------
-const THEMES = [['light', 'Terang'], ['paper', 'Kertas'], ['dark', 'Gelap'], ['forest', 'Hutan'], ['system', 'Ikut sistem']];
+const THEMES = [['light', 'Light'], ['paper', 'Paper'], ['dark', 'Dark'], ['forest', 'Forest'], ['system', 'System']];
 const darkMq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
 function themePref() { const t = store.get('theme'); return THEMES.some(x => x[0] === t) ? t : 'light'; }
 function applyTheme() {
@@ -764,13 +822,13 @@ const READ_ACTIONS = { boot: 1, bootstrap: 1, overview: 1, project: 1, activity:
 function handleRaw(action, raw, sentToken) {
   let res;
   try { res = JSON.parse(raw); } catch (e) {
-    throw new Error(VIA_FETCH ? 'Respons server tidak terbaca. Pastikan deploy Apps Script aksesnya "Anyone".' : 'Respons server tidak terbaca.');
+    throw new Error(VIA_FETCH ? 'Couldn\'t read the server response. Make sure the Apps Script deployment access is "Anyone".' : 'Couldn\'t read the server response.');
   }
   if (res.ok) return res.data;
-  const err = new Error(res.message || 'Terjadi kesalahan.');
+  const err = new Error(res.message || 'Something went wrong.');
   err.code = res.code; err.data = res.data;
   // sesi habis: cuma kalau permintaan ini dikirim dengan sesi yang masih dipakai (bukan sisa setelah keluar)
-  if (res.code === 'AUTH' && action !== 'login' && action !== 'loginInfo' && S.token && S.token === sentToken) { forceLogout('Sesi habis. Silakan masuk lagi.'); }
+  if (res.code === 'AUTH' && action !== 'login' && action !== 'loginInfo' && S.token && S.token === sentToken) { forceLogout('Session expired. Please sign in again.'); }
   throw err;
 }
 function fetchApi(action, payload, attempt) {
@@ -778,12 +836,12 @@ function fetchApi(action, payload, attempt) {
     method: 'POST', redirect: 'follow', cache: 'no-store',
     body: JSON.stringify({ action: action, payload: payload || {}, token: S.token }), // text/plain: tanpa preflight CORS
   }).then(r => {
-    if (!r.ok) throw new Error('Server tidak merespons (' + r.status + ').');
+    if (!r.ok) throw new Error('Server not responding (' + r.status + ').');
     return r.text();
   }).catch(e => {
     // koneksi putus: ulangi sekali, khusus untuk ambil data (bukan simpan, supaya nggak dobel)
     if (READ_ACTIONS[action] && !attempt) return new Promise(res => setTimeout(res, 800)).then(() => fetchApi(action, payload, 1));
-    throw new Error(/Failed to fetch|NetworkError|Load failed/i.test(e.message) ? 'Gagal terhubung ke server. Cek koneksi internet.' : e.message);
+    throw new Error(/Failed to fetch|NetworkError|Load failed/i.test(e.message) ? 'Can\'t reach the server. Check your internet connection.' : e.message);
   });
 }
 function call(action, payload) {
@@ -792,7 +850,7 @@ function call(action, payload) {
   return new Promise((resolve, reject) => {
     google.script.run
       .withSuccessHandler(raw => { try { resolve(handleRaw(action, raw, tok)); } catch (e) { reject(e); } })
-      .withFailureHandler(e => reject(new Error((e && e.message) || 'Gagal terhubung ke server.')))
+      .withFailureHandler(e => reject(new Error((e && e.message) || 'Can\'t reach the server.')))
       .api(action, payload || {}, S.token);
   });
 }
@@ -846,10 +904,10 @@ function fmtDate(v, withYear) {
 function relDay(v) {
   if (!isYmd(v)) return fmtDate(v);
   const diff = Math.round((parseYmd(v) - parseYmd(todayStr())) / 86400000);
-  if (diff === 0) return 'Hari ini';
-  if (diff === 1) return 'Besok';
-  if (diff === -1) return 'Kemarin';
-  if (diff < 0) return Math.abs(diff) + ' hari lalu';
+  if (diff === 0) return 'Today';
+  if (diff === 1) return 'Tomorrow';
+  if (diff === -1) return 'Yesterday';
+  if (diff < 0) return Math.abs(diff) + ' days ago';
   if (diff < 7) return DAYS[parseYmd(v).getDay()];
   return fmtDate(v);
 }
@@ -873,7 +931,7 @@ function memberName(code) { const m = S.team.find(t => t.code === code); return 
 function firstName(n) { return String(n || '').split(' ')[0]; }
 function greeting() {
   const h = new Date().getHours();
-  return h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam';
+  return h < 11 ? 'Good morning' : h < 15 ? 'Good afternoon' : h < 18 ? 'Good afternoon' : 'Good evening';
 }
 function list(name) { return S.lists[name] || []; }
 function stages() { return list('Stage').length ? list('Stage') : ['Brief', 'Concept Design', 'Design Development', 'DED', 'Construction', 'Completed']; }
@@ -881,16 +939,60 @@ function safeUrl(u) { return /^https?:\/\//i.test(String(u || '').trim()) ? Stri
 // Warna label project (latar di belakang nama project)
 const PROJECT_COLORS = [
   ['sage', 'Sage'], ['ochre', 'Ochre'], ['terra', 'Terracotta'], ['blue', 'Egyptian blue'],
-  ['pasir', 'Krem pasir'], ['rose', 'Rose'], ['lilac', 'Lilac'], ['teal', 'Teal'], ['olive', 'Olive'],
+  ['pasir', 'Sand'], ['rose', 'Rose'], ['lilac', 'Lilac'], ['teal', 'Teal'], ['olive', 'Olive'],
 ];
 function projectById(id) { return S.projects.find(p => p.id === id) || {}; }
-function projColor(id) { const c = (projectById(id).color || '').trim(); return PROJECT_COLORS.some(x => x[0] === c) ? c : ''; }
+const HEX_RE = /^#[0-9a-f]{6}$/i;
+/** Warna label: id preset (sage, terra, …) atau warna bebas #RRGGBB. */
+function validColor(c) { c = String(c || '').trim(); return PROJECT_COLORS.some(x => x[0] === c) || HEX_RE.test(c) ? c : ''; }
+function projColor(id) { return validColor(projectById(id).color); }
+function inkFor(hex) {
+  const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#22302A' : '#FFFFFF';
+}
+/** class + style untuk elemen berwarna label. dotOnly: cuma latar (titik di sidebar). */
+function colorAttr(c, dotOnly) {
+  c = validColor(c);
+  if (!c) return { cls: '', style: '' };
+  if (HEX_RE.test(c)) return { cls: ' pc-custom', style: ' style="background:' + c + (dotOnly ? '' : ';color:' + inkFor(c)) + '"' };
+  return { cls: ' pc-' + c, style: '' };
+}
+function swatchList() {
+  // preset bawaan + palet studio dari Settings (PROJECT_COLORS)
+  return PROJECT_COLORS.concat((S.palette || []).filter(x => HEX_RE.test(x[0])));
+}
 function ptag(id, text) {
-  const c = projColor(id);
-  return '<span class="ptag' + (c ? ' pc-' + c : '') + '">' + esc(text) + '</span>';
+  const a = colorAttr(projColor(id));
+  return '<span class="ptag' + a.cls + '"' + a.style + '>' + esc(text) + '</span>';
+}
+// Status, prioritas & kategori project (disimpan di registry)
+const PSTATUS = ['Going', 'Waiting', 'Delayed', 'Inactive', 'Completed'];
+const PRIORITIES = ['Very High', 'High', 'Medium', 'Low', 'Very Low'];
+const CATEGORIES = ['Residential', 'Commercial', 'F&B', 'Office', 'Retail', 'Hospitality', 'Healthcare', 'Sport', 'Education', 'Other'];
+function pStatus(p) { const s = String((p && p.status) || '').trim(); return PSTATUS.indexOf(s) > -1 ? s : 'Going'; }
+function pKey(v) { return String(v || '').toLowerCase().replace(/[^a-z]+/g, '-'); }
+/** Urutkan project: Going → Waiting → Delayed → Inactive → Completed (urutan registry dipertahankan di dalam grup). */
+function statusOf(p) { const r = projectById(p.id); return pStatus(r.id ? r : p); }
+function sortProjects(arr) {
+  return arr.map((p, i) => [p, i]).sort((a, b) => PSTATUS.indexOf(statusOf(a[0])) - PSTATUS.indexOf(statusOf(b[0])) || a[1] - b[1]).map(x => x[0]);
+}
+function metaSelect(id, field, cur, opts, cls, label) {
+  return '<select class="pill-select ' + cls + '" data-change="proj-meta" data-id="' + esc(id) + '" data-field="' + esc(field) + '" aria-label="' + esc(label) + '">' +
+    (cur ? '' : '<option value="" selected>–</option>') +
+    opts.map(o => '<option' + (o === cur ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select>';
+}
+function statusSelect2(p) { const st = pStatus(p); return metaSelect(p.id, 'Current Status', st, PSTATUS, 'ps ps-' + pKey(st), 'Project status'); }
+function prioritySelect(p) {
+  const pr = projectById(p.id).priority || p.priority || '';
+  return metaSelect(p.id, 'Priority', pr, PRIORITIES, 'pp ' + (pr ? 'pp-' + pKey(pr) : 'pp-none'), 'Priority');
+}
+function notesHtml(text) {
+  const lines = String(text || '').split(/\n+/).map(l => l.replace(/^\s*[-•*]\s*/, '').trim()).filter(Boolean);
+  if (!lines.length) return '<span class="muted notes-empty">Add notes</span>';
+  return '<ul class="notes-list">' + lines.map(l => '<li>' + esc(l) + '</li>').join('') + '</ul>';
 }
 
-/** Link gambar Google Drive -> URL gambar langsung (file harus di-share 'siapa pun yang punya link'). */
+/** Link gambar Google Drive -> URL gambar langsung (file harus di-share 'anyone with the link'). */
 function coverUrl(u, width) {
   const s = String(u || '').trim();
   if (!/^https?:\/\//i.test(s)) return '';
@@ -910,7 +1012,7 @@ function coverImg(link, crop, width) {
   const u = /^data:image\//.test(link || '') ? link : coverUrl(link, width);
   return u ? '<img class="cover-img" alt="" src="' + esc(u) + '" style="' + cropStyle(parseCrop(crop)) + '">' : '';
 }
-function projectName(p) { return (p && (p.info && p.info['Project Name'])) || (p && p.name) || 'Tanpa nama'; }
+function projectName(p) { return (p && (p.info && p.info['Project Name'])) || (p && p.name) || 'Untitled'; }
 
 // ---------- Toast ----------
 function toast(msg, opts) {
@@ -926,9 +1028,9 @@ function toast(msg, opts) {
 function handleError(err, reloadFn) {
   if (err.code === 'AUTH') return;
   if (err.code === 'CONFLICT' && reloadFn) {
-    toast(err.message, { error: true, action: 'Muat ulang', onAction: reloadFn });
+    toast(err.message, { error: true, action: 'Reload', onAction: reloadFn });
   } else {
-    toast(err.message || 'Terjadi kesalahan.', { error: true });
+    toast(err.message || 'Something went wrong.', { error: true });
   }
 }
 
@@ -939,7 +1041,7 @@ function chip(code) {
   return '<span class="chip' + (av ? '' : ' plain') + (S.user && code === S.user.code ? ' me' : '') + '" title="' + esc(memberName(code)) + '">' + av + esc(code) + '</span>';
 }
 function pill(status) {
-  if (!status) return '<span class="pill">Belum diisi</span>';
+  if (!status) return '<span class="pill">Not set</span>';
   return '<span class="pill ' + statusKey(status) + '">' + esc(status) + '</span>';
 }
 function statusSelect(tab, row, field) {
@@ -947,9 +1049,9 @@ function statusSelect(tab, row, field) {
   const cur = row[field] || '';
   const opts = list('Status').slice();
   if (cur && opts.indexOf(cur) === -1) opts.unshift(cur);
-  return '<select class="pill-select ' + statusKey(cur) + '" aria-label="Ubah status" data-change="quick-field" data-tab="' + tab +
+  return '<select class="pill-select ' + statusKey(cur) + '" aria-label="Change status" data-change="quick-field" data-tab="' + tab +
     '" data-key="' + esc(rowKey(row)) + '" data-field="' + field + '">' +
-    (cur ? '' : '<option value="" selected>Pilih status</option>') +
+    (cur ? '' : '<option value="" selected>Choose status</option>') +
     opts.map(o => '<option' + (o === cur ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select>';
 }
 function journey(stage, opts) {
@@ -964,7 +1066,7 @@ function journey(stage, opts) {
     }
     return '<span class="' + cls + '" title="' + esc(s) + '"><span class="seg-label">' + esc(s) + '</span></span>';
   }).join('');
-  return '<div class="journey' + (opts.big ? ' big' : '') + '" style="--n:' + st.length + '" role="group" aria-label="Project journey, tahap: ' + esc(stage || 'belum diisi') + '">' + segs + '</div>';
+  return '<div class="journey' + (opts.big ? ' big' : '') + '" style="--n:' + st.length + '" role="group" aria-label="Project journey, stage: ' + esc(stage || 'not set') + '">' + segs + '</div>';
 }
 function rowKey(row) { return row._cid ? 'c:' + row._cid : row.ID ? 'id:' + row.ID : 'row:' + row._row; }
 function findRow(tab, key) {
@@ -1020,56 +1122,56 @@ function authPanel(mode, message, data) {
   if (!box) return;
   data = data || {};
   const err = '<div class="form-error" id="lg-error" role="alert">' + esc(message || '') + '</div>';
-  const tabs = '<div class="seg-ctl auth-tabs" role="tablist"><button type="button" role="tab" data-action="auth" data-mode="login" aria-pressed="' + (mode === 'login') + '">Masuk</button>' +
-    '<button type="button" role="tab" data-action="auth" data-mode="register" aria-pressed="' + (mode === 'register') + '">Daftar</button></div>';
+  const tabs = '<div class="seg-ctl auth-tabs" role="tablist"><button type="button" role="tab" data-action="auth" data-mode="login" aria-pressed="' + (mode === 'login') + '">Sign in</button>' +
+    '<button type="button" role="tab" data-action="auth" data-mode="register" aria-pressed="' + (mode === 'register') + '">Register</button></div>';
   let html = '', focus = '';
   if (mode === 'login') {
-    html = wordmarkSvg(S.studio) + '<h1>Project Hub</h1><p>Semua project studio dalam satu tempat.</p>' + tabs +
+    html = wordmarkSvg(S.studio) + '<h1>Project Hub</h1><p>All studio projects in one place.</p>' + tabs +
       '<form id="auth-form" novalidate>' +
-        authField('lg-email', 'Email atau username', 'text', ' autocomplete="username" autocapitalize="none" required value="' + esc(data.ident || store.get('ident') || store.get('email') || '') + '"') +
+        authField('lg-email', 'Email or username', 'text', ' autocomplete="username" autocapitalize="none" required value="' + esc(data.ident || store.get('ident') || store.get('email') || '') + '"') +
         authField('lg-pass', 'Password', 'password', ' autocomplete="current-password" required') +
-        err + '<button class="btn primary wide-btn" type="submit">Masuk</button>' +
-        '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="forgot">Lupa password?</button></div>' +
-        '<p class="auth-note">Anggota lama yang belum punya password: masuk sekali pakai email + passcode studio, lalu bikin username & password.</p>' +
+        err + '<button class="btn primary wide-btn" type="submit">Sign in</button>' +
+        '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="forgot">Forgot password?</button></div>' +
+        '<p class="auth-note">Existing members without a password: sign in once with your email + the studio passcode, then create a username & password.</p>' +
       '</form>';
     focus = (data.ident || store.get('ident') || store.get('email')) ? '#lg-pass' : '#lg-email';
   } else if (mode === 'register') {
-    html = wordmarkSvg(S.studio) + '<h1>Daftar akun</h1><p>Setelah daftar, admin studio perlu approve dulu sebelum kamu bisa masuk.</p>' + tabs +
+    html = wordmarkSvg(S.studio) + '<h1>Create an account</h1><p>After you register, a studio admin needs to approve it before you can sign in.</p>' + tabs +
       '<form id="auth-form" novalidate><div class="auth-grid">' +
-        authField('rg-name', 'Nama lengkap', 'text', ' autocomplete="name" required') +
-        authField('rg-code', 'Inisial (2–4 huruf)', 'text', ' maxlength="4" autocapitalize="characters" placeholder="TOK" required') +
-        authField('rg-username', 'Username', 'text', ' autocomplete="username" autocapitalize="none" placeholder="huruf kecil, tanpa spasi" required') +
+        authField('rg-name', 'Full name', 'text', ' autocomplete="name" required') +
+        authField('rg-code', 'Initials (2–4 letters)', 'text', ' maxlength="4" autocapitalize="characters" placeholder="TOK" required') +
+        authField('rg-username', 'Username', 'text', ' autocomplete="username" autocapitalize="none" placeholder="lowercase, no spaces" required') +
         authField('rg-email', 'Email', 'email', ' autocomplete="email" required') +
-        authField('rg-wa', 'Nomor WhatsApp', 'tel', ' autocomplete="tel" inputmode="tel" placeholder="0812…" required') +
-        authField('rg-pass', 'Password (min. 8 karakter)', 'password', ' autocomplete="new-password" required') +
-        authField('rg-pass2', 'Ulangi password', 'password', ' autocomplete="new-password" required') +
-      '</div>' + err + '<button class="btn primary wide-btn" type="submit">Daftar</button></form>';
+        authField('rg-wa', 'WhatsApp number', 'tel', ' autocomplete="tel" inputmode="tel" placeholder="0812…" required') +
+        authField('rg-pass', 'Password (min. 8 characters)', 'password', ' autocomplete="new-password" required') +
+        authField('rg-pass2', 'Repeat password', 'password', ' autocomplete="new-password" required') +
+      '</div>' + err + '<button class="btn primary wide-btn" type="submit">Register</button></form>';
     focus = '#rg-name';
   } else if (mode === 'registered') {
-    html = wordmarkSvg(S.studio) + '<div class="auth-done">' + buddySvg(2) + '</div><h1>Pendaftaran terkirim</h1>' +
-      '<p>Admin studio akan mengecek dan approve akun kamu. Setelah itu kamu bisa masuk pakai username atau email dan password yang tadi dibuat.</p>' +
-      '<button class="btn primary wide-btn" type="button" data-action="auth" data-mode="login">Kembali ke halaman masuk</button>';
+    html = wordmarkSvg(S.studio) + '<div class="auth-done">' + buddySvg(2) + '</div><h1>Registration sent</h1>' +
+      '<p>A studio admin will review and approve your account. After that you can sign in with your username or email and the password you just created.</p>' +
+      '<button class="btn primary wide-btn" type="button" data-action="auth" data-mode="login">Back to sign in</button>';
   } else if (mode === 'forgot') {
-    html = wordmarkSvg(S.studio) + '<h1>Lupa password</h1><p>Kode reset 6 angka akan dikirim ke email akun kamu.</p>' +
-      '<form id="auth-form" novalidate>' + authField('fg-ident', 'Email atau username', 'text', ' autocapitalize="none" required value="' + esc(data.ident || '') + '"') +
-      err + '<button class="btn primary wide-btn" type="submit">Kirim kode</button>' +
-      '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="login">← Kembali</button></div></form>';
+    html = wordmarkSvg(S.studio) + '<h1>Forgot password</h1><p>We\'ll send a 6-digit reset code to your account email.</p>' +
+      '<form id="auth-form" novalidate>' + authField('fg-ident', 'Email or username', 'text', ' autocapitalize="none" required value="' + esc(data.ident || '') + '"') +
+      err + '<button class="btn primary wide-btn" type="submit">Send code</button>' +
+      '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="login">← Back</button></div></form>';
     focus = '#fg-ident';
   } else if (mode === 'reset') {
-    html = wordmarkSvg(S.studio) + '<h1>Bikin password baru</h1><p>Cek email kamu (juga folder Spam), lalu masukkan kodenya di sini.</p>' +
-      '<form id="auth-form" novalidate>' + authField('rs-code', 'Kode dari email', 'text', ' inputmode="numeric" autocomplete="one-time-code" maxlength="6" required') +
-      authField('rs-pass', 'Password baru (min. 8 karakter)', 'password', ' autocomplete="new-password" required') +
-      authField('rs-pass2', 'Ulangi password baru', 'password', ' autocomplete="new-password" required') +
-      err + '<button class="btn primary wide-btn" type="submit">Simpan password</button>' +
-      '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="forgot" data-ident="' + esc(data.ident || '') + '">Kirim ulang kode</button></div></form>';
+    html = wordmarkSvg(S.studio) + '<h1>Create a new password</h1><p>Check your email (and the Spam folder), then enter the code here.</p>' +
+      '<form id="auth-form" novalidate>' + authField('rs-code', 'Code from email', 'text', ' inputmode="numeric" autocomplete="one-time-code" maxlength="6" required') +
+      authField('rs-pass', 'New password (min. 8 characters)', 'password', ' autocomplete="new-password" required') +
+      authField('rs-pass2', 'Repeat new password', 'password', ' autocomplete="new-password" required') +
+      err + '<button class="btn primary wide-btn" type="submit">Save password</button>' +
+      '<div class="auth-links"><button type="button" class="link" data-action="auth" data-mode="forgot" data-ident="' + esc(data.ident || '') + '">Resend code</button></div></form>';
     focus = '#rs-code';
   } else if (mode === 'setup') {
-    html = wordmarkSvg(S.studio) + '<h1>Halo, ' + esc(firstName(data.user && data.user.name)) + '</h1><p>Sekarang login nggak pakai passcode bersama lagi. Bikin username & password kamu sendiri.</p>' +
+    html = wordmarkSvg(S.studio) + '<h1>Hi, ' + esc(firstName(data.user && data.user.name)) + '</h1><p>Sign-in no longer uses the shared passcode. Create your own username & password.</p>' +
       '<form id="auth-form" novalidate>' +
       authField('su-username', 'Username', 'text', ' autocomplete="username" autocapitalize="none" required value="' + esc(String((data.user && data.user.email) || '').split('@')[0].toLowerCase().replace(/[^a-z0-9._]/g, '')) + '"') +
-      authField('su-pass', 'Password (min. 8 karakter)', 'password', ' autocomplete="new-password" required') +
-      authField('su-pass2', 'Ulangi password', 'password', ' autocomplete="new-password" required') +
-      err + '<button class="btn primary wide-btn" type="submit">Simpan & masuk</button></form>';
+      authField('su-pass', 'Password (min. 8 characters)', 'password', ' autocomplete="new-password" required') +
+      authField('su-pass2', 'Repeat password', 'password', ' autocomplete="new-password" required') +
+      err + '<button class="btn primary wide-btn" type="submit">Save & sign in</button></form>';
     focus = '#su-pass';
   }
   box.innerHTML = html + authFoot();
@@ -1081,24 +1183,24 @@ async function authSubmit(mode, data, form) {
   const v = id => ($(id) ? $(id).value : '').trim();
   const fail = m => { $('#lg-error').textContent = m; btn.disabled = false; btn.textContent = label; };
   const btn = form.querySelector('button[type=submit]'), label = btn.textContent;
-  btn.disabled = true; btn.textContent = 'Memproses…';
+  btn.disabled = true; btn.textContent = 'Processing…';
   try {
     if (mode === 'login') {
       const ident = v('#lg-email');
-      if (!ident || !$('#lg-pass').value) return fail('Isi email/username dan password.');
+      if (!ident || !$('#lg-pass').value) return fail('Enter your email/username and password.');
       const res = await call('login', { ident: ident, password: $('#lg-pass').value });
       store.set('ident', ident);
       if (res.needSetup) { authPanel('setup', '', { setupToken: res.setupToken, user: res.user }); return; }
       return finishLogin(res);
     }
     if (mode === 'setup') {
-      if ($('#su-pass').value !== $('#su-pass2').value) return fail('Password dan ulangannya beda.');
+      if ($('#su-pass').value !== $('#su-pass2').value) return fail('The passwords don\'t match.');
       const res = await call('setupAccount', { setupToken: data.setupToken, username: v('#su-username'), password: $('#su-pass').value });
       store.set('ident', v('#su-username'));
       return finishLogin(res);
     }
     if (mode === 'register') {
-      if ($('#rg-pass').value !== $('#rg-pass2').value) return fail('Password dan ulangannya beda.');
+      if ($('#rg-pass').value !== $('#rg-pass2').value) return fail('The passwords don\'t match.');
       await call('register', { name: v('#rg-name'), code: v('#rg-code'), username: v('#rg-username'), email: v('#rg-email'), whatsapp: v('#rg-wa'), password: $('#rg-pass').value });
       store.set('ident', v('#rg-username').toLowerCase());
       authPanel('registered');
@@ -1106,15 +1208,15 @@ async function authSubmit(mode, data, form) {
     }
     if (mode === 'forgot') {
       const ident = v('#fg-ident');
-      if (!ident) return fail('Isi email atau username.');
+      if (!ident) return fail('Enter your email or username.');
       await call('requestReset', { ident: ident });
       authPanel('reset', '', { ident: ident });
       return;
     }
     if (mode === 'reset') {
-      if ($('#rs-pass').value !== $('#rs-pass2').value) return fail('Password dan ulangannya beda.');
+      if ($('#rs-pass').value !== $('#rs-pass2').value) return fail('The passwords don\'t match.');
       const res = await call('resetPassword', { ident: data.ident, code: v('#rs-code'), password: $('#rs-pass').value });
-      if (res.pending) { authPanel('login', 'Password tersimpan. Akun kamu masih menunggu approve admin.', { ident: data.ident }); return; }
+      if (res.pending) { authPanel('login', 'Password saved. Your account is still waiting for admin approval.', { ident: data.ident }); return; }
       return finishLogin(res);
     }
   } catch (err) { fail(err.message); }
@@ -1145,7 +1247,7 @@ function readBootCache() {
 }
 function applyBoot(d, fresh) {
   const b = d.bootstrap;
-  Object.assign(S, { user: b.user, studio: b.studio, team: b.team, lists: b.lists, projects: b.projects });
+  Object.assign(S, { user: b.user, studio: b.studio, team: b.team, lists: b.lists, projects: b.projects, palette: b.palette || [] });
   S.overview = d.overview; S.overviewAt = fresh ? Date.now() : 0;
   document.title = S.studio + ' · Project Hub';
   if (fresh) store.set('boot', JSON.stringify({ email: store.get('email'), data: d }));
@@ -1153,7 +1255,7 @@ function applyBoot(d, fresh) {
 function saveBootCache() {
   if (!S.user || !S.overview) return;
   store.set('boot', JSON.stringify({ email: store.get('email'), data: {
-    bootstrap: { user: S.user, studio: S.studio, team: S.team, lists: S.lists, projects: S.projects }, overview: S.overview } }));
+    bootstrap: { user: S.user, studio: S.studio, team: S.team, lists: S.lists, projects: S.projects, palette: S.palette }, overview: S.overview } }));
 }
 function startView() {
   renderShell();
@@ -1172,10 +1274,10 @@ async function boot() {
       applyBoot(d, true);
       renderSidebar(); repaintOverviewViews();
       prefetchAll();
-    }).catch(err => { if (err.code !== 'AUTH') toast('Belum bisa mengambil data terbaru: ' + err.message, { error: true }); });
+    }).catch(err => { if (err.code !== 'AUTH') toast('Couldn\'t get the latest data: ' + err.message, { error: true }); });
     return;
   }
-  $('#app').innerHTML = '<div class="loading">Menyiapkan dashboard…</div>';
+  $('#app').innerHTML = '<div class="loading">Preparing the dashboard…</div>';
   try {
     applyBoot(await call('boot'), true);
     startView();
@@ -1187,7 +1289,7 @@ async function boot() {
 
 async function refreshBootstrap() {
   const b = await call('bootstrap');
-  Object.assign(S, { team: b.team, lists: b.lists, projects: b.projects });
+  Object.assign(S, { team: b.team, lists: b.lists, projects: b.projects, palette: b.palette || [] });
   renderSidebar(); saveBootCache();
 }
 
@@ -1271,8 +1373,8 @@ async function runQueue() {
     catch (err) {
       if (err.code === 'AUTH') { Q.jobs = []; break; }
       Q.failed[job.pid] = true;
-      const msg = String(err.message || 'Terjadi kesalahan.').replace(/\s*Muat ulang( data| dulu)?\.?\s*$/i, '');
-      toast('Gagal menyimpan: ' + msg + ' Data diambil ulang dari GSheets.', { error: true });
+      const msg = String(err.message || 'Something went wrong.').replace(/\s*Muat ulang( data| dulu)?\.?\s*$/i, '');
+      toast('Couldn\'t save: ' + msg + ' Data reloaded from Google Sheets.', { error: true });
       // perubahan lanjutan untuk baris yang gagal ditambahkan tidak bisa dikirim
       if (job.type === 'add') Q.jobs = Q.jobs.filter((j, i) => i === 0 || j.row !== job.row);
     }
@@ -1291,7 +1393,8 @@ async function runJob(job) {
   if (job.type === 'info') {
     const info = await call('updateInfo', { id: job.pid, fields: job.fields });
     const d = S.cache[job.pid];
-    if (d && !Q.jobs.slice(1).some(j => j.pid === job.pid && j.type === 'info')) d.info = info;
+    if (info && info._partial) { delete info._partial; if (d && d.info) Object.assign(d.info, info); }
+    else if (d && !Q.jobs.slice(1).some(j => j.pid === job.pid && j.type === 'info')) d.info = info;
     refreshBootstrap().catch(() => {});
     return;
   }
@@ -1301,7 +1404,7 @@ async function runJob(job) {
   let res;
   if (job.type === 'add') res = await call('addRow', Object.assign(base, { record: job.record }));
   else {
-    if (!row._row) throw Object.assign(new Error('Baris belum tersimpan.'), { code: 'CONFLICT' });
+    if (!row._row) throw Object.assign(new Error('This row hasn\'t been saved yet.'), { code: 'CONFLICT' });
     const orig = cleanRow(row._base || row);
     res = await call(job.type === 'update' ? 'updateRow' : 'deleteRow', Object.assign(base, { row: row._row, orig: orig, record: job.record }));
   }
@@ -1343,10 +1446,10 @@ function savebar(finished) {
   const n = Q.jobs.length;
   if (n) {
     el.className = 'savebar on';
-    el.querySelector('span').textContent = 'Menyimpan ke GSheets' + (n > 1 ? ' (' + n + ')' : '') + '…';
+    el.querySelector('span').textContent = 'Saving to Google Sheets' + (n > 1 ? ' (' + n + ')' : '') + '…';
   } else if (finished) {
     el.className = 'savebar on done';
-    el.querySelector('span').textContent = 'Tersimpan';
+    el.querySelector('span').textContent = 'Saved';
     savedTimer = setTimeout(() => { el.className = 'savebar'; }, 1800);
   }
 }
@@ -1402,6 +1505,7 @@ function renderShell() {
     '</div>';
   renderSidebar();
 }
+function projStatusFilter() { const v = store.get('projStatus'); return PSTATUS.indexOf(v) > -1 ? v : ''; }
 function projFilter() { const v = store.get('projFilter'); return v === 'pic' || v === 'task' ? v : 'all'; }
 /** pic: PIC project = saya · task: PIC project saya ATAU ada task/gambar/revisi terbuka atas nama saya */
 function projMatches(p, mode) {
@@ -1420,37 +1524,45 @@ function renderSidebar() {
   const el = $('#sidebar');
   if (!el) return;
   const pf = projFilter();
+  const sf = projStatusFilter();
   const all = S.projects.filter(p => !p.archived);
-  const active = all.filter(p => projMatches(p, pf));
+  const active = sortProjects(all.filter(p => projMatches(p, pf) && (!sf || pStatus(p) === sf)));
   const archived = S.projects.filter(p => p.archived && projMatches(p, pf));
   const myOpen = myTasks().length;
   const item = p => '<button type="button" class="nav-item" data-action="open-project" data-id="' + esc(p.id) + '"' +
     (S.view === 'project' && S.projectId === p.id ? ' aria-current="page"' : '') + '>' +
-    '<span class="stage-dot' + (p.stage === 'Completed' ? ' s-done' : '') + (projColor(p.id) ? ' pc-' + projColor(p.id) : '') + '" title="' + esc(p.stage) + '"></span>' +
+    (a => '<span class="stage-dot' + (p.stage === 'Completed' ? ' s-done' : '') + a.cls + '"' + a.style + ' title="' + esc(p.stage) + '"></span>')(colorAttr(projColor(p.id), true)) +
     '<span class="pname">' + esc(p.name || p.code) + '</span></button>';
+  // daftar project dikelompokkan per status (Going → Completed)
+  const grouped = list => {
+    let last = null;
+    return list.map(p => { const st = pStatus(p); const h = st !== last ? '<p class="nav-group"><i class="sdot ps-' + pKey(st) + '"></i>' + esc(st) + '</p>' : ''; last = st; return h + item(p); }).join('');
+  };
   el.innerHTML =
     '<div class="brand"><div>' + wordmarkSvg(S.studio) + '<small>Project Hub</small></div>' +
       '<button type="button" class="side-refresh" data-action="refresh-all" title="Muat ulang semua data dari Sheets" aria-label="Muat ulang semua data">' +
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg></button></div>' +
     '<nav class="nav">' +
-      '<button type="button" class="nav-item" data-action="go" data-view="home"' + (S.view === 'home' ? ' aria-current="page"' : '') + '>Ringkasan</button>' +
-      '<button type="button" class="nav-item" data-action="go" data-view="me"' + (S.view === 'me' ? ' aria-current="page"' : '') + '>Tugas saya' +
+      '<button type="button" class="nav-item" data-action="go" data-view="home"' + (S.view === 'home' ? ' aria-current="page"' : '') + '>Overview</button>' +
+      '<button type="button" class="nav-item" data-action="go" data-view="me"' + (S.view === 'me' ? ' aria-current="page"' : '') + '>My tasks' +
         (S.overview ? '<span class="count num">' + myOpen + '</span>' : '') + '</button>' +
     '</nav>' +
     '<div><div class="nav-head"><h2>Project</h2><span>' +
-      '<button type="button" class="btn small ghost" data-action="new-project" aria-label="Project baru atau import sheet">+ Baru</button></span></div>' +
-      '<div class="proj-filter" role="group" aria-label="Filter project">' + [['all', 'Semua'], ['pic', 'PIC saya'], ['task', 'Tugasku']].map(o =>
-        '<button type="button" data-action="proj-filter" data-v="' + o[0] + '" aria-pressed="' + (pf === o[0]) + '" title="' + (o[0] === 'pic' ? 'Project dengan PIC kamu' : o[0] === 'task' ? 'Project yang ada task/gambar/revisi atas nama kamu' : 'Semua project') + '">' + o[1] + '</button>').join('') + '</div>' +
-      '<nav class="nav">' + (active.length ? active.map(item).join('') :
-        '<p class="muted" style="padding:0 8px;font-size:14px">' + (all.length ? (pf === 'pic' ? 'Belum ada project dengan PIC kamu.' : 'Nggak ada project yang ada tugas kamu.') : 'Belum ada project.') + '</p>') + '</nav>' +
+      '<button type="button" class="btn small ghost" data-action="new-project" aria-label="New project or import a sheet">+ New</button></span></div>' +
+      '<div class="proj-filter" role="group" aria-label="Filter project">' + [['all', 'All'], ['pic', 'My PIC'], ['task', 'My tasks']].map(o =>
+        '<button type="button" data-action="proj-filter" data-v="' + o[0] + '" aria-pressed="' + (pf === o[0]) + '" title="' + (o[0] === 'pic' ? 'Projects where you\'re the PIC' : o[0] === 'task' ? 'Projects with tasks/drawings/revisions assigned to you' : 'All projects') + '">' + o[1] + '</button>').join('') + '</div>' +
+      '<select class="select side-status" data-change="proj-status-filter" aria-label="Filter by project status"><option value="">All statuses</option>' +
+        PSTATUS.map(x => '<option' + (sf === x ? ' selected' : '') + '>' + x + '</option>').join('') + '</select>' +
+      '<nav class="nav">' + (active.length ? grouped(active) :
+        '<p class="muted" style="padding:0 8px;font-size:14px">' + (all.length ? 'No projects match this filter.' : 'No projects yet.') + '</p>') + '</nav>' +
       (archived.length ? '<button type="button" class="nav-item muted" data-action="toggle-archived" style="margin-top:6px;font-size:13px">' +
-        (S.ui.showArchived ? 'Sembunyikan arsip' : 'Lihat arsip') + '<span class="count num">' + archived.length + '</span></button>' +
+        (S.ui.showArchived ? 'Hide archive' : 'Show archive') + '<span class="count num">' + archived.length + '</span></button>' +
         (S.ui.showArchived ? '<nav class="nav">' + archived.map(item).join('') + '</nav>' : '') : '') +
     '</div>' +
     '<div class="side-foot"><button type="button" class="me-avatar" data-action="pick-buddy" title="Profil kamu" aria-label="Buka profil">' + buddySvg(memberBuddy(S.user.code)) + '</button>' +
       '<button type="button" class="who" data-action="pick-buddy"><b>' + esc(S.user.name) + '</b><span class="muted">' + esc(S.user.code) + (S.user.role ? ' · ' + esc(S.user.role) : '') + '</span></button>' +
-      '<button type="button" class="btn small ghost" data-action="logout" style="margin-left:auto">Keluar</button></div>' +
-    '<label class="theme-pick">Tampilan<select data-change="theme" aria-label="Mode tampilan">' +
+      '<button type="button" class="btn small ghost" data-action="logout" style="margin-left:auto">Sign out</button></div>' +
+    '<label class="theme-pick">Theme<select data-change="theme" aria-label="Display mode">' +
       THEMES.map(t => '<option value="' + t[0] + '"' + (themePref() === t[0] ? ' selected' : '') + '>' + t[1] + '</option>').join('') + '</select></label>';
 }
 function closeNav() { const s = $('#shell'); if (s) s.classList.remove('nav-open'); }
@@ -1503,19 +1615,19 @@ async function renderHome(force) {
     '<div class="page-head"><div><h1>' + greeting() + ', ' + esc(firstName(S.user.name)) + '</h1>' +
     '<p>' + DAYS[now.getDay()] + ', ' + fmtDate(todayStr(), true) + '</p></div>' +
     '<div class="head-actions"><span class="sync" id="sync"></span>' +
-    '<button type="button" class="btn" data-action="refresh-home">Muat ulang</button>' +
-    '<button type="button" class="btn primary" data-action="new-project">+ Project baru</button></div></div>';
-  if (S.overview) paintHome(); else page.innerHTML = head + '<div class="loading">Mengambil data semua project…</div>';
+    '<button type="button" class="btn" data-action="refresh-home">Reload</button>' +
+    '<button type="button" class="btn primary" data-action="new-project">+ New project</button></div></div>';
+  if (S.overview) paintHome(); else page.innerHTML = head + '<div class="loading">Loading all projects…</div>';
   const btn = page.querySelector('[data-action=refresh-home]');
-  if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Memuat…'; }
+  if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Loading…'; }
   call('activity', { limit: 12 }).then(a => { S.activity = a; const el = $('#activity'); if (el && S.view === 'home') el.innerHTML = activityHtml(); }).catch(() => {});
   if (Q.jobs.length && !force) return;
   try {
     await loadOverview(force);
   } catch (err) {
     if (err.code === 'AUTH' || S.view !== 'home') return;
-    if (!S.overview) page.innerHTML = head + '<div class="section">' + emptyState('Data belum bisa diambil', err.message) + '</div>';
-    else toast('Belum bisa memperbarui ringkasan: ' + err.message, { error: true });
+    if (!S.overview) page.innerHTML = head + '<div class="section">' + emptyState('Couldn\'t load the data', err.message) + '</div>';
+    else toast('Couldn\'t refresh the overview: ' + err.message, { error: true });
     if (S.overview) paintHome();
     return;
   }
@@ -1526,8 +1638,8 @@ function homeHead() {
   return '<div class="page-head"><div><h1>' + greeting() + ', ' + esc(firstName(S.user.name)) + '</h1>' +
     '<p>' + DAYS[now.getDay()] + ', ' + fmtDate(todayStr(), true) + '</p></div>' +
     '<div class="head-actions"><span class="sync" id="sync"></span>' +
-    '<button type="button" class="btn" data-action="refresh-home">Muat ulang</button>' +
-    '<button type="button" class="btn primary" data-action="new-project">+ Project baru</button></div></div>';
+    '<button type="button" class="btn" data-action="refresh-home">Reload</button>' +
+    '<button type="button" class="btn primary" data-action="new-project">+ New project</button></div></div>';
 }
 function paintHome() {
   const page = $('#page');
@@ -1537,9 +1649,9 @@ function paintHome() {
   const projects = ov.projects;
 
   if (!projects.length) {
-    page.innerHTML = head + '<div class="section">' + emptyState('Belum ada project',
-      'Bikin project baru dari template, atau sambungkan dashboard GSheets yang udah ada supaya langsung kepakai di sini.',
-      '<button type="button" class="btn primary" data-action="new-project">+ Project baru</button>') + '</div>';
+    page.innerHTML = head + '<div class="section">' + emptyState('No projects yet',
+      'Create a new project from the template, or connect an existing Google Sheets dashboard so you can use it here right away.',
+      '<button type="button" class="btn primary" data-action="new-project">+ New project</button>') + '</div>';
     return;
   }
 
@@ -1555,40 +1667,46 @@ function paintHome() {
           '<div class="sub">' + ptag(t._pid, t._pname) + (t.PIC ? ' · ' + esc(memberName(t.PIC)) : '') + '</div></div>' +
           '<span class="lead"></span><div class="num ' + dateClass(t.Deadline) + '" style="text-align:right">' + esc(relDay(t.Deadline)) + '</div>' +
         '</div>').join('') + '</div>' +
-      (upcoming.length > 12 ? '<p class="muted" style="margin:10px 6px 0;font-size:14px">dan ' + (upcoming.length - 12) + ' task lain.</p>' : '')
-    : emptyState('Aman untuk seminggu ke depan', 'Nggak ada task yang jatuh tempo dalam 7 hari.');
+      (upcoming.length > 12 ? '<p class="muted" style="margin:10px 6px 0;font-size:14px">and ' + (upcoming.length - 12) + ' more tasks.</p>' : '')
+    : emptyState('All clear for the next 7 days', 'No tasks due in the next 7 days.');
 
   page.innerHTML = head +
+    '<section class="section"><div class="section-head"><h2>Project overview</h2><span class="muted num status-count">' +
+        PSTATUS.map(st => [st, projects.filter(p => statusOf(p) === st).length]).filter(x => x[1]).map(x => '<span><i class="sdot ps-' + pKey(x[0]) + '"></i>' + x[0] + ' ' + x[1] + '</span>').join('') + '</span></div>' +
+      '<div class="ov-scroll"><div class="ov-table"><div class="thead proj-head"><span>Status</span><span>Project</span><span>Stage</span><span>Priority</span><span>PIC</span><span>Notes</span><span>Drawings</span><span>Rev.</span><span>Late</span></div>' +
+      '<div class="rows">' + sortProjects(projects).map(projRowHtml).join('') + '</div></div></div></section>' +
     '<div class="grid-2">' +
-      '<section class="section"><div class="section-head"><h2>Deadline 7 hari ke depan</h2>' +
-        '<span class="muted num">' + upcoming.length + ' task</span></div>' + deadlines + '</section>' +
-      '<section class="section"><div class="section-head"><h2>Beban kerja tim</h2><span class="muted">task terbuka</span></div>' + workloadHtml() + '</section>' +
+      '<section class="section"><div class="section-head"><h2>Due in the next 7 days</h2>' +
+        '<span class="muted num">' + upcoming.length + (upcoming.length === 1 ? ' task' : ' tasks') + '</span></div>' + deadlines + '</section>' +
+      '<section class="section"><div class="section-head"><h2>Team workload</h2><span class="muted">open tasks</span></div>' + workloadHtml() + '</section>' +
     '</div>' +
-    '<section class="section"><div class="section-head"><h2>Project aktif</h2><span class="muted num">' + projects.length + ' project</span></div>' +
-      '<div class="thead proj-head"><span>Project</span><span>Tahap</span><span>Gambar</span><span>Revisi</span><span>Telat</span><span>PIC</span></div>' +
-      '<div class="rows">' + projects.map(projRowHtml).join('') + '</div></section>' +
-    '<section class="section"><div class="section-head"><h2>Aktivitas terbaru</h2></div><div id="activity">' + activityHtml() + '</div></section>';
+    '<section class="section"><div class="section-head"><h2>Recent activity</h2></div><div id="activity">' + activityHtml() + '</div></section>';
   const sync = $('#sync');
-  if (sync) sync.textContent = 'Diperbarui ' + new Date(ov.generatedAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+  if (sync) sync.textContent = 'Updated ' + new Date(ov.generatedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 }
 function projRowHtml(p) {
+  const meta = Object.assign({}, p, projectById(p.id).id ? projectById(p.id) : {});
+  const name = '<div class="proj-name"><div style="min-width:0"><div class="title"><span class="ptag-wrap">' + ptag(p.id, projectName(p)) +
+    '<button type="button" class="color-btn" data-action="pick-color" data-id="' + esc(p.id) + '" title="Label color" aria-label="Label color for ' + esc(projectName(p)) + '"></button></span></div>' +
+    '<div class="sub">' + esc([meta.category, p.info && p.info.Client, p.info && p.info.Location].filter(Boolean).join(' · ') || p.code) + '</div></div></div>';
   if (p.error) {
-    return '<div class="row proj-row"><div class="title">' + esc(p.name) + '</div><div class="muted" style="grid-column:2/-1">Sheet tidak bisa dibuka: ' + esc(p.error) + '</div></div>';
+    return '<div class="row proj-row"><div>' + statusSelect2(meta) + '</div>' + name + '<div class="muted" style="grid-column:3/-1">Can\'t open the sheet: ' + esc(p.error) + '</div></div>';
   }
   const stage = (p.info && p.info.Stage) || p.stage;
   const dr = p.drawings;
   const draw = dr.total ? '<div class="num" style="font-weight:800;color:var(--ink)">' + dr.progress + '%</div><div class="meter" style="margin-top:4px"><i style="width:' + dr.progress + '%"></i></div>' : '<span class="stat zero">–</span>';
-  return '<div class="row proj-row clickable" data-action="open-project" data-id="' + esc(p.id) + '">' +
-    '<div class="proj-name">' +
-      '<div style="min-width:0"><div class="title"><span class="ptag-wrap">' + ptag(p.id, projectName(p)) +
-        '<button type="button" class="color-btn" data-action="pick-color" data-id="' + esc(p.id) + '" title="Atur warna label" aria-label="Atur warna label ' + esc(projectName(p)) + '"></button></span></div><div class="sub">' + esc([p.info && p.info.Client, p.info && p.info.Location].filter(Boolean).join(', ') || p.code) + '</div></div></div>' +
-    '<div class="journey-wrap">' + journey(stage) + '<span class="stage-name">' + esc(stage || 'Belum diisi') + '</span></div>' +
-    '<div>' + draw + '</div>' +
-    '<div><span class="stat num' + (p.revisions.open ? '' : ' zero') + '">' + p.revisions.open + '</span></div>' +
-    '<div><span class="stat num' + (p.tasks.overdue ? ' alert' : ' zero') + '">' + p.tasks.overdue + '</span></div>' +
-    '<div>' + chip(p.info && p.info.PIC || p.pic) + '</div>' +
-    '<div class="m-stats"><span>' + (dr.total ? 'Gambar ' + dr.progress + '%' : 'Belum ada gambar') + '</span><span>' + p.revisions.open + ' revisi</span>' +
-      '<span' + (p.tasks.overdue ? ' class="date-late"' : '') + '>' + p.tasks.overdue + ' telat</span></div>' +
+  return '<div class="row proj-row clickable" data-action="open-project" data-id="' + esc(p.id) + '" tabindex="0">' +
+    '<div class="c-status">' + statusSelect2(meta) + '</div>' +
+    name +
+    '<div class="journey-wrap">' + journey(stage) + '<span class="stage-name">' + esc(stage || 'Not set') + '</span></div>' +
+    '<div class="c-prio">' + prioritySelect(meta) + '</div>' +
+    '<div class="c-pic">' + chip(p.info && p.info.PIC || p.pic) + '</div>' +
+    '<div class="c-notes"><button type="button" class="notes-btn" data-action="edit-notes" data-id="' + esc(p.id) + '" title="Edit notes">' + notesHtml(meta.notes) + '</button></div>' +
+    '<div class="c-draw">' + draw + '</div>' +
+    '<div class="c-rev"><span class="stat num' + (p.revisions.open ? '' : ' zero') + '">' + p.revisions.open + '</span></div>' +
+    '<div class="c-late"><span class="stat num' + (p.tasks.overdue ? ' alert' : ' zero') + '">' + p.tasks.overdue + '</span></div>' +
+    '<div class="m-stats"><span>' + (dr.total ? 'Drawings ' + dr.progress + '%' : 'No drawings') + '</span><span>' + p.revisions.open + ' revisions</span>' +
+      '<span' + (p.tasks.overdue ? ' class="date-late"' : '') + '>' + p.tasks.overdue + ' late</span></div>' +
   '</div>';
 }
 function workloadHtml() {
@@ -1602,54 +1720,54 @@ function workloadHtml() {
     if (isYmd(t.Deadline) && t.Deadline < today) counts[t.PIC].late++; else counts[t.PIC].ok++;
   });
   const codes = Object.keys(counts);
-  if (!codes.length) return emptyState('Tim belum diisi', 'Tambahkan anggota di tab Team pada registry.');
+  if (!codes.length) return emptyState('No team members yet', 'Add members in the Team tab of the registry.');
   const max = Math.max(1, ...codes.map(c => counts[c].ok + counts[c].late));
   return codes.sort((a, b) => (counts[b].ok + counts[b].late) - (counts[a].ok + counts[a].late)).map(c => {
     const n = counts[c]; const total = n.ok + n.late;
     return '<div class="load">' + (avatar(c) || '<span></span>') + '<span class="name" title="' + esc(memberName(c)) + '">' + esc(firstName(memberName(c))) + '</span>' +
-      '<span class="load-bar" role="img" aria-label="' + total + ' task, ' + n.late + ' telat">' +
+      '<span class="load-bar" role="img" aria-label="' + total + ' task, ' + n.late + ' late">' +
         '<i class="late" style="width:' + (n.late / max * 100) + '%"></i><i class="ok" style="width:' + (n.ok / max * 100) + '%"></i></span>' +
       '<span class="num" style="text-align:right;font-weight:800;color:var(--ink)">' + total + '</span></div>';
   }).join('') +
-  '<div class="legend"><span><i style="background:var(--leaf)"></i>Sesuai jadwal</span><span><i style="background:#D9604A"></i>Lewat deadline</span>' +
-  (unassigned ? '<span>' + unassigned + ' tanpa PIC</span>' : '') + '</div>';
+  '<div class="legend"><span><i style="background:var(--leaf)"></i>On schedule</span><span><i style="background:#D9604A"></i>Past deadline</span>' +
+  (unassigned ? '<span>' + unassigned + ' without PIC</span>' : '') + '</div>';
 }
 function activityHtml() {
-  if (!S.activity.length) return '<p class="muted" style="margin:0">Belum ada aktivitas.</p>';
+  if (!S.activity.length) return '<p class="muted" style="margin:0">No activity yet.</p>';
   const labels = {
-    'login': 'masuk', 'create project': 'bikin project', 'update info': 'ubah info', 'archive': 'arsipkan project',
-    'unarchive': 'aktifkan lagi project', 'sync team': 'sync tim', 'connect project': 'sambungkan project',
+    'login': 'signed in', 'create project': 'created project', 'update info': 'updated info', 'archive': 'archived project',
+    'unarchive': 'reactivated project', 'sync team': 'synced team', 'connect project': 'connected project',
   };
-  const tabNames = { tasks: 'task', daily: 'daily log', drawings: 'gambar', revisions: 'revisi', meetings: 'meeting', files: 'file' };
+  const tabNames = { tasks: 'task', daily: 'daily log', drawings: 'drawing', revisions: 'revision', meetings: 'meeting', files: 'file' };
   const verb = a => {
     if (labels[a]) return labels[a];
     const m = String(a).match(/^(add|update|delete) (\w+)$/);
     if (!m) return a;
-    return { add: 'tambah', update: 'ubah', delete: 'hapus' }[m[1]] + ' ' + (tabNames[m[2]] || m[2]);
+    return { add: 'added', update: 'updated', delete: 'deleted' }[m[1]] + ' ' + (tabNames[m[2]] || m[2]);
   };
   return S.activity.filter(a => a.action !== 'login').slice(0, 10).map(a => {
     const t = new Date(a.time);
     const when = isNaN(t) ? '' : (t.toDateString() === new Date().toDateString()
-      ? t.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })
+      ? t.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
       : t.getDate() + ' ' + MONTHS[t.getMonth()]);
-    return '<div class="act">' + chip(a.user) + '<span><b>' + esc(verb(a.action)) + '</b>' + (a.project ? ' di ' + esc(a.project) : '') +
+    return '<div class="act">' + chip(a.user) + '<span><b>' + esc(verb(a.action)) + '</b>' + (a.project ? ' in ' + esc(a.project) : '') +
       (a.detail ? ' <span class="muted">' + esc(a.detail) + '</span>' : '') + '</span><span class="when">' + esc(when) + '</span></div>';
-  }).join('') || '<p class="muted" style="margin:0">Belum ada perubahan data.</p>';
+  }).join('') || '<p class="muted" style="margin:0">No data changes yet.</p>';
 }
 
 // ---------- My tasks ----------
 async function renderMe(force) {
   const page = $('#page');
-  const head = '<div class="page-head"><div><h1>Tugas saya</h1><p>Semua task terbuka atas nama ' + esc(S.user.name) + ' di semua project.</p></div>' +
-    '<div class="head-actions"><button type="button" class="btn" data-action="refresh-me">Muat ulang</button></div></div>';
-  if (S.overview) paintMe(); else page.innerHTML = head + '<div class="loading">Mengumpulkan task…</div>';
+  const head = '<div class="page-head"><div><h1>My tasks</h1><p>All open tasks assigned to ' + esc(S.user.name) + ' across all projects.</p></div>' +
+    '<div class="head-actions"><button type="button" class="btn" data-action="refresh-me">Reload</button></div></div>';
+  if (S.overview) paintMe(); else page.innerHTML = head + '<div class="loading">Collecting tasks…</div>';
   const btn = page.querySelector('[data-action=refresh-me]');
-  if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Memuat…'; }
+  if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Loading…'; }
   if (Q.jobs.length && !force) return;
   try { await loadOverview(force); } catch (err) {
     if (err.code === 'AUTH' || S.view !== 'me') return;
-    if (!S.overview) page.innerHTML = head + '<div class="section">' + emptyState('Data belum bisa diambil', err.message) + '</div>';
-    else { toast('Belum bisa memperbarui: ' + err.message, { error: true }); paintMe(); }
+    if (!S.overview) page.innerHTML = head + '<div class="section">' + emptyState('Couldn\'t load the data', err.message) + '</div>';
+    else { toast('Couldn\'t refresh: ' + err.message, { error: true }); paintMe(); }
     return;
   }
   if (S.view === 'me') paintMe();
@@ -1657,27 +1775,27 @@ async function renderMe(force) {
 function paintMe() {
   const page = $('#page');
   if (!page || !S.overview) return;
-  const head = '<div class="page-head"><div><h1>Tugas saya</h1><p>Semua task terbuka atas nama ' + esc(S.user.name) + ' di semua project.</p></div>' +
-    '<div class="head-actions"><button type="button" class="btn" data-action="refresh-me">Muat ulang</button></div></div>';
+  const head = '<div class="page-head"><div><h1>My tasks</h1><p>All open tasks assigned to ' + esc(S.user.name) + ' across all projects.</p></div>' +
+    '<div class="head-actions"><button type="button" class="btn" data-action="refresh-me">Reload</button></div></div>';
   const today = todayStr(), week = addDays(today, 7);
   const tasks = myTasks().sort((a, b) => String(a.Deadline || '9999') < String(b.Deadline || '9999') ? -1 : 1);
   const groups = [
-    ['Lewat deadline', tasks.filter(t => isYmd(t.Deadline) && t.Deadline < today)],
-    ['7 hari ke depan', tasks.filter(t => isYmd(t.Deadline) && t.Deadline >= today && t.Deadline <= week)],
-    ['Nanti', tasks.filter(t => isYmd(t.Deadline) && t.Deadline > week)],
-    ['Tanpa deadline', tasks.filter(t => !isYmd(t.Deadline))],
+    ['Past deadline', tasks.filter(t => isYmd(t.Deadline) && t.Deadline < today)],
+    ['Next 7 days', tasks.filter(t => isYmd(t.Deadline) && t.Deadline >= today && t.Deadline <= week)],
+    ['Later', tasks.filter(t => isYmd(t.Deadline) && t.Deadline > week)],
+    ['No deadline', tasks.filter(t => !isYmd(t.Deadline))],
   ].filter(g => g[1].length);
   page.innerHTML = head + '<section class="section">' + (groups.length ? groups.map(g =>
     '<div class="group-title">' + esc(g[0]) + '<span class="muted num">' + g[1].length + '</span></div>' +
     '<div class="rows">' + g[1].map(t =>
       '<div class="row mytask-row">' +
-        '<button type="button" class="check" data-action="me-done" data-pid="' + esc(t._pid) + '" data-key="' + esc(rowKey(t)) + '" aria-label="Tandai selesai: ' + esc(t.Task) + '"></button>' +
+        '<button type="button" class="check" data-action="me-done" data-pid="' + esc(t._pid) + '" data-key="' + esc(rowKey(t)) + '" aria-label="Mark as done: ' + esc(t.Task) + '"></button>' +
         '<div style="min-width:0"><div class="title">' + esc(t.Task) + '</div>' +
           '<button type="button" class="crumb" style="margin:0;font-size:13px" data-action="open-project" data-id="' + esc(t._pid) + '" data-tab="tasks">' + ptag(t._pid, t._pname) + '</button></div>' +
         '<div class="c-date num ' + dateClass(t.Deadline) + '">' + esc(t.Deadline ? relDay(t.Deadline) : '–') + '</div>' +
         '<div class="c-status">' + pill(t.Status) + '</div>' +
       '</div>').join('') + '</div>').join('')
-    : emptyState('Semua beres', 'Nggak ada task terbuka atas nama kamu.')) + '</section>';
+    : emptyState('All done', 'No open tasks assigned to you.')) + '</section>';
 }
 
 // ---------- Project ----------
@@ -1698,20 +1816,20 @@ async function openProject(id, tab, force) {
     const age = Date.now() - (S.cacheAt[id] || 0);
     if (!force && (age < 15000 || hasPending(id))) return;
     const btn = $('[data-action=reload-project]');
-    if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Memuat…'; }
+    if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Loading…'; }
     try {
       const before = JSON.stringify(cleanProject(cached));
       const data = await fetchProject(id, force);
       if (S.projectId !== id) return;
       if (force || JSON.stringify(cleanProject(data)) !== before) render();
-      if (force) toast('Data terbaru dari GSheets sudah dimuat.');
+      if (force) toast('Latest data from Google Sheets loaded.');
     } catch (err) {
-      if (err.code !== 'AUTH' && S.projectId === id) { toast('Belum bisa mengambil data terbaru: ' + err.message, { error: true }); render(); }
+      if (err.code !== 'AUTH' && S.projectId === id) { toast('Couldn\'t get the latest data: ' + err.message, { error: true }); render(); }
     }
     return;
   }
-  $('#page').innerHTML = '<button type="button" class="crumb" data-action="go" data-view="home">← Ringkasan</button>' +
-    '<h1 class="proj-title">' + esc(meta ? meta.name : 'Project') + '</h1><div class="loading">Membuka sheet project…</div>';
+  $('#page').innerHTML = '<button type="button" class="crumb" data-action="go" data-view="home">← Overview</button>' +
+    '<h1 class="proj-title">' + esc(meta ? meta.name : 'Project') + '</h1><div class="loading">Opening the project sheet…</div>';
   window.scrollTo(0, 0);
   try {
     await fetchProject(id, force);
@@ -1719,8 +1837,8 @@ async function openProject(id, tab, force) {
     S.project = S.cache[id];
     renderProject();
   } catch (err) {
-    if (err.code !== 'AUTH' && S.projectId === id) $('#page').innerHTML = '<button type="button" class="crumb" data-action="go" data-view="home">← Ringkasan</button>' +
-      '<div class="section">' + emptyState('Project tidak bisa dibuka', err.message) + '</div>';
+    if (err.code !== 'AUTH' && S.projectId === id) $('#page').innerHTML = '<button type="button" class="crumb" data-action="go" data-view="home">← Overview</button>' +
+      '<div class="section">' + emptyState('Can\'t open the project', err.message) + '</div>';
   }
 }
 function cleanProject(d) { const o = {}; ['info'].concat(DATA_TABS).forEach(k => { o[k] = k === 'info' ? d.info : (d[k] || []).map(cleanRow); }); return o; }
@@ -1728,10 +1846,10 @@ function cleanProject(d) { const o = {}; ['info'].concat(DATA_TABS).forEach(k =>
 let refreshAllBusy = false;
 async function refreshAll() {
   if (refreshAllBusy) return;
-  if (Q.jobs.length) { toast('Tunggu sebentar, masih ada perubahan yang sedang disimpan.'); return; }
+  if (Q.jobs.length) { toast('Hold on, some changes are still being saved.'); return; }
   refreshAllBusy = true;
   const btns = () => document.querySelectorAll('[data-action=refresh-all],[data-action=refresh-home],[data-action=refresh-me]');
-  btns().forEach(b => { b.classList.add('busy'); if (b.classList.contains('btn')) b.textContent = 'Memuat…'; });
+  btns().forEach(b => { b.classList.add('busy'); if (b.classList.contains('btn')) b.textContent = 'Loading…'; });
   try {
     const d = await call('boot', { force: true });
     try { Object.keys(localStorage).filter(k => k.indexOf(PREFIX + 'p:') === 0).forEach(k => localStorage.removeItem(k)); } catch (err) {}
@@ -1742,12 +1860,12 @@ async function refreshAll() {
     if (S.view === 'project' && S.projectId) {
       if (S.projects.some(p => p.id === S.projectId)) await openProject(S.projectId, S.tab, true); else go('home');
     } else if (S.view === 'me') renderMe(); else renderHome();
-    toast('Semua data sudah dimuat ulang dari Sheets.');
+    toast('All data reloaded from Sheets.');
     prefetchAll();
   } catch (err) { handleError(err); }
   finally {
     refreshAllBusy = false;
-    btns().forEach(b => { b.classList.remove('busy'); if (b.classList.contains('btn')) b.textContent = 'Muat ulang'; });
+    btns().forEach(b => { b.classList.remove('busy'); if (b.classList.contains('btn')) b.textContent = 'Reload'; });
   }
 }
 function reloadProject() { if (S.projectId) openProject(S.projectId, S.tab, true); }
@@ -1769,20 +1887,20 @@ function renderProject() {
   const archived = p.project && p.project.archived;
   const cover = coverUrl(info['Cover Photo']);
   const titleHtml = '<div style="min-width:0"><h1 class="proj-title">' + esc(projectName(p)) + '</h1>' +
-    '<p class="proj-sub">' + esc([info.Type, info.Scope].filter(Boolean).join(' · ') || 'Tipe dan scope belum diisi') + (archived ? ' · <b>Diarsipkan</b>' : '') + '</p></div>';
-  const actionsHtml = '<div class="head-actions">' + (cover ? '<button type="button" class="btn" data-action="cover-edit">Atur cover</button>' : '') +
-    '<button type="button" class="btn" data-action="reload-project">Muat ulang</button>' +
-    '<a class="btn" href="' + esc(p.url) + '" target="_blank" rel="noopener">Buka GSheets</a></div>';
+    '<p class="proj-sub">' + esc([info.Category, info.Type, info.Scope].filter(Boolean).join(' · ') || 'Type and scope not set') + (archived ? ' · <b>Archived</b>' : '') + '</p></div>';
+  const actionsHtml = '<div class="head-actions">' + (cover ? '<button type="button" class="btn" data-action="cover-edit">Edit cover</button>' : '') +
+    '<button type="button" class="btn" data-action="reload-project">Reload</button>' +
+    '<a class="btn" href="' + esc(p.url) + '" target="_blank" rel="noopener">Open Google Sheets</a></div>';
   $('#page').innerHTML =
-    '<button type="button" class="crumb" data-action="go" data-view="home">← Ringkasan</button>' +
+    '<button type="button" class="crumb" data-action="go" data-view="home">← Overview</button>' +
     (cover
       ? '<header class="cover">' + coverImg(info['Cover Photo'], info['Cover Crop']) + actionsHtml + titleHtml + '</header>'
       : '<div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap">' + titleHtml + actionsHtml + '</div>') +
     '<div class="meta">' +
-      metaItem('Client', esc(info.Client)) + metaItem('Lokasi', esc(info.Location)) +
-      metaItem('PIC', esc(info.PIC ? memberName(info.PIC) : '')) + metaItem('Kode', esc(info['Project Code'])) +
-      metaItem('Periode', dates) +
-      metaItem('Folder', safeUrl(info['Drive Folder']) ? '<a href="' + esc(safeUrl(info['Drive Folder'])) + '" target="_blank" rel="noopener">Buka folder</a>' : '') +
+      metaItem('Client', esc(info.Client)) + metaItem('Location', esc(info.Location)) +
+      metaItem('PIC', esc(info.PIC ? memberName(info.PIC) : '')) + metaItem('Code', esc(info['Project Code'])) +
+      metaItem('Period', dates) +
+      metaItem('Folder', safeUrl(info['Drive Folder']) ? '<a href="' + esc(safeUrl(info['Drive Folder'])) + '" target="_blank" rel="noopener">Open folder</a>' : '') +
     '</div>' +
     '<h2 class="sr">Project journey</h2>' + journey(stage, { big: true }) +
     '<div class="tabs" role="tablist">' + TAB_ORDER.map(t =>
@@ -1802,7 +1920,7 @@ function renderTab() {
   body.querySelectorAll('[data-key^="c:"]').forEach(el => {
     const tab = el.dataset.tab;
     const row = tab && findRow(tab, el.dataset.key);
-    if (row && row._pending) { const box = el.closest('.row, .entry, .meeting') || el; box.classList.add('saving'); box.title = 'Sedang disimpan ke GSheets…'; }
+    if (row && row._pending) { const box = el.closest('.row, .entry, .meeting') || el; box.classList.add('saving'); box.title = 'Saving to Google Sheets…'; }
   });
 }
 
@@ -1818,24 +1936,24 @@ function tabTasks() {
   });
   const toolbar = '<div class="toolbar">' +
     '<div class="seg-ctl" role="group" aria-label="Filter status">' +
-      [['open', 'Terbuka'], ['done', 'Selesai'], ['all', 'Semua']].map(o => '<button type="button" data-action="task-filter" data-v="' + o[0] + '" aria-pressed="' + (f === o[0]) + '">' + o[1] + '</button>').join('') +
+      [['open', 'Open'], ['done', 'Done'], ['all', 'All']].map(o => '<button type="button" data-action="task-filter" data-v="' + o[0] + '" aria-pressed="' + (f === o[0]) + '">' + o[1] + '</button>').join('') +
     '</div>' +
-    '<select class="select" data-change="task-pic" aria-label="Filter PIC"><option value="">Semua PIC</option>' +
+    '<select class="select" data-change="task-pic" aria-label="Filter PIC"><option value="">All PICs</option>' +
       S.team.map(m => '<option value="' + esc(m.code) + '"' + (S.ui.taskPic === m.code ? ' selected' : '') + '>' + esc(m.name) + '</option>').join('') + '</select>' +
     '<div class="seg-ctl" role="group" aria-label="Tampilan">' +
-      [['list', 'Daftar'], ['timeline', 'Timeline']].map(o => '<button type="button" data-action="task-view" data-v="' + o[0] + '" aria-pressed="' + (S.ui.taskView === o[0]) + '">' + o[1] + '</button>').join('') +
+      [['list', 'List'], ['timeline', 'Timeline']].map(o => '<button type="button" data-action="task-view" data-v="' + o[0] + '" aria-pressed="' + (S.ui.taskView === o[0]) + '">' + o[1] + '</button>').join('') +
     '</div><span class="spacer"></span>' +
-    '<button type="button" class="btn primary" data-action="add" data-tab="tasks">Tambah task</button></div>';
-  if (!all.length) return toolbar + '<div class="section">' + emptyState('Belum ada task', 'Tambahkan task pertama untuk project ini.') + '</div>';
+    '<button type="button" class="btn primary" data-action="add" data-tab="tasks">Add task</button></div>';
+  if (!all.length) return toolbar + '<div class="section">' + emptyState('No tasks yet', 'Add the first task for this project.') + '</div>';
   if (S.ui.taskView === 'timeline') return toolbar + timelineHtml(rows);
-  if (!rows.length) return toolbar + '<div class="section">' + emptyState('Kosong', 'Nggak ada task yang cocok dengan filter ini.') + '</div>';
+  if (!rows.length) return toolbar + '<div class="section">' + emptyState('Empty', 'No tasks match this filter.') + '</div>';
   return toolbar + '<div class="section">' +
-    '<div class="thead task-head"><span></span><span>Task</span><span>PIC</span><span>Deadline</span><span>Prioritas</span><span>Status</span></div>' +
+    '<div class="thead task-head"><span></span><span>Task</span><span>PIC</span><span>Deadline</span><span>Priority</span><span>Status</span></div>' +
     '<div class="rows">' + rows.map(t => {
       const done = isDone(t.Status);
       return '<div class="row task-row clickable' + (done ? ' task-done' : '') + '" data-action="edit" data-tab="tasks" data-key="' + esc(rowKey(t)) + '">' +
-        '<button type="button" class="check' + (done ? ' on' : '') + '" data-action="toggle-done" data-key="' + esc(rowKey(t)) + '" aria-label="' + (done ? 'Buka lagi' : 'Tandai selesai') + ': ' + esc(t.Task) + '"></button>' +
-        '<div style="min-width:0"><div class="title">' + esc(t.Task) + '</div>' + (t.Start ? '<div class="sub num">Mulai ' + esc(fmtDate(t.Start)) + '</div>' : '') + '</div>' +
+        '<button type="button" class="check' + (done ? ' on' : '') + '" data-action="toggle-done" data-key="' + esc(rowKey(t)) + '" aria-label="' + (done ? 'Reopen' : 'Mark as done') + ': ' + esc(t.Task) + '"></button>' +
+        '<div style="min-width:0"><div class="title">' + esc(t.Task) + '</div>' + (t.Start ? '<div class="sub num">Start ' + esc(fmtDate(t.Start)) + '</div>' : '') + '</div>' +
         '<div class="c-pic">' + chip(t.PIC) + '</div>' +
         '<div class="c-date num ' + dateClass(t.Deadline, done) + '">' + esc(t.Deadline ? fmtDate(t.Deadline) : '–') + '</div>' +
         '<div class="c-prio prio-' + esc(t.Priority) + '">' + esc(t.Priority || '–') + '</div>' +
@@ -1845,7 +1963,7 @@ function tabTasks() {
 }
 function timelineHtml(rows) {
   const dated = rows.filter(t => isYmd(t.Start) || isYmd(t.Deadline));
-  if (!dated.length) return '<div class="section">' + emptyState('Belum ada tanggal', 'Isi Start atau Deadline supaya task muncul di timeline.') + '</div>';
+  if (!dated.length) return '<div class="section">' + emptyState('No dates yet', 'Fill in Start or Deadline so the task shows up on the timeline.') + '</div>';
   const today = todayStr();
   let min = today, max = today;
   dated.forEach(t => [t.Start, t.Deadline].forEach(d => { if (isYmd(d)) { if (d < min) min = d; if (d > max) max = d; } }));
@@ -1858,7 +1976,7 @@ function timelineHtml(rows) {
   const pos = d => (Math.round((parseYmd(d) - parseYmd(start)) / 86400000) / days * 100);
   const head = '<div class="tl-row tl-head"><div class="tl-label muted">Task</div><div class="tl-track" style="grid-template-columns:repeat(' + weeks + ',1fr)">' +
     Array.from({ length: weeks }, (_, i) => '<span class="tl-week num">' + fmtDate(addDays(start, i * 7)) + '</span>').join('') + '</div></div>';
-  const todayLine = '<span class="tl-today" style="left:' + pos(today) + '%" title="Hari ini"></span>';
+  const todayLine = '<span class="tl-today" style="left:' + pos(today) + '%" title="Today"></span>';
   const body = dated.map(t => {
     const s = isYmd(t.Start) ? t.Start : t.Deadline;
     const e = isYmd(t.Deadline) ? t.Deadline : t.Start;
@@ -1871,7 +1989,7 @@ function timelineHtml(rows) {
       esc(t.Task + ' · ' + fmtDate(a) + ' – ' + fmtDate(b) + (t.PIC ? ' · ' + t.PIC : '')) + '"><span class="sr">' + esc(t.Task) + '</span></button></div></div>';
   }).join('');
   return '<div class="tl"><div class="tl-inner">' + head + body + '</div></div>' +
-    '<div class="legend"><span><i style="background:var(--leaf)"></i>Berjalan</span><span><i style="background:#D9604A"></i>Lewat deadline</span><span><i style="background:var(--sage-2)"></i>Selesai</span><span><i style="background:var(--ink);opacity:.45"></i>Hari ini</span></div>';
+    '<div class="legend"><span><i style="background:var(--leaf)"></i>In progress</span><span><i style="background:#D9604A"></i>Past deadline</span><span><i style="background:var(--sage-2)"></i>Done</span><span><i style="background:var(--ink);opacity:.45"></i>Today</span></div>';
 }
 
 // Daily log
@@ -1879,18 +1997,18 @@ function tabDaily() {
   const rows = S.project.daily.filter(r => r.Task || r.Notes)
     .sort((a, b) => String(b.Date) < String(a.Date) ? -1 : String(b.Date) > String(a.Date) ? 1 : b._row - a._row);
   const quick = '<form class="quick" id="quick-log">' +
-    '<input class="input" type="date" name="Date" value="' + esc(S.ui.lastLogDate || todayStr()) + '" aria-label="Tanggal" required>' +
+    '<input class="input" type="date" name="Date" value="' + esc(S.ui.lastLogDate || todayStr()) + '" aria-label="Date" required>' +
     '<select class="select" name="PIC" aria-label="PIC">' + S.team.map(m => '<option value="' + esc(m.code) + '"' + (m.code === S.user.code ? ' selected' : '') + '>' + esc(m.code) + '</option>').join('') + '</select>' +
     '<input class="input q-task" name="Task" placeholder="Kerjaan hari ini" aria-label="Task" required>' +
     '<input class="input q-notes" name="Notes" placeholder="Catatan progres (opsional)" aria-label="Catatan">' +
-    '<button class="btn primary" type="submit">Catat</button></form>';
-  if (!rows.length) return quick + '<div class="section">' + emptyState('Belum ada log', 'Catat kerjaan hari ini lewat form di atas.') + '</div>';
+    '<button class="btn primary" type="submit">Log</button></form>';
+  if (!rows.length) return quick + '<div class="section">' + emptyState('No logs yet', 'Log today\'s work with the form above.') + '</div>';
   const byDate = {};
-  rows.forEach(r => { (byDate[r.Date || 'Tanpa tanggal'] = byDate[r.Date || 'Tanpa tanggal'] || []).push(r); });
+  rows.forEach(r => { (byDate[r.Date || 'No date'] = byDate[r.Date || 'No date'] || []).push(r); });
   return quick + '<div class="section">' + Object.keys(byDate).map(d =>
     '<div class="day"><div class="day-date"><b>' + esc(isYmd(d) ? fmtDate(d) : d) + '</b><span>' + esc(isYmd(d) ? DAYS[parseYmd(d).getDay()] : '') + '</span></div><div>' +
       byDate[d].map(r => '<div class="entry">' + chip(r.PIC) + '<div><div class="t">' + esc(r.Task || '–') + '</div>' + (r.Notes ? '<div class="n">' + esc(r.Notes) + '</div>' : '') + '</div>' +
-        '<button type="button" class="btn small ghost" data-action="edit" data-tab="daily" data-key="' + esc(rowKey(r)) + '">Ubah</button></div>').join('') +
+        '<button type="button" class="btn small ghost" data-action="edit" data-tab="daily" data-key="' + esc(rowKey(r)) + '">Edit</button></div>').join('') +
     '</div></div>').join('') + '</div>';
 }
 function bindQuickLog() {
@@ -2021,7 +2139,7 @@ function drCommit(groups, specs, renames) {
 }
 async function runLayoutJob(job) {
   const d = S.cache[job.pid];
-  if (!d) throw new Error('Data project tidak ada.');
+  if (!d) throw new Error('Project data not found.');
   const groups = drGroupsOf(d);
   const sentRows = {};
   const series = job.specs.map(sp => {
@@ -2082,14 +2200,14 @@ function tabDrawings() {
   const match = r => (!q || (String(r.Code) + ' ' + r.Title + ' ' + (r.Notes || '')).toLowerCase().indexOf(q) > -1) &&
     (!fPic || r.PIC === fPic) && (!fSt || drawingStatus(r) === fSt);
   const toolbar = '<div class="toolbar">' +
-    (rows.length ? '<div style="min-width:200px;flex:1;max-width:360px"><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px"><b style="color:var(--ink)" class="num">' + done + ' dari ' + rows.length + ' gambar selesai</b><span class="muted num">' + pct + '%' + (hold ? ' · ' + hold + ' on hold' : '') + '</span></div><div class="meter"><i style="width:' + pct + '%"></i></div></div>' : '') +
+    (rows.length ? '<div style="min-width:200px;flex:1;max-width:360px"><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px"><b style="color:var(--ink)" class="num">' + done + ' of ' + rows.length + ' drawings done</b><span class="muted num">' + pct + '%' + (hold ? ' · ' + hold + ' on hold' : '') + '</span></div><div class="meter"><i style="width:' + pct + '%"></i></div></div>' : '') +
     '<span class="spacer"></span>' +
-    '<input class="input dr-search" type="search" placeholder="Cari kode / judul" aria-label="Cari gambar" value="' + esc(S.ui.drQuery || '') + '" data-input="dr-query">' +
-    '<select class="select" data-change="dr-pic" aria-label="Filter PIC"><option value="">Semua PIC</option>' + S.team.map(m => '<option' + (fPic === m.code ? ' selected' : '') + '>' + esc(m.code) + '</option>').join('') + '</select>' +
-    '<select class="select" data-change="dr-status" aria-label="Filter status"><option value="">Semua status</option>' + list('Status').map(o => '<option' + (fSt === o ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select>' +
-    '<button type="button" class="btn primary" data-action="dr-new-series">Series baru</button></div>';
+    '<input class="input dr-search" type="search" placeholder="Search code / title" aria-label="Search drawings" value="' + esc(S.ui.drQuery || '') + '" data-input="dr-query">' +
+    '<select class="select" data-change="dr-pic" aria-label="Filter PIC"><option value="">All PICs</option>' + S.team.map(m => '<option' + (fPic === m.code ? ' selected' : '') + '>' + esc(m.code) + '</option>').join('') + '</select>' +
+    '<select class="select" data-change="dr-status" aria-label="Filter status"><option value="">All statuses</option>' + list('Status').map(o => '<option' + (fSt === o ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select>' +
+    '<button type="button" class="btn primary" data-action="dr-new-series">New series</button></div>';
   const groups = drGroups();
-  if (!groups.length) return toolbar + '<div class="section">' + emptyState('Drawing list masih kosong', 'Bikin series pertama, misalnya AR_100SERIES_MAIN DRAWING, lalu ketik gambar-gambarnya langsung di tabel.', '<button type="button" class="btn primary" data-action="dr-new-series">Series baru</button>') + '</div>';
+  if (!groups.length) return toolbar + '<div class="section">' + emptyState('The drawing list is empty', 'Create the first series, e.g. AR_100SERIES_MAIN DRAWING, then type the drawings straight into the table.', '<button type="button" class="btn primary" data-action="dr-new-series">New series</button>') + '</div>';
   const revN = revCount();
   const picOpts = cur => '<option value="">–</option>' + S.team.map(m => '<option' + (m.code === cur ? ' selected' : '') + '>' + esc(m.code) + '</option>').join('') +
     (cur && !S.team.some(m => m.code === cur) ? '<option selected>' + esc(cur) + '</option>' : '');
@@ -2097,29 +2215,29 @@ function tabDrawings() {
     let out = '';
     for (let i = 1; i <= revN; i++) {
       const v = r['Rev ' + i] || '';
-      out += '<button type="button" class="rev ' + statusKey(v) + (v ? ' on' : '') + '" data-action="dr-rev" data-key="' + esc(rowKey(r)) + '" data-n="' + i + '" title="Revisi ke-' + i + ': ' + esc(v || 'belum') + ' (klik untuk ganti)">R' + i + '</button>';
+      out += '<button type="button" class="rev ' + statusKey(v) + (v ? ' on' : '') + '" data-action="dr-rev" data-key="' + esc(rowKey(r)) + '" data-n="' + i + '" title="Revision ' + i + ': ' + esc(v || 'not yet') + ' (click to change)">R' + i + '</button>';
     }
     return out;
   };
   const rowHtml = r => {
     const k = esc(rowKey(r)), sel = DR.sel.has(rowKey(r));
     return '<div class="row draw-row' + (sel ? ' selected' : '') + '" data-key="' + k + '" data-tab="drawings">' +
-      '<input type="checkbox" class="dr-check" data-action="dr-sel" data-key="' + k + '"' + (sel ? ' checked' : '') + ' aria-label="Pilih ' + esc(r.Code || r.Title) + '">' +
-      '<span class="drag" draggable="' + (!filtering) + '" data-drag="' + k + '" title="Geser untuk pindah urutan" aria-hidden="true">⋮⋮</span>' +
+      '<input type="checkbox" class="dr-check" data-action="dr-sel" data-key="' + k + '"' + (sel ? ' checked' : '') + ' aria-label="Select ' + esc(r.Code || r.Title) + '">' +
+      '<span class="drag" draggable="' + (!filtering) + '" data-drag="' + k + '" title="Drag to reorder" aria-hidden="true">⋮⋮</span>' +
       '<span class="c-no num muted">' + (noOf.get(r) || '') + '</span>' +
-      '<input class="cell c-code num" data-f="Code" data-key="' + k + '" value="' + esc(r.Code) + '" aria-label="Kode">' +
-      '<input class="cell c-title" data-f="Title" data-key="' + k + '" value="' + esc(r.Title) + '" aria-label="Judul">' +
+      '<input class="cell c-code num" data-f="Code" data-key="' + k + '" value="' + esc(r.Code) + '" aria-label="Code">' +
+      '<input class="cell c-title" data-f="Title" data-key="' + k + '" value="' + esc(r.Title) + '" aria-label="Title">' +
       '<select class="cell c-pic" data-f="PIC" data-key="' + k + '" aria-label="PIC">' + picOpts(r.PIC) + '</select>' +
-      '<input class="cell c-scale num" data-f="Scale" data-key="' + k + '" value="' + esc(r.Scale) + '" aria-label="Skala" placeholder="–">' +
+      '<input class="cell c-scale num" data-f="Scale" data-key="' + k + '" value="' + esc(r.Scale) + '" aria-label="Scale" placeholder="–">' +
       '<div class="c-status">' + statusSelect('drawings', r, 'Progress') + '</div>' +
       '<div class="c-rev">' + revPills(r) + '</div>' +
-      '<button type="button" class="more" data-action="edit" data-tab="drawings" data-key="' + k + '" title="Detail & catatan" aria-label="Detail">' + (r.Notes ? '✎' : '⋯') + '</button>' +
+      '<button type="button" class="more" data-action="edit" data-tab="drawings" data-key="' + k + '" title="Details & notes" aria-label="Details">' + (r.Notes ? '✎' : '⋯') + '</button>' +
     '</div>';
   };
   const addRow = (g, sb) => filtering ? '' :
     '<div class="row draw-add" data-series="' + esc(g.name) + '" data-sub="' + esc(sb.name) + '">' +
       '<span></span><span class="drag" aria-hidden="true">+</span><span></span>' +
-      '<input class="cell c-code num add-code" placeholder="' + esc(nextCode(g, sb.name)) + '" aria-label="Kode gambar baru">' +
+      '<input class="cell c-code num add-code" placeholder="' + esc(nextCode(g, sb.name)) + '" aria-label="New drawing code">' +
       '<input class="cell c-title add-title" placeholder="Tambah gambar… (Enter) · bisa paste banyak baris" aria-label="Judul gambar baru">' +
     '</div>';
   const body = groups.map(g => {
@@ -2130,13 +2248,13 @@ function tabDrawings() {
     const allSel = all.length && all.every(r => DR.sel.has(rowKey(r)));
     return '<section class="dr-series' + (closed ? ' closed' : '') + '" data-series="' + esc(g.name) + '">' +
       '<div class="dr-series-head" data-drop="series" data-series="' + esc(g.name) + '">' +
-        '<button type="button" class="x tog" data-action="dr-collapse" data-series="' + esc(g.name) + '" aria-expanded="' + !closed + '" aria-label="Buka/tutup series">' + (closed ? '▸' : '▾') + '</button>' +
-        (all.length ? '<input type="checkbox" class="dr-check" data-action="dr-sel-group" data-series="' + esc(g.name) + '"' + (allSel ? ' checked' : '') + ' aria-label="Pilih semua di series">' : '<span></span>') +
-        '<h3>' + esc(g.name || 'Tanpa series') + '</h3><span class="muted num">' + all.filter(r => isDone(drawingStatus(r))).length + '/' + all.length + '</span>' +
+        '<button type="button" class="x tog" data-action="dr-collapse" data-series="' + esc(g.name) + '" aria-expanded="' + !closed + '" aria-label="Expand/collapse series">' + (closed ? '▸' : '▾') + '</button>' +
+        (all.length ? '<input type="checkbox" class="dr-check" data-action="dr-sel-group" data-series="' + esc(g.name) + '"' + (allSel ? ' checked' : '') + ' aria-label="Select all in series">' : '<span></span>') +
+        '<h3>' + esc(g.name || 'No series') + '</h3><span class="muted num">' + all.filter(r => isDone(drawingStatus(r))).length + '/' + all.length + '</span>' +
         '<span class="spacer"></span>' +
-        (g.name ? '<button type="button" class="btn small ghost" data-action="dr-add-sub" data-series="' + esc(g.name) + '">+ Sub-grup</button>' +
-          '<button type="button" class="btn small ghost" data-action="dr-rename-series" data-series="' + esc(g.name) + '">Ganti nama</button>' +
-          '<button type="button" class="btn small ghost danger" data-action="dr-del-series" data-series="' + esc(g.name) + '">Hapus</button>' : '') +
+        (g.name ? '<button type="button" class="btn small ghost" data-action="dr-add-sub" data-series="' + esc(g.name) + '">+ Sub-group</button>' +
+          '<button type="button" class="btn small ghost" data-action="dr-rename-series" data-series="' + esc(g.name) + '">Rename</button>' +
+          '<button type="button" class="btn small ghost danger" data-action="dr-del-series" data-series="' + esc(g.name) + '">Delete</button>' : '') +
       '</div>' +
       (closed ? '' : g.subs.map((sb, si) => {
         const rs = filtering ? sb.rows.filter(match) : sb.rows;
@@ -2145,27 +2263,27 @@ function tabDrawings() {
         if (!sb.name && !rs.length && g.subs.some(x => x.name)) return '';
         const tone = sb.name ? ' tone-' + (((g.subs[0].name ? si : si - 1) % 6) + 1) : '';
         return (sb.name ? '<div class="sub-group dr-sub' + tone + '" data-drop="sub" data-series="' + esc(g.name) + '" data-sub="' + esc(sb.name) + '"><span>' + esc(sb.name) + '</span>' +
-            '<button type="button" class="btn small ghost" data-action="dr-rename-sub" data-series="' + esc(g.name) + '" data-sub="' + esc(sb.name) + '">Ganti nama</button>' +
-            '<button type="button" class="btn small ghost danger" data-action="dr-del-sub" data-series="' + esc(g.name) + '" data-sub="' + esc(sb.name) + '">Hapus</button></div>' : '') +
+            '<button type="button" class="btn small ghost" data-action="dr-rename-sub" data-series="' + esc(g.name) + '" data-sub="' + esc(sb.name) + '">Rename</button>' +
+            '<button type="button" class="btn small ghost danger" data-action="dr-del-sub" data-series="' + esc(g.name) + '" data-sub="' + esc(sb.name) + '">Delete</button></div>' : '') +
           '<div class="rows' + tone + '" data-series="' + esc(g.name) + '" data-sub="' + esc(sb.name) + '">' + rs.map(rowHtml).join('') + (g.name ? addRow(g, sb) : '') + '</div>';
       }).join('')) +
     '</section>';
   }).join('');
   const n = DR.sel.size;
   const targets = () => groups.filter(g => g.name).map(g => g.subs.map(sb => '<option value="' + esc(g.name + '\u0001' + sb.name) + '">' + esc(g.name + (sb.name ? ' › ' + sb.name : '')) + '</option>').join('')).join('');
-  const selbar = n ? '<div class="selbar" role="region" aria-label="Aksi untuk gambar terpilih"><b class="num">' + n + ' dipilih</b>' +
+  const selbar = n ? '<div class="selbar" role="region" aria-label="Actions for selected drawings"><b class="num">' + n + ' selected</b>' +
     '<select class="select" data-change="dr-bulk" data-f="PIC" aria-label="Ubah PIC"><option value="">PIC…</option>' + S.team.map(m => '<option>' + esc(m.code) + '</option>').join('') + '</select>' +
-    '<select class="select" data-change="dr-bulk" data-f="Progress" aria-label="Ubah progress"><option value="">Progress…</option>' + list('Status').map(o => '<option>' + esc(o) + '</option>').join('') + '</select>' +
+    '<select class="select" data-change="dr-bulk" data-f="Progress" aria-label="Change progress"><option value="">Progress…</option>' + list('Status').map(o => '<option>' + esc(o) + '</option>').join('') + '</select>' +
     '<input class="input" style="width:90px" placeholder="Skala…" data-bulk-scale aria-label="Ubah skala">' +
-    '<select class="select" data-change="dr-move" aria-label="Pindah ke"><option value="">Pindah ke…</option>' + targets() + '</select>' +
-    '<select class="select" data-change="dr-dup" aria-label="Duplikat ke"><option value="">Duplikat ke…</option>' + targets() + '</select>' +
+    '<select class="select" data-change="dr-move" aria-label="Move to"><option value="">Move to…</option>' + targets() + '</select>' +
+    '<select class="select" data-change="dr-dup" aria-label="Duplicate to"><option value="">Duplicate to…</option>' + targets() + '</select>' +
     '<button type="button" class="btn small" data-action="dr-up" title="Naik satu">↑</button><button type="button" class="btn small" data-action="dr-down" title="Turun satu">↓</button>' +
-    '<button type="button" class="btn small danger" data-action="dr-del">Hapus</button>' +
-    '<button type="button" class="btn small ghost" data-action="dr-clear">Batal</button></div>' : '';
+    '<button type="button" class="btn small danger" data-action="dr-del">Delete</button>' +
+    '<button type="button" class="btn small ghost" data-action="dr-clear">Cancel</button></div>' : '';
   return toolbar +
     '<div class="section dr-sheet' + (filtering ? ' filtering' : '') + '">' +
-      '<div class="thead draw-head"><span></span><span></span><span>No</span><span>Kode</span><span>Judul</span><span>PIC</span><span>Skala</span><span>Progress</span><span>Revisi</span><span></span></div>' +
-      (body || emptyState('Nggak ketemu', 'Coba kata kunci atau filter lain.')) +
+      '<div class="thead draw-head"><span></span><span></span><span>No</span><span>Code</span><span>Title</span><span>PIC</span><span>Scale</span><span>Progress</span><span>Revisions</span><span></span></div>' +
+      (body || emptyState('Nothing found', 'Try a different keyword or filter.')) +
     '</div>' + selbar;
 }
 
@@ -2214,7 +2332,7 @@ function drBulkSet(field, value) {
 function drDelete() {
   const rows = drSelected();
   if (!rows.length) return;
-  if (!confirm('Hapus ' + rows.length + ' gambar? Baris di DRAWING LIST juga ikut terhapus.')) return;
+  if (!confirm('Delete ' + rows.length + ' drawing(s)? The rows in DRAWING LIST will be deleted too.')) return;
   drBegin();
   const groups = drGroups();
   rows.forEach(r => { const loc = drLocate(groups, r); if (loc) loc.sb.rows.splice(loc.i, 1); });
@@ -2245,7 +2363,7 @@ function drStep(dir) {
   const first = drLocate(groups, rows[0]);
   if (!first) return;
   const sbRows = first.sb.rows;
-  if (rows.some(r => sbRows.indexOf(r) === -1)) { toast('Naik/turun cuma bisa untuk gambar di sub-grup yang sama.'); return; }
+  if (rows.some(r => sbRows.indexOf(r) === -1)) { toast('Moving up/down only works for drawings in the same sub-group.'); return; }
   const idx = rows.map(r => sbRows.indexOf(r)).sort((a, b) => a - b);
   if (dir < 0 && idx[0] === 0) return;
   if (dir > 0 && idx[idx.length - 1] === sbRows.length - 1) return;
@@ -2286,13 +2404,13 @@ function drPasteMany(addRowEl, text) {
   if (!added.length) return false;
   sb.rows.push.apply(sb.rows, added);
   drCommit(groups, [{ key: g.name, title: g.name }]);
-  toast(added.length + ' gambar ditambahkan.');
+  toast(added.length + ' drawing(s) added.');
   return true;
 }
 function drNewSeries() {
-  const name = (prompt('Nama series baru (contoh: AR_900SERIES_DETAIL)') || '').trim();
+  const name = (prompt('New series name (e.g. AR_900SERIES_DETAIL)') || '').trim();
   if (!name) return;
-  if (drGroups().some(g => g.name.toLowerCase() === name.toLowerCase())) { toast('Series itu sudah ada.', { error: true }); return; }
+  if (drGroups().some(g => g.name.toLowerCase() === name.toLowerCase())) { toast('That series already exists.', { error: true }); return; }
   drBegin();
   const groups = drGroups();
   groups.push({ name: name, subs: [{ name: '', rows: [] }] });
@@ -2300,7 +2418,7 @@ function drNewSeries() {
   setTimeout(() => { const el = document.querySelector('.draw-add[data-series="' + CSS.escape(name) + '"] .add-title'); if (el) el.focus(); }, 30);
 }
 function drRenameSeries(name) {
-  const nn = (prompt('Ganti nama series', name) || '').trim();
+  const nn = (prompt('Rename series', name) || '').trim();
   if (!nn || nn === name) return;
   drBegin();
   const groups = drGroups();
@@ -2313,23 +2431,23 @@ function drRenameSeries(name) {
 function drDeleteSeries(name) {
   const g = drGroups().find(x => x.name === name);
   const n = [].concat.apply([], g.subs.map(s => s.rows)).length;
-  if (!confirm('Hapus series ' + name + (n ? ' beserta ' + n + ' gambarnya' : '') + '?')) return;
+  if (!confirm('Delete series ' + name + (n ? ' and its ' + n + ' drawing(s)' : '') + '?')) return;
   drBegin();
   const groups = drGroups().filter(x => x.name !== name);
   drCommit(groups, [{ key: name, title: name, remove: true }]);
 }
 function drAddSub(name) {
-  const sn = (prompt('Nama sub-grup / lantai baru (contoh: LANTAI 2)') || '').trim();
+  const sn = (prompt('New sub-group / floor name (e.g. LANTAI 2)') || '').trim();
   if (!sn) return;
   drBegin();
   const groups = drGroups();
   const g = groups.find(x => x.name === name);
-  if (g.subs.some(x => x.name.toLowerCase() === sn.toLowerCase())) { toast('Sub-grup itu sudah ada.', { error: true }); return; }
+  if (g.subs.some(x => x.name.toLowerCase() === sn.toLowerCase())) { toast('That sub-group already exists.', { error: true }); return; }
   g.subs.push({ name: sn, rows: [] });
   drCommit(groups, [{ key: name, title: name }]);
 }
 function drRenameSub(name, sub) {
-  const sn = (prompt('Ganti nama sub-grup', sub) || '').trim();
+  const sn = (prompt('Rename sub-group', sub) || '').trim();
   if (!sn || sn === sub) return;
   drBegin();
   const groups = drGroups();
@@ -2339,7 +2457,7 @@ function drRenameSub(name, sub) {
 function drDeleteSub(name, sub) {
   const groups0 = drGroups();
   const sb0 = groups0.find(x => x.name === name).subs.find(x => x.name === sub);
-  if (!confirm('Hapus sub-grup ' + sub + (sb0.rows.length ? ' beserta ' + sb0.rows.length + ' gambarnya' : '') + '?')) return;
+  if (!confirm('Delete sub-group ' + sub + (sb0.rows.length ? ' and its ' + sb0.rows.length + ' drawing(s)' : '') + '?')) return;
   drBegin();
   const groups = drGroups();
   const g = groups.find(x => x.name === name);
@@ -2472,14 +2590,14 @@ function tabRevisions() {
   const rows = all.filter(r => f === 'all' ? true : !isDone(r.Status))
     .sort((a, b) => String(b.Date) < String(a.Date) ? -1 : 1);
   const toolbar = '<div class="toolbar"><div class="seg-ctl" role="group" aria-label="Filter revisi">' +
-    [['open', 'Belum selesai'], ['all', 'Semua']].map(o => '<button type="button" data-action="rev-filter" data-v="' + o[0] + '" aria-pressed="' + (f === o[0]) + '">' + o[1] + '</button>').join('') +
-    '</div><span class="spacer"></span><button type="button" class="btn primary" data-action="add" data-tab="revisions">Catat revisi</button></div>';
-  if (!all.length) return toolbar + '<div class="section">' + emptyState('Belum ada revisi', 'Catat permintaan revisi dari client atau internal di sini.') + '</div>';
-  if (!rows.length) return toolbar + '<div class="section">' + emptyState('Semua revisi selesai', 'Pilih "Semua" untuk melihat riwayatnya.') + '</div>';
-  return toolbar + '<div class="section"><div class="thead rev-head"><span>Tanggal</span><span>Item</span><span>Gambar terkait</span><span>PIC</span><span>Status</span></div><div class="rows">' +
+    [['open', 'Open'], ['all', 'All']].map(o => '<button type="button" data-action="rev-filter" data-v="' + o[0] + '" aria-pressed="' + (f === o[0]) + '">' + o[1] + '</button>').join('') +
+    '</div><span class="spacer"></span><button type="button" class="btn primary" data-action="add" data-tab="revisions">Log revision</button></div>';
+  if (!all.length) return toolbar + '<div class="section">' + emptyState('No revisions yet', 'Log revision requests from the client or internally here.') + '</div>';
+  if (!rows.length) return toolbar + '<div class="section">' + emptyState('All revisions done', 'Choose "All" to see the history.') + '</div>';
+  return toolbar + '<div class="section"><div class="thead rev-head"><span>Date</span><span>Item</span><span>Related drawing</span><span>PIC</span><span>Status</span></div><div class="rows">' +
     rows.map(r => '<div class="row rev-row clickable" data-action="edit" data-tab="revisions" data-key="' + esc(rowKey(r)) + '">' +
       '<div class="c-date num">' + esc(fmtDate(r.Date) || '–') + '</div>' +
-      '<div style="min-width:0"><div class="title">' + esc(r.Item) + '</div><div class="sub">' + esc([r['Requested By'] ? 'dari ' + r['Requested By'] : '', r.Description].filter(Boolean).join(' · ')) + '</div></div>' +
+      '<div style="min-width:0"><div class="title">' + esc(r.Item) + '</div><div class="sub">' + esc([r['Requested By'] ? 'of ' + r['Requested By'] : '', r.Description].filter(Boolean).join(' · ')) + '</div></div>' +
       '<div class="c-ref num muted" style="overflow-wrap:anywhere">' + esc(r['Related Drawing'] || '–') + '</div>' +
       '<div class="c-pic">' + chip(r.PIC) + '</div><div class="c-status">' + statusSelect('revisions', r) + '</div></div>').join('') +
     '</div></div>';
@@ -2489,20 +2607,20 @@ function tabRevisions() {
 function tabMeetings() {
   const rows = S.project.meetings.filter(r => r.Date || r.Agenda || r.Notes)
     .sort((a, b) => String(b.Date) < String(a.Date) ? -1 : 1);
-  const toolbar = '<div class="toolbar"><span class="spacer"></span><button type="button" class="btn primary" data-action="add" data-tab="meetings">Catat meeting</button></div>';
-  if (!rows.length) return toolbar + '<div class="section">' + emptyState('Belum ada catatan meeting', 'Catat hasil meeting, action item-nya bisa langsung dijadikan task.') + '</div>';
+  const toolbar = '<div class="toolbar"><span class="spacer"></span><button type="button" class="btn primary" data-action="add" data-tab="meetings">Log meeting</button></div>';
+  if (!rows.length) return toolbar + '<div class="section">' + emptyState('No meeting notes yet', 'Log meeting outcomes; action items can be turned into tasks right away.') + '</div>';
   const taskNames = S.project.tasks.map(t => String(t.Task || '').trim().toLowerCase());
   return toolbar + '<div class="section">' + rows.map(r => {
     const items = String(r['Action Items'] || '').split('\n').map(s => s.replace(/^[-•*\d.)\s]+/, '').trim()).filter(Boolean);
     return '<div class="meeting"><div class="day-date"><b>' + esc(fmtDate(r.Date) || '–') + '</b><span>' + esc(isYmd(r.Date) ? DAYS[parseYmd(r.Date).getDay()] : '') + '</span></div>' +
       '<div style="min-width:0"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><h3>' + esc(r.Agenda || 'Meeting') + '</h3>' +
-      '<button type="button" class="btn small ghost" data-action="edit" data-tab="meetings" data-key="' + esc(rowKey(r)) + '">Ubah</button></div>' +
-      (r.Attendees ? '<div class="sub muted">Hadir: ' + esc(r.Attendees) + '</div>' : '') +
+      '<button type="button" class="btn small ghost" data-action="edit" data-tab="meetings" data-key="' + esc(rowKey(r)) + '">Edit</button></div>' +
+      (r.Attendees ? '<div class="sub muted">Attendees: ' + esc(r.Attendees) + '</div>' : '') +
       (r.Notes ? '<div class="notes">' + esc(r.Notes) + '</div>' : '') +
       (items.length ? '<ul class="actions-list">' + items.map(it => {
         const exists = taskNames.indexOf(it.toLowerCase()) > -1;
-        return '<li><span>' + esc(it) + '</span>' + (exists ? '<span class="muted" style="font-size:13px;white-space:nowrap">Sudah jadi task</span>'
-          : '<button type="button" class="btn small" data-action="item-to-task" data-item="' + esc(it) + '" data-date="' + esc(r.Date || '') + '">Jadikan task</button>') + '</li>';
+        return '<li><span>' + esc(it) + '</span>' + (exists ? '<span class="muted" style="font-size:13px;white-space:nowrap">Already a task</span>'
+          : '<button type="button" class="btn small" data-action="item-to-task" data-item="' + esc(it) + '" data-date="' + esc(r.Date || '') + '">Make it a task</button>') + '</li>';
       }).join('') + '</ul>' : '') +
       '</div></div>';
   }).join('') + '</div>';
@@ -2513,65 +2631,69 @@ function tabFiles() {
   const rows = S.project.files.filter(r => r.Name || r.Link);
   const drive = safeUrl((S.project.info || {})['Drive Folder']);
   const toolbar = '<div class="toolbar">' +
-    (drive ? '<a class="btn" href="' + esc(drive) + '" target="_blank" rel="noopener">Buka MAIN DRIVE</a>' : '<span class="muted" style="font-size:14px">Link MAIN DRIVE belum diisi (atur di tab Info).</span>') +
-    '<span class="spacer"></span><button type="button" class="btn primary" data-action="add" data-tab="files">Tambah link</button></div>';
-  if (!rows.length) return toolbar + '<div class="section">' + emptyState('Belum ada file', 'Simpan link Canva, BOQ, folder CAD, dan lainnya di sini.') + '</div>';
+    (drive ? '<a class="btn" href="' + esc(drive) + '" target="_blank" rel="noopener">Open MAIN DRIVE</a>' : '<span class="muted" style="font-size:14px">MAIN DRIVE link not set (set it in the Info tab).</span>') +
+    '<span class="spacer"></span><button type="button" class="btn primary" data-action="add" data-tab="files">Add link</button></div>';
+  if (!rows.length) return toolbar + '<div class="section">' + emptyState('No files yet', 'Keep links to Canva, BOQ, CAD folders and more here.') + '</div>';
   const order = [];
-  rows.forEach(r => { const c = r.Category || 'Lainnya'; if (order.indexOf(c) === -1) order.push(c); });
+  rows.forEach(r => { const c = r.Category || 'Others'; if (order.indexOf(c) === -1) order.push(c); });
   return toolbar + '<div class="section">' + order.map(c => {
-    const items = rows.filter(r => (r.Category || 'Lainnya') === c);
-    return '<div class="group-title">' + esc(c) + '<span class="muted num">' + items.filter(r => r.Link).length + '/' + items.length + ' terisi</span></div><div class="rows">' +
+    const items = rows.filter(r => (r.Category || 'Others') === c);
+    return '<div class="group-title">' + esc(c) + '<span class="muted num">' + items.filter(r => r.Link).length + '/' + items.length + ' filled</span></div><div class="rows">' +
       items.map(r => {
         const url = safeUrl(r.Link), pdf = safeUrl(r.PDF);
         return '<div class="row file-row' + (url ? '' : ' placeholder') + '"><div style="min-width:0">' +
           (url ? '<a class="title" href="' + esc(url) + '" target="_blank" rel="noopener" style="text-decoration:none">' + esc(r.Name || url) + '</a>' : '<div class="title">' + esc(r.Name) + '</div>') +
-          '<div class="sub">' + (url ? esc(url.replace(/^https?:\/\//, '').slice(0, 60)) : 'Belum ada link') +
+          '<div class="sub">' + (url ? esc(url.replace(/^https?:\/\//, '').slice(0, 60)) : 'No link yet') +
           (pdf ? ' · <a href="' + esc(pdf) + '" target="_blank" rel="noopener">PDF</a>' : '') + '</div></div>' +
-          '<button type="button" class="btn small ' + (url ? 'ghost' : '') + '" data-action="edit" data-tab="files" data-key="' + esc(rowKey(r)) + '" aria-label="Ubah ' + esc(r.Name) + '">' + (url ? 'Ubah' : 'Isi link') + '</button></div>';
+          '<button type="button" class="btn small ' + (url ? 'ghost' : '') + '" data-action="edit" data-tab="files" data-key="' + esc(rowKey(r)) + '" aria-label="Edit ' + esc(r.Name) + '">' + (url ? 'Edit' : 'Add link') + '</button></div>';
       }).join('') + '</div>';
   }).join('') + '</div>';
 }
 
 // Info
 const INFO_FIELDS = [
-  { k: 'Project Name', label: 'Nama project', t: 'text', req: 1 },
-  { k: 'Project Code', label: 'Kode', t: 'text' },
+  { k: 'Project Name', label: 'Project name', t: 'text', req: 1 },
+  { k: 'Project Code', label: 'Code', t: 'text' },
   { k: 'Client', label: 'Client', t: 'text' },
-  { k: 'Location', label: 'Lokasi', t: 'text' },
-  { k: 'Type', label: 'Tipe', t: 'text', hint: 'House Interior, Office, Retail…' },
-  { k: 'Scope', label: 'Scope', t: 'text', hint: 'Interior Design, Arsitektur…' },
+  { k: 'Location', label: 'Location', t: 'text' },
+  { k: 'Type', label: 'Type', t: 'text', hint: 'House Interior, Office, Retail…' },
+  { k: 'Scope', label: 'Scope', t: 'text', hint: 'Interior Design, Architecture…' },
   { k: 'PIC', label: 'PIC', t: 'pic' },
-  { k: 'Stage', label: 'Tahap', t: 'list', list: 'Stage' },
-  { k: 'Start Date', label: 'Mulai', t: 'date' },
-  { k: 'End Date', label: 'Selesai', t: 'date' },
-  { k: 'Drive Folder', label: 'Link MAIN DRIVE (folder project)', t: 'url', wide: 1 },
-  { k: 'Color', label: 'Warna label project', t: 'color', wide: 1 },
+  { k: 'Stage', label: 'Stage', t: 'list', list: 'Stage' },
+  { k: 'Current Status', label: 'Project status', t: 'list', opts: PSTATUS },
+  { k: 'Priority', label: 'Priority', t: 'list', opts: PRIORITIES },
+  { k: 'Category', label: 'Category', t: 'list', opts: CATEGORIES },
+  { k: 'Start Date', label: 'Start', t: 'date' },
+  { k: 'End Date', label: 'End', t: 'date' },
+  { k: 'Drive Folder', label: 'MAIN DRIVE link (project folder)', t: 'url', wide: 1 },
+  { k: 'Notes', label: 'Notes', t: 'area', wide: 1, hint: 'One point per line' },
+  { k: 'Color', label: 'Project label color', t: 'color', wide: 1 },
 ];
 function tabInfo() {
   const info = S.project.info || {};
   const archived = S.project.project && S.project.project.archived;
   const cov = coverUrl(info['Cover Photo'], 1200);
-  const coverBlock = '<div class="wide cover-block"><span class="cover-label">Foto cover</span>' +
+  const coverBlock = '<div class="wide cover-block"><span class="cover-label">Cover photo</span>' +
     (cov ? '<div class="cover-preview">' + coverImg(info['Cover Photo'], info['Cover Crop'], 1200) + '</div>'
-         : '<p class="muted" style="margin:0 0 8px;font-size:14px">Belum ada foto cover. Opsional, project tanpa foto tetap tampil rapi.</p>') +
-    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" data-action="cover-edit">' + (cov ? 'Atur foto cover' : 'Tambah foto cover') + '</button>' +
-    (cov ? '<button type="button" class="btn ghost danger" data-action="cover-remove">Hapus foto</button>' : '') + '</div></div>';
+         : '<p class="muted" style="margin:0 0 8px;font-size:14px">No cover photo yet. Optional — projects without one still look tidy.</p>') +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap"><button type="button" class="btn" data-action="cover-edit">' + (cov ? 'Edit cover photo' : 'Add cover photo') + '</button>' +
+    (cov ? '<button type="button" class="btn ghost danger" data-action="cover-remove">Remove photo</button>' : '') + '</div></div>';
   return '<form class="section" id="info-form"><div class="info-grid">' + INFO_FIELDS.map(f => fieldHtml(f, info[f.k])).join('') +
     coverBlock + '</div>' +
-    '<div class="info-actions"><button class="btn primary" type="submit">Simpan info</button>' +
+    '<div class="info-actions"><button class="btn primary" type="submit">Save info</button>' +
     '<span class="muted" id="info-state" style="font-size:14px"></span><span style="flex:1"></span>' +
-    '<button type="button" class="btn ' + (archived ? '' : 'danger') + '" data-action="archive" data-v="' + (archived ? 'false' : 'true') + '">' + (archived ? 'Aktifkan lagi' : 'Arsipkan project') + '</button></div></form>';
+    '<button type="button" class="btn ' + (archived ? '' : 'danger') + '" data-action="archive" data-v="' + (archived ? 'false' : 'true') + '">' + (archived ? 'Reactivate' : 'Archive project') + '</button></div></form>';
 }
 function bindInfoForm() {
   const form = $('#info-form');
-  form.addEventListener('input', () => { $('#info-state').textContent = 'Ada perubahan yang belum disimpan.'; });
+  form.addEventListener('input', () => { $('#info-state').textContent = 'There are unsaved changes.'; });
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const data = readForm(form, INFO_FIELDS);
-    if (!data['Project Name']) { toast('Nama project wajib diisi.', { error: true }); return; }
+    if (!data['Project Name']) { toast('Project name is required.', { error: true }); return; }
     const changed = {};
     Object.keys(data).forEach(k => { if (String(data[k]) !== String(S.project.info[k] == null ? '' : S.project.info[k])) changed[k] = data[k]; });
-    if (!Object.keys(changed).length) { toast('Nggak ada yang berubah.'); return; }
+    if (!Object.keys(changed).length) { toast('Nothing changed.'); return; }
     saveInfo(changed);
     render(true);
   });
@@ -2590,12 +2712,17 @@ function saveInfo(changed, pid) {
     if ('Cover Photo' in changed) pr.cover = changed['Cover Photo'];
     if ('Cover Crop' in changed) pr.coverCrop = changed['Cover Crop'];
     if ('Color' in changed) pr.color = changed.Color;
+    if ('Current Status' in changed) pr.status = changed['Current Status'];
+    if ('Priority' in changed) pr.priority = changed.Priority;
+    if ('Notes' in changed) pr.notes = changed.Notes;
+    if ('Category' in changed) pr.category = changed.Category;
     renderSidebar();
   }
   const ov = S.overview && S.overview.projects.find(x => x.id === pid);
   if (ov && ov.info) Object.assign(ov.info, changed);
   if (ov && 'Cover Photo' in changed) ov.cover = changed['Cover Photo'];
   if (ov && 'Color' in changed) ov.color = changed.Color;
+  if (ov) [['Current Status', 'status'], ['Priority', 'priority'], ['Notes', 'notes'], ['Category', 'category']].forEach(x => { if (x[0] in changed) ov[x[1]] = changed[x[0]]; });
   enqueue({ pid: pid, type: 'info', fields: changed });
 }
 
@@ -2603,39 +2730,39 @@ function saveInfo(changed, pid) {
 const SCHEMA = {
   tasks: { title: 'task', fields: [
     { k: 'Task', label: 'Task', t: 'text', req: 1, wide: 1 },
-    { k: 'PIC', label: 'PIC', t: 'pic' }, { k: 'Priority', label: 'Prioritas', t: 'list', list: 'Priority' },
-    { k: 'Start', label: 'Mulai', t: 'date' }, { k: 'Deadline', label: 'Deadline (End)', t: 'date' },
+    { k: 'PIC', label: 'PIC', t: 'pic' }, { k: 'Priority', label: 'Priority', t: 'list', list: 'Priority' },
+    { k: 'Start', label: 'Start', t: 'date' }, { k: 'Deadline', label: 'Deadline (End)', t: 'date' },
     { k: 'Status', label: 'Status', t: 'list', list: 'Status', wide: 1 }] },
   daily: { title: 'log', fields: [
-    { k: 'Date', label: 'Tanggal', t: 'date', req: 1 }, { k: 'PIC', label: 'PIC', t: 'pic' },
-    { k: 'Task', label: 'Kerjaan', t: 'text', req: 1, wide: 1 }, { k: 'Notes', label: 'Catatan progres', t: 'area', wide: 1 }] },
-  drawings: { title: 'gambar', fields: () => [
-    { k: 'Series', label: 'Series', t: 'text', req: 1, wide: 1, datalist: 'series', hint: 'Pilih atau ketik, misal AR_100SERIES_MAIN DRAWING' },
-    { k: 'Sub', label: 'Sub-grup / lantai (opsional)', t: 'text', wide: 1, datalist: 'subs', hint: 'BASEMENT, LANTAI 1, …' },
-    { k: 'Code', label: 'Drawing code', t: 'text', hint: 'AR_100SERIES_101' }, { k: 'Scale', label: 'Skala', t: 'text', hint: '1:100' },
+    { k: 'Date', label: 'Date', t: 'date', req: 1 }, { k: 'PIC', label: 'PIC', t: 'pic' },
+    { k: 'Task', label: 'Work', t: 'text', req: 1, wide: 1 }, { k: 'Notes', label: 'Progress notes', t: 'area', wide: 1 }] },
+  drawings: { title: 'drawing', fields: () => [
+    { k: 'Series', label: 'Series', t: 'text', req: 1, wide: 1, datalist: 'series', hint: 'Choose or type, e.g. AR_100SERIES_MAIN DRAWING' },
+    { k: 'Sub', label: 'Sub-group / floor (optional)', t: 'text', wide: 1, datalist: 'subs', hint: 'BASEMENT, LANTAI 1, …' },
+    { k: 'Code', label: 'Drawing code', t: 'text', hint: 'AR_100SERIES_101' }, { k: 'Scale', label: 'Scale', t: 'text', hint: '1:100' },
     { k: 'Title', label: 'Drawing title', t: 'text', req: 1, wide: 1 },
     { k: 'PIC', label: 'PIC', t: 'pic' }, { k: 'Progress', label: 'Progress', t: 'list', list: 'Status' }]
-    .concat(Array.from({ length: revCount() }, (_, i) => ({ k: 'Rev ' + (i + 1), label: 'Revisi ke-' + (i + 1), t: 'list', list: 'Status' })))
-    .concat([{ k: 'Notes', label: 'Ket', t: 'text', wide: 1 }]) },
-  revisions: { title: 'revisi', fields: [
-    { k: 'Date', label: 'Tanggal', t: 'date' }, { k: 'Requested By', label: 'Diminta oleh', t: 'text', hint: 'Client, PIC, kontraktor…' },
-    { k: 'Item', label: 'Yang direvisi', t: 'text', req: 1, wide: 1 },
-    { k: 'Related Drawing', label: 'Gambar terkait', t: 'text', datalist: 'drawings' }, { k: 'PIC', label: 'PIC', t: 'pic' },
-    { k: 'Description', label: 'Detail revisi', t: 'area', wide: 1 },
-    { k: 'Status', label: 'Status', t: 'list', list: 'Status' }, { k: 'Done Date', label: 'Tanggal selesai', t: 'date' }] },
+    .concat(Array.from({ length: revCount() }, (_, i) => ({ k: 'Rev ' + (i + 1), label: 'Revision ' + (i + 1), t: 'list', list: 'Status' })))
+    .concat([{ k: 'Notes', label: 'Notes', t: 'text', wide: 1 }]) },
+  revisions: { title: 'revision', fields: [
+    { k: 'Date', label: 'Date', t: 'date' }, { k: 'Requested By', label: 'Requested by', t: 'text', hint: 'Client, PIC, contractor…' },
+    { k: 'Item', label: 'What\'s revised', t: 'text', req: 1, wide: 1 },
+    { k: 'Related Drawing', label: 'Related drawing', t: 'text', datalist: 'drawings' }, { k: 'PIC', label: 'PIC', t: 'pic' },
+    { k: 'Description', label: 'Revision details', t: 'area', wide: 1 },
+    { k: 'Status', label: 'Status', t: 'list', list: 'Status' }, { k: 'Done Date', label: 'Done date', t: 'date' }] },
   meetings: { title: 'meeting', fields: [
-    { k: 'Date', label: 'Tanggal', t: 'date', req: 1 }, { k: 'Attendees', label: 'Peserta', t: 'text' },
+    { k: 'Date', label: 'Date', t: 'date', req: 1 }, { k: 'Attendees', label: 'Attendees', t: 'text' },
     { k: 'Agenda', label: 'Agenda', t: 'text', wide: 1 },
-    { k: 'Notes', label: 'Catatan', t: 'area', wide: 1 },
-    { k: 'Action Items', label: 'Action items (satu per baris)', t: 'area', wide: 1 }] },
+    { k: 'Notes', label: 'Notes', t: 'area', wide: 1 },
+    { k: 'Action Items', label: 'Action items (one per line)', t: 'area', wide: 1 }] },
   files: { title: 'link', fields: [
-    { k: 'Category', label: 'Seksi di FILES', t: 'text', req: 1, wide: 1, datalist: 'filecats', hint: 'Presentation Files, Working Files, …' },
-    { k: 'Name', label: 'Nama', t: 'text', req: 1, wide: 1, hint: 'Canva_002_20261013' },
-    { k: 'Link', label: 'Link', t: 'url', wide: 1 }, { k: 'PDF', label: 'Link PDF (kalau seksinya punya kolom PDF)', t: 'url', wide: 1 }] },
+    { k: 'Category', label: 'Section in FILES', t: 'text', req: 1, wide: 1, datalist: 'filecats', hint: 'Presentation Files, Working Files, …' },
+    { k: 'Name', label: 'Name', t: 'text', req: 1, wide: 1, hint: 'Canva_002_20261013' },
+    { k: 'Link', label: 'Link', t: 'url', wide: 1 }, { k: 'PDF', label: 'PDF link (if the section has a PDF column)', t: 'url', wide: 1 }] },
   newproject: { title: 'project', fields: INFO_FIELDS.filter(f => f.k !== 'Drive Folder')
-    .map(f => f.k === 'Project Code' ? Object.assign({}, f, { hint: 'Kosongkan untuk dibuat otomatis' }) : f)
+    .map(f => f.k === 'Project Code' ? Object.assign({}, f, { hint: 'Leave empty to generate automatically' }) : f)
     .concat([{ k: 'Drive Mode', label: 'MAIN DRIVE', t: 'drivemode', wide: 1 },
-      { k: 'Drive Folder', label: 'Link folder MAIN DRIVE yang udah ada', t: 'url', wide: 1, hint: 'https://drive.google.com/drive/folders/…' }]) },
+      { k: 'Drive Folder', label: 'Existing MAIN DRIVE folder link', t: 'url', wide: 1, hint: 'https://drive.google.com/drive/folders/…' }]) },
 };
 function schemaFields(kind) { const f = SCHEMA[kind].fields; return typeof f === 'function' ? f() : f; }
 function fieldHtml(f, value) {
@@ -2646,21 +2773,24 @@ function fieldHtml(f, value) {
   if (f.t === 'drivemode') {
     const cur = v || 'new';
     return '<fieldset class="field wide color-field drive-mode"><legend>' + label + '</legend>' +
-      [['new', 'Bikin folder baru otomatis', 'Folder NAMA PROJECT di 002 WORKING, isinya salinan 000 FOLDER TEMP'],
-       ['link', 'Pakai folder yang udah ada', 'Tempel link folder project di Drive']].map(o =>
+      [['new', 'Create a new folder automatically', 'PROJECT NAME folder in 002 WORKING, with a copy of 000 FOLDER TEMP'],
+       ['link', 'Use an existing folder', 'Paste the project folder link from Drive']].map(o =>
         '<label class="radio-card"><input type="radio" name="' + esc(f.k) + '" value="' + o[0] + '" data-change="drive-mode"' + (cur === o[0] ? ' checked' : '') + '>' +
         '<span><b>' + o[1] + '</b><span>' + o[2] + '</span></span></label>').join('') + '</fieldset>';
   }
   if (f.t === 'color') {
     return '<fieldset class="field' + (f.wide ? ' wide' : '') + ' color-field"><legend>' + label + '</legend><div class="swatches">' +
-      [['', 'Tanpa warna']].concat(PROJECT_COLORS).map(c => '<label class="swatch' + (c[0] ? ' pc-' + c[0] : ' none') + '" title="' + esc(c[1]) + '">' +
-        '<input type="radio" name="' + esc(f.k) + '" value="' + c[0] + '"' + (String(v) === c[0] ? ' checked' : '') + '><span class="sr">' + esc(c[1]) + '</span></label>').join('') +
+      [['', 'No color']].concat(swatchList()).map(c => (a => '<label class="swatch' + (c[0] ? a.cls : ' none') + '"' + a.style + ' title="' + esc(c[1]) + '">' +
+        '<input type="radio" name="' + esc(f.k) + '" value="' + esc(c[0]) + '"' + (String(v) === c[0] ? ' checked' : '') + '><span class="sr">' + esc(c[1]) + '</span></label>')(colorAttr(c[0], true))).join('') +
+      (cv => '<label class="swatch custom" title="Custom color"' + (cv ? ' style="background:' + v + '"' : '') + '><span class="plus" aria-hidden="true">+</span>' +
+        '<input type="radio" name="' + esc(f.k) + '" value="' + (cv ? esc(v) : '') + '"' + (cv ? ' checked' : '') + ' tabindex="-1">' +
+        '<input type="color" class="color-input" data-change="custom-color-field" value="' + (HEX_RE.test(v) ? v : '#9DB4A0') + '" aria-label="Custom color"></label>')(HEX_RE.test(v) && !swatchList().some(c => c[0] === v)) +
       '</div></fieldset>';
   }
   if (f.t === 'area') {
     control = '<textarea class="area" id="' + id + '" name="' + esc(f.k) + '">' + esc(v) + '</textarea>';
   } else if (f.t === 'pic' || f.t === 'list') {
-    const opts = f.t === 'pic' ? S.team.map(m => [m.code, m.code + ' · ' + m.name]) : list(f.list).map(o => [o, o]);
+    const opts = f.t === 'pic' ? S.team.map(m => [m.code, m.code + ' · ' + m.name]) : (f.opts || list(f.list)).map(o => [o, o]);
     if (v && !opts.some(o => o[0] === String(v))) opts.unshift([String(v), String(v)]);
     control = '<select class="select" id="' + id + '" name="' + esc(f.k) + '"><option value="">–</option>' +
       opts.map(o => '<option value="' + esc(o[0]) + '"' + (String(v) === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>').join('') + '</select>';
@@ -2699,7 +2829,7 @@ function openDrawer(kind, row, defaults) {
   const values = Object.assign({}, defaults || {}, row || {});
   closeDrawer();
   drawerState = { kind: kind, row: row };
-  const title = kind === 'newproject' ? 'Project baru' : (isNew ? 'Tambah ' : 'Ubah ') + schema.title;
+  const title = kind === 'newproject' ? 'New project' : (isNew ? 'Add ' : 'Edit ') + schema.title;
   const wrap = document.createElement('div');
   wrap.id = 'drawer-root';
   wrap.innerHTML = '<div class="scrim" data-action="close-drawer"></div>' +
@@ -2708,9 +2838,9 @@ function openDrawer(kind, row, defaults) {
     '<form id="drawer-form" novalidate><div class="body">' + schemaFields(kind).map(f => fieldHtml(f, values[f.k])).join('') + datalists() +
     (kind === 'newproject' ? '<p class="muted wide" id="np-note" style="margin:0;font-size:14px"></p>' : '') +
     '</div><footer>' +
-      (isNew ? '' : '<button type="button" class="btn danger ghost" data-action="delete-row">Hapus</button>') +
-      '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Batal</button>' +
-      '<button type="submit" class="btn primary">' + (kind === 'newproject' ? 'Bikin project' : 'Simpan') + '</button>' +
+      (isNew ? '' : '<button type="button" class="btn danger ghost" data-action="delete-row">Delete</button>') +
+      '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Cancel</button>' +
+      '<button type="submit" class="btn primary">' + (kind === 'newproject' ? 'Create project' : 'Save') + '</button>' +
     '</footer></form></div>';
   document.body.appendChild(wrap);
   if (kind === 'newproject') driveModeUi();
@@ -2721,7 +2851,7 @@ function openDrawer(kind, row, defaults) {
 function closeDrawer() { const d = $('#drawer-root'); if (d) d.remove(); drawerState = null; }
 
 // ---------- Sambungkan dashboard lama ----------
-const CONNECT_FIELDS = INFO_FIELDS.map(f => f.k === 'Project Code' ? Object.assign({}, f, { hint: 'Kosongkan untuk dibuat otomatis' }) : f);
+const CONNECT_FIELDS = INFO_FIELDS.map(f => f.k === 'Project Code' ? Object.assign({}, f, { hint: 'Leave empty to generate automatically' }) : f);
 
 function mountDrawer(title, bodyHtml, footerHtml) {
   const replacing = !!$('#drawer-root'); // ganti langkah: jangan animasi masuk lagi
@@ -2746,30 +2876,30 @@ function driveModeUi() {
   if (link) link.closest('.field').hidden = mode !== 'link';
   const note = $('#np-note');
   if (note) note.textContent = mode === 'link'
-    ? 'Dashboard GSheets disimpan di folder itu. Link MAIN DRIVE diisi, dan subfolder Site Photo, Dimension, Data From Client di dalamnya otomatis ditautkan kalau ketemu. Folder & sheet di-share ke semua email tim.'
-    : 'Sistem akan bikin folder project di 002 WORKING (isi folder dari 000 FOLDER TEMP), menyimpan dashboard GSheets di dalamnya, mengisi link MAIN DRIVE, Site Photo, Dimension, dan Data From Client, lalu share ke semua email tim.';
+    ? 'The Google Sheets dashboard is saved in that folder. The MAIN DRIVE link is filled in, and the Site Photo, Dimension and Data From Client subfolders inside it are linked automatically if found. The folder & sheet are shared with every team email.'
+    : 'The system creates a project folder in 002 WORKING (contents from 000 FOLDER TEMP), saves the Google Sheets dashboard inside it, fills in the MAIN DRIVE, Site Photo, Dimension and Data From Client links, then shares it with every team email.';
 }
 
 /** "+ Baru": bikin project dari template, atau import dashboard GSheets yang sudah ada. */
 function openNewChooser() {
-  mountDrawer('Project baru',
+  mountDrawer('New project',
     '<button type="button" class="choice wide" data-action="new-choice" data-v="template">' + buddySvg(4) +
-      '<span><b>Bikin project baru</b><span>Dari template SAAAMA: folder project di 002 WORKING + dashboard GSheets dibikin otomatis.</span></span></button>' +
+      '<span><b>Create a new project</b><span>From the SAAAMA template: a project folder in 002 WORKING + a Google Sheets dashboard, created automatically.</span></span></button>' +
     '<button type="button" class="choice wide" data-action="new-choice" data-v="import">' + buddySvg(9) +
-      '<span><b>Import dari GSheets yang udah ada</b><span>Sambungkan dashboard project lama (format F HOUSE). Sheet-nya langsung dipakai, nggak ada salinan.</span></span></button>',
-    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Batal</button>');
+      '<span><b>Import an existing Google Sheet</b><span>Connect an older project dashboard (F HOUSE format). The sheet is used directly, no copy is made.</span></span></button>',
+    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Cancel</button>');
   drawerState = { kind: 'chooser' };
 }
 function openConnectStep1(url, error, existing) {
-  const wrap = mountDrawer('Sambungkan dashboard lama',
-    '<p class="wide muted" style="margin:0">Tempel link GSheets dashboard project yang udah ada. Sheet itu yang langsung dipakai: edit di aplikasi masuk ke sheet itu, nggak ada salinan.</p>' +
-    '<label class="field wide" for="imp-url"><span>Link GSheets</span>' +
+  const wrap = mountDrawer('Connect an existing dashboard',
+    '<p class="wide muted" style="margin:0">Paste the link to an existing project dashboard in Google Sheets. That sheet is used directly: edits in the app go into that sheet, no copy is made.</p>' +
+    '<label class="field wide" for="imp-url"><span>Google Sheets link</span>' +
       '<input class="input" id="imp-url" type="url" placeholder="https://docs.google.com/spreadsheets/d/…" value="' + esc(url || '') + '" required></label>' +
     (error ? '<div class="notice red wide" role="alert">' + esc(error) +
-      (existing ? '<div style="margin-top:8px"><button type="button" class="btn small" data-action="open-project" data-id="' + esc(existing.id) + '">Buka ' + esc(existing.name) + '</button></div>' : '') + '</div>' : '') +
-    '<div class="notice green wide">Sebelum disambungkan, sistem cuma <b>membaca</b> sheet itu dan nunjukin isinya plus perubahan yang bakal dipasang. Belum ada yang diubah sampai lu klik <b>Sambungkan</b>.</div>',
-    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Batal</button>' +
-    '<button type="submit" class="btn primary">Cek isi sheet</button>');
+      (existing ? '<div style="margin-top:8px"><button type="button" class="btn small" data-action="open-project" data-id="' + esc(existing.id) + '">Open ' + esc(existing.name) + '</button></div>' : '') + '</div>' : '') +
+    '<div class="notice green wide">Before connecting, the system only <b>reads</b> the sheet and shows its contents plus the changes it will add. Nothing is changed until you click <b>Connect</b>.</div>',
+    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Cancel</button>' +
+    '<button type="submit" class="btn primary">Check sheet</button>');
   drawerState = { kind: 'connect' };
   const input = wrap.querySelector('#imp-url');
   input.focus(); input.select();
@@ -2778,7 +2908,7 @@ function openConnectStep1(url, error, existing) {
     const link = input.value.trim();
     if (!link) { input.focus(); return; }
     const btn = e.target.querySelector('button[type=submit]');
-    btn.disabled = true; btn.textContent = 'Membaca sheet…';
+    btn.disabled = true; btn.textContent = 'Reading the sheet…';
     try {
       openConnectStep2(link, await call('previewConnect', { url: link }));
     } catch (err) {
@@ -2798,38 +2928,38 @@ function openConnectStep2(url, pv) {
     sample(pv.samples.tasks.slice(0, 2), r => '<b>Task</b> ' + esc(r.Task) + (r.Deadline ? ' · ' + esc(fmtDate(r.Deadline)) : '')),
   ].join('');
   const nothing = !c.tasks && !c.daily && !c.drawings && !c.files && !pv.info.Client;
-  const wrap = mountDrawer('Sambungkan dashboard lama',
+  const wrap = mountDrawer('Connect an existing dashboard',
     '<div class="imp-src wide"><span class="muted">Sheet</span><b style="flex:1">' + esc(pv.source.name) + '</b>' +
-      '<a href="' + esc(pv.source.url) + '" target="_blank" rel="noopener">Buka</a></div>' +
-    (nothing ? '<div class="notice red wide">Nggak ada data yang kebaca. Pastikan link ini dashboard project format Studio SAAAMA.</div>' : '') +
-    '<div class="imp-stats wide">' + stat(c.drawings, 'gambar') + stat(c.daily, 'daily log') + stat(c.tasks, 'task') + stat(c.files, 'link file') + '</div>' +
+      '<a href="' + esc(pv.source.url) + '" target="_blank" rel="noopener">Open</a></div>' +
+    (nothing ? '<div class="notice red wide">No data could be read. Make sure this link is a Studio SAAAMA project dashboard.</div>' : '') +
+    '<div class="imp-stats wide">' + stat(c.drawings, 'drawing') + stat(c.daily, 'daily log') + stat(c.tasks, 'task') + stat(c.files, 'file links') + '</div>' +
     (samples ? '<div class="imp-samples wide">' + samples + '</div>' : '') +
-    (pv.changes.length ? '<div class="notice green wide"><b>Yang bakal ditambahkan ke sheet ini</b><ul>' + pv.changes.map(w => '<li>' + esc(w) + '</li>').join('') +
-      '</ul><span class="muted" style="font-size:13px">Data dan tampilan yang udah ada nggak diubah.</span></div>' : '<div class="notice green wide">Sheet ini udah lengkap, nggak ada yang perlu ditambah.</div>') +
-    (pv.warnings.length ? '<div class="notice wide"><b>Perlu dicek</b><ul>' + pv.warnings.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></div>' : '') +
-    '<label class="wide" style="display:flex;gap:8px;align-items:center;font-weight:700;font-size:14px;cursor:pointer"><input type="checkbox" id="imp-share" checked> Share sheet ini ke semua email tim</label>' +
-    '<p class="sub-head wide">Info project</p>' +
-    '<p class="wide muted" style="margin:0;font-size:14px">Dibaca dari tab DASHBOARD. Kalau dikoreksi di sini, sel di DASHBOARD ikut diperbarui.</p>' +
+    (pv.changes.length ? '<div class="notice green wide"><b>What will be added to this sheet</b><ul>' + pv.changes.map(w => '<li>' + esc(w) + '</li>').join('') +
+      '</ul><span class="muted" style="font-size:13px">Existing data and formatting stay unchanged.</span></div>' : '<div class="notice green wide">This sheet is already complete, nothing needs to be added.</div>') +
+    (pv.warnings.length ? '<div class="notice wide"><b>Needs checking</b><ul>' + pv.warnings.map(w => '<li>' + esc(w) + '</li>').join('') + '</ul></div>' : '') +
+    '<label class="wide" style="display:flex;gap:8px;align-items:center;font-weight:700;font-size:14px;cursor:pointer"><input type="checkbox" id="imp-share" checked> Share this sheet with every team email</label>' +
+    '<p class="sub-head wide">Project info</p>' +
+    '<p class="wide muted" style="margin:0;font-size:14px">Read from the DASHBOARD tab. If you correct it here, the DASHBOARD cells are updated too.</p>' +
     CONNECT_FIELDS.map(f => fieldHtml(f, pv.info[f.k])).join(''),
-    '<button type="button" class="btn ghost" data-action="connect-back">Ganti link</button><span class="spacer"></span>' +
-    '<button type="button" class="btn" data-action="close-drawer">Batal</button>' +
-    '<button type="submit" class="btn primary"' + (nothing ? ' disabled' : '') + '>Sambungkan</button>');
+    '<button type="button" class="btn ghost" data-action="connect-back">Change link</button><span class="spacer"></span>' +
+    '<button type="button" class="btn" data-action="close-drawer">Cancel</button>' +
+    '<button type="submit" class="btn primary"' + (nothing ? ' disabled' : '') + '>Connect</button>');
   drawerState = { kind: 'connect', url: url };
   const form = wrap.querySelector('form');
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const fields = readForm(form, CONNECT_FIELDS);
-    if (!fields['Project Name']) { toast('Nama project wajib diisi.', { error: true }); return; }
+    if (!fields['Project Name']) { toast('Project name is required.', { error: true }); return; }
     const btn = form.querySelector('button[type=submit]');
-    btn.disabled = true; btn.textContent = 'Menyambungkan…';
+    btn.disabled = true; btn.textContent = 'Connecting…';
     try {
       const res = await call('connectProject', { url: url, fields: fields, share: form.querySelector('#imp-share').checked });
       closeDrawer();
       invalidateOverview(); await refreshBootstrap();
-      toast(res.project.name + ' tersambung.' + (res.shareErrors && res.shareErrors.length ? ' Gagal share ke: ' + res.shareErrors.join(', ') : ''));
+      toast(res.project.name + ' connected.' + (res.shareErrors && res.shareErrors.length ? ' Couldn\'t share with: ' + res.shareErrors.join(', ') : ''));
       openProject(res.project.id, 'drawings');
     } catch (err) {
-      btn.disabled = false; btn.textContent = 'Sambungkan';
+      btn.disabled = false; btn.textContent = 'Connect';
       handleError(err);
     }
   });
@@ -2841,20 +2971,20 @@ function openCoverEditor() {
   const info = S.project.info || {};
   const c = parseCrop(info['Cover Crop']);
   coverEd = { link: info['Cover Photo'] || '', src: info['Cover Photo'] ? coverUrl(info['Cover Photo'], 2000) : '', file: null, x: c.x, y: c.y, z: c.z, mode: 'link' };
-  const wrap = mountDrawer('Foto cover',
-    '<div class="seg-ctl wide" role="group" aria-label="Sumber foto"><button type="button" data-action="cover-src" data-v="link" aria-pressed="true">Link Google Drive</button>' +
-      '<button type="button" data-action="cover-src" data-v="upload" aria-pressed="false">Upload dari perangkat</button></div>' +
+  const wrap = mountDrawer('Cover photo',
+    '<div class="seg-ctl wide" role="group" aria-label="Photo source"><button type="button" data-action="cover-src" data-v="link" aria-pressed="true">Google Drive link</button>' +
+      '<button type="button" data-action="cover-src" data-v="upload" aria-pressed="false">Upload from device</button></div>' +
     '<div class="wide" id="cover-src-link" style="display:flex;gap:8px"><input class="input" id="cover-link" type="url" placeholder="https://drive.google.com/file/d/…" value="' + esc(coverEd.link) + '">' +
-      '<button type="button" class="btn" data-action="cover-use-link">Pakai</button></div>' +
+      '<button type="button" class="btn" data-action="cover-use-link">Use</button></div>' +
     '<div class="wide" id="cover-src-upload" hidden><input class="input" id="cover-file" type="file" accept="image/*">' +
-      '<p class="muted" style="margin:6px 0 0;font-size:13px">Disimpan di folder project, subfolder <b>COVER PROJECT</b>.</p></div>' +
-    '<p class="wide muted" style="margin:0;font-size:13px" id="cover-hint">' + (coverEd.src ? 'Geser foto untuk milih bagian yang tampil, atur zoom di bawah.' : 'Pilih foto dulu.') + '</p>' +
-    '<div class="wide crop-frame" id="crop-main" data-ratio="desktop"><img alt="" id="crop-img-a"' + (coverEd.src ? ' src="' + esc(coverEd.src) + '"' : '') + '><span>Tampilan header</span></div>' +
-    '<div class="wide crop-row"><div class="crop-frame small" id="crop-mobile"><img alt="" id="crop-img-b"' + (coverEd.src ? ' src="' + esc(coverEd.src) + '"' : '') + '><span>HP</span></div>' +
+      '<p class="muted" style="margin:6px 0 0;font-size:13px">Saved in the project folder, subfolder <b>COVER PROJECT</b>.</p></div>' +
+    '<p class="wide muted" style="margin:0;font-size:13px" id="cover-hint">' + (coverEd.src ? 'Drag the photo to choose the visible area, adjust zoom below.' : 'Choose a photo first.') + '</p>' +
+    '<div class="wide crop-frame" id="crop-main" data-ratio="desktop"><img alt="" id="crop-img-a"' + (coverEd.src ? ' src="' + esc(coverEd.src) + '"' : '') + '><span>Header preview</span></div>' +
+    '<div class="wide crop-row"><div class="crop-frame small" id="crop-mobile"><img alt="" id="crop-img-b"' + (coverEd.src ? ' src="' + esc(coverEd.src) + '"' : '') + '><span>Phone</span></div>' +
       '<label class="field" style="flex:1"><span>Zoom</span><input type="range" id="crop-zoom" min="1" max="3" step="0.01" value="' + coverEd.z + '"></label></div>',
-    (S.project.info['Cover Photo'] ? '<button type="button" class="btn ghost danger" data-action="cover-remove">Hapus foto</button>' : '') +
-    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Batal</button>' +
-    '<button type="submit" class="btn primary">Simpan</button>');
+    (S.project.info['Cover Photo'] ? '<button type="button" class="btn ghost danger" data-action="cover-remove">Remove photo</button>' : '') +
+    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Cancel</button>' +
+    '<button type="submit" class="btn primary">Save</button>');
   wrap.querySelector('.drawer').classList.add('wide-drawer');
   drawerState = { kind: 'cover' };
   coverPaint();
@@ -2877,7 +3007,7 @@ function openCoverEditor() {
   wrap.querySelector('#cover-file').addEventListener('change', e => {
     const f = e.target.files && e.target.files[0];
     if (!f) return;
-    if (!/^image\//.test(f.type)) { toast('File harus gambar (JPG/PNG).', { error: true }); return; }
+    if (!/^image\//.test(f.type)) { toast('The file must be an image (JPG/PNG).', { error: true }); return; }
     coverEd.file = f; coverEd.x = 50; coverEd.y = 50; coverEd.z = 1;
     const rd = new FileReader();
     rd.onload = () => { coverEd.src = rd.result; $('#crop-zoom').value = 1; coverPaint(true); };
@@ -2895,7 +3025,7 @@ function coverSrcTab(v) {
 function coverUseLink() {
   const v = $('#cover-link').value.trim();
   const u = coverUrl(v, 2000);
-  if (!u) { toast('Tempel link gambar yang valid.', { error: true }); return; }
+  if (!u) { toast('Paste a valid image link.', { error: true }); return; }
   coverEd.link = v; coverEd.file = null; coverEd.src = u; coverEd.x = 50; coverEd.y = 50; coverEd.z = 1; $('#crop-zoom').value = 1;
   coverPaint(true);
 }
@@ -2905,10 +3035,10 @@ function coverPaint(newSrc) {
     if (!img) return;
     if (newSrc) img.src = coverEd.src;
     img.style.cssText = coverEd.src ? cropStyle(coverEd) : 'display:none';
-    img.onerror = () => { const h = $('#cover-hint'); if (h) h.textContent = 'Gambar nggak bisa dibuka. Pastikan file di-share "siapa pun yang punya link".'; };
+    img.onerror = () => { const h = $('#cover-hint'); if (h) h.textContent = 'Can\'t open the image. Make sure the file is shared with "anyone with the link".'; };
   });
   const h = $('#cover-hint');
-  if (h && coverEd.src) h.textContent = 'Geser foto untuk milih bagian yang tampil, atur zoom di bawah.';
+  if (h && coverEd.src) h.textContent = 'Drag the photo to choose the visible area, adjust zoom below.';
 }
 function shrinkImage(file, maxSide) {
   return new Promise((resolve, reject) => {
@@ -2920,13 +3050,13 @@ function shrinkImage(file, maxSide) {
       c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
       resolve(c.toDataURL('image/jpeg', 0.86));
     };
-    img.onerror = () => reject(new Error('Gambar nggak bisa dibaca.'));
+    img.onerror = () => reject(new Error('Can\'t read the image.'));
     img.src = URL.createObjectURL(file);
   });
 }
 async function saveCover(e) {
   e.preventDefault();
-  if (!coverEd || !coverEd.src) { toast('Pilih foto dulu.', { error: true }); return; }
+  if (!coverEd || !coverEd.src) { toast('Choose a photo first.', { error: true }); return; }
   const crop = [coverEd.x, coverEd.y, coverEd.z].map(v => Math.round(v * 100) / 100).join(',');
   const pid = S.projectId;
   if (!coverEd.file) {
@@ -2935,15 +3065,15 @@ async function saveCover(e) {
     return;
   }
   const btn = e.target.querySelector('button[type=submit]');
-  btn.disabled = true; btn.textContent = 'Mengunggah…';
+  btn.disabled = true; btn.textContent = 'Uploading…';
   try {
     const data = await shrinkImage(coverEd.file, 2400);
     const res = await call('uploadCover', { id: pid, data: data, type: 'image/jpeg' });
     saveInfo({ 'Cover Photo': res.url, 'Cover Crop': crop }, pid);
     closeDrawer(); render(true);
-    toast('Foto cover tersimpan di folder project.');
+    toast('Cover photo saved in the project folder.');
   } catch (err) {
-    btn.disabled = false; btn.textContent = 'Simpan';
+    btn.disabled = false; btn.textContent = 'Save';
     handleError(err);
   }
 }
@@ -2954,15 +3084,41 @@ function openColorPop(btn) {
   closeColorPop();
   const id = btn.dataset.id, cur = projColor(id);
   const pop = document.createElement('div');
-  pop.id = 'color-pop'; pop.className = 'color-pop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', 'Warna label project');
-  pop.innerHTML = [['', 'Tanpa warna']].concat(PROJECT_COLORS).map(c => '<button type="button" class="swatch' + (c[0] ? ' pc-' + c[0] : ' none') + '" data-action="set-color" data-id="' + esc(id) + '" data-c="' + c[0] + '" title="' + esc(c[1]) + '" aria-pressed="' + (c[0] === cur) + '"></button>').join('');
+  pop.id = 'color-pop'; pop.className = 'color-pop'; pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', 'Project label color');
+  const sw = swatchList();
+  const isCustom = HEX_RE.test(cur) && !sw.some(c => c[0] === cur);
+  pop.innerHTML = [['', 'No color']].concat(sw).map(c => (a => '<button type="button" class="swatch' + (c[0] ? a.cls : ' none') + '"' + a.style + ' data-action="set-color" data-id="' + esc(id) + '" data-c="' + esc(c[0]) + '" title="' + esc(c[1]) + '" aria-pressed="' + (c[0] === cur) + '"></button>')(colorAttr(c[0], true))).join('') +
+    '<label class="swatch custom" title="Custom color" aria-pressed="' + isCustom + '"' + (isCustom ? ' style="background:' + cur + '"' : '') + '><span class="plus" aria-hidden="true">+</span>' +
+    '<input type="color" data-change="custom-color" data-id="' + esc(id) + '" value="' + (HEX_RE.test(cur) ? cur : '#9DB4A0') + '" aria-label="Custom color"></label>';
   document.body.appendChild(pop);
   const r = btn.getBoundingClientRect();
   pop.style.top = (window.scrollY + r.bottom + 6) + 'px';
   pop.style.left = Math.max(8, Math.min(window.scrollX + r.left - 8, window.scrollX + document.documentElement.clientWidth - pop.offsetWidth - 8)) + 'px';
-  pop.querySelector('[aria-pressed=true]').focus();
+  const on = pop.querySelector('button[aria-pressed=true]') || pop.querySelector('button'); if (on) on.focus();
 }
+// ---------- Notes project (Overview) ----------
+function closeNotesPop() { const p = $('#notes-pop'); if (p) p.remove(); }
+function openNotesPop(btn) {
+  closeNotesPop(); closeColorPop();
+  const id = btn.dataset.id;
+  const pop = document.createElement('div');
+  pop.id = 'notes-pop'; pop.className = 'meta-pop'; pop.dataset.id = id;
+  pop.setAttribute('role', 'dialog'); pop.setAttribute('aria-label', 'Project notes');
+  pop.innerHTML = '<b>' + esc(projectName(projectById(id))) + '</b>' +
+    '<textarea class="area" rows="6" placeholder="One point per line">' + esc(projectById(id).notes || '') + '</textarea>' +
+    '<div class="pop-actions"><span class="muted">Ctrl+Enter to save</span><span class="spacer"></span>' +
+    '<button type="button" class="btn small" data-action="cancel-notes">Cancel</button><button type="button" class="btn small primary" data-action="save-notes">Save</button></div>';
+  document.body.appendChild(pop);
+  const r = btn.getBoundingClientRect();
+  pop.style.top = (window.scrollY + r.bottom + 6) + 'px';
+  pop.style.left = Math.max(8, Math.min(window.scrollX + r.left - 8, window.scrollX + document.documentElement.clientWidth - pop.offsetWidth - 8)) + 'px';
+  const ta = pop.querySelector('textarea');
+  ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  ta.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); pop.querySelector('[data-action=save-notes]').click(); } });
+}
+document.addEventListener('click', e => { if ($('#notes-pop') && !e.target.closest('#notes-pop, [data-action=edit-notes]')) closeNotesPop(); });
 document.addEventListener('click', e => { if (!e.target.closest('#color-pop, [data-action=pick-color]')) closeColorPop(); });
+document.addEventListener('pointerdown', e => { if ($('#color-pop') && !e.target.closest('#color-pop, [data-action=pick-color]')) closeColorPop(); });
 
 // ---------- Pilih buddy (avatar) ----------
 // ---------- Profil ----------
@@ -2970,22 +3126,22 @@ function openProfile() {
   const u = S.user;
   const cur = memberBuddy(u.code);
   const f = (id, label, val, extra) => '<label class="field' + (extra && extra.wide ? ' wide' : '') + '"><span>' + label + '</span><input class="input" id="' + id + '" value="' + esc(val || '') + '"' + ((extra && extra.attrs) || '') + '></label>';
-  const wrap = mountDrawer('Profil kamu',
+  const wrap = mountDrawer('Your profile',
     '<div class="wide profile-head"><span class="me-avatar big">' + buddySvg(cur) + '</span><div><b>' + esc(u.name) + '</b><span class="muted">' + esc(u.email) + '</span></div></div>' +
-    f('pf-name', 'Nama', u.name, { wide: 1, attrs: ' autocomplete="name"' }) +
-    f('pf-code', 'Inisial (PIC)', u.code, { attrs: ' maxlength="4" autocapitalize="characters"' }) +
+    f('pf-name', 'Name', u.name, { wide: 1, attrs: ' autocomplete="name"' }) +
+    f('pf-code', 'Initials (PIC)', u.code, { attrs: ' maxlength="4" autocapitalize="characters"' }) +
     f('pf-username', 'Username', u.username, { attrs: ' autocapitalize="none" autocomplete="username"' }) +
-    f('pf-wa', 'Nomor WhatsApp', '', { attrs: ' inputmode="tel" placeholder="Memuat…"' }) +
+    f('pf-wa', 'WhatsApp number', '', { attrs: ' inputmode="tel" placeholder="Loading…"' }) +
     '<label class="field"><span>Email</span><input class="input" value="' + esc(u.email) + '" disabled></label>' +
-    '<p class="wide muted" style="margin:0;font-size:13px">Kalau inisial diganti, semua PIC lama atas nama kamu di setiap sheet project ikut diganti.</p>' +
-    '<p class="sub-head wide">Buddy kamu</p>' +
+    '<p class="wide muted" style="margin:0;font-size:13px">If you change your initials, every PIC entry under your old initials in every project sheet is updated too.</p>' +
+    '<p class="sub-head wide">Your buddy</p>' +
     '<div class="buddy-grid">' + Array.from({ length: BUDDY_COUNT }, (_, i) => i + 1).map(n =>
       '<button type="button" class="buddy-opt" data-action="profile-buddy" data-n="' + n + '" aria-pressed="' + (n === cur) + '" aria-label="Buddy ' + n + '">' + buddySvg(n) + '</button>').join('') + '</div>' +
-    '<p class="sub-head wide">Ganti password</p>' +
-    '<label class="field"><span>Password sekarang</span><input class="input" id="pf-cur" type="password" autocomplete="current-password"></label>' +
-    '<label class="field"><span>Password baru (min. 8)</span><input class="input" id="pf-new" type="password" autocomplete="new-password"></label>' +
+    '<p class="sub-head wide">Change password</p>' +
+    '<label class="field"><span>Current password</span><input class="input" id="pf-cur" type="password" autocomplete="current-password"></label>' +
+    '<label class="field"><span>New password (min. 8)</span><input class="input" id="pf-new" type="password" autocomplete="new-password"></label>' +
     '<div class="form-error wide" id="pf-error" role="alert"></div>',
-    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Batal</button><button type="submit" class="btn primary">Simpan profil</button>');
+    '<span class="spacer"></span><button type="button" class="btn" data-action="close-drawer">Cancel</button><button type="submit" class="btn primary">Save profile</button>');
   drawerState = { kind: 'profile', buddy: cur };
   call('profile').then(p => {
     const wa = $('#pf-wa');
@@ -3006,7 +3162,7 @@ async function saveProfile(e) {
   if (st.buddy && st.buddy !== memberBuddy(u.code)) fields.buddy = st.buddy;
   if ($('#pf-new').value) { fields.newPassword = $('#pf-new').value; fields.currentPassword = $('#pf-cur').value; }
   const btn = e.target.querySelector('button[type=submit]');
-  btn.disabled = true; btn.textContent = fields.code ? 'Mengganti inisial di semua project…' : 'Menyimpan…';
+  btn.disabled = true; btn.textContent = fields.code ? 'Updating initials across all projects…' : 'Saving…';
   try {
     const res = await call('updateProfile', { fields: fields });
     const oldCode = u.code;
@@ -3019,14 +3175,14 @@ async function saveProfile(e) {
       try { Object.keys(localStorage).filter(k => k.indexOf(PREFIX + 'p:') === 0).forEach(k => localStorage.removeItem(k)); } catch (err) {}
       S.cache = {}; S.cacheAt = {}; S.overviewAt = 0;
       const n = (res.renamed && res.renamed.projects || []).reduce((a, x) => a + x.cells, 0);
-      toast('Inisial diganti ke ' + S.user.code + (n ? ' (' + n + ' isian PIC di semua project ikut diganti).' : '.'));
+      toast('Initials changed to ' + S.user.code + (n ? ' (' + n + ' PIC entries across all projects updated).' : '.'));
       refreshBootstrap().catch(() => {});
       if (S.view === 'project' && S.projectId) openProject(S.projectId, S.tab, true); else repaintOverviewViews(true);
-    } else toast('Profil tersimpan.');
+    } else toast('Profile saved.');
     saveBootCache(); renderSidebar();
     if (!fields.code) rerenderView();
   } catch (err) {
-    btn.disabled = false; btn.textContent = 'Simpan profil';
+    btn.disabled = false; btn.textContent = 'Save profile';
     const box = $('#pf-error'); if (box) box.textContent = err.message; else handleError(err);
   }
 }
@@ -3038,7 +3194,7 @@ function chooseBuddy(n) {
   const prevTeam = me ? me.buddy : 0;
   if (me) me.buddy = n;
   closeDrawer(); renderSidebar(); rerenderView();
-  call('setBuddy', { buddy: n }).then(() => { saveBootCache(); toast('Buddy kamu udah diganti.'); }).catch(err => {
+  call('setBuddy', { buddy: n }).then(() => { saveBootCache(); toast('Your buddy has been changed.'); }).catch(err => {
     S.user.buddy = prev; if (me) me.buddy = prevTeam;
     renderSidebar(); rerenderView(); handleError(err);
   });
@@ -3057,20 +3213,20 @@ async function submitDrawer(e) {
   const fields = schemaFields(st.kind);
   const data = readForm(form, fields);
   const missing = fields.filter(f => f.req && !data[f.k]).map(f => f.label);
-  if (missing.length) { toast(missing.join(', ') + ' wajib diisi.', { error: true }); return; }
+  if (missing.length) { toast(missing.join(', ') + ' is required.', { error: true }); return; }
   const btn = form.querySelector('button[type=submit]');
-  btn.disabled = true; btn.textContent = st.kind === 'newproject' ? 'Menyiapkan sheet…' : 'Menyimpan…';
+  btn.disabled = true; btn.textContent = st.kind === 'newproject' ? 'Preparing the sheet…' : 'Saving…';
   try {
     if (st.kind === 'newproject') {
       if (data['Drive Mode'] === 'link' && !/drive\.google\.com\/.*(folders\/|id=)/.test(data['Drive Folder'] || '')) {
-        btn.disabled = false; btn.textContent = 'Bikin project';
-        toast('Tempel link folder Google Drive (yang ada /folders/…).', { error: true }); return;
+        btn.disabled = false; btn.textContent = 'Create project';
+        toast('Paste a Google Drive folder link (one with /folders/…).', { error: true }); return;
       }
       if (data['Drive Mode'] !== 'link') delete data['Drive Folder'];
       const res = await call('createProject', { fields: data });
       closeDrawer();
       invalidateOverview(); await refreshBootstrap();
-      toast('Project ' + res.project.name + ' siap.' + (res.shareErrors && res.shareErrors.length ? ' Gagal share ke: ' + res.shareErrors.join(', ') : ''));
+      toast('Project ' + res.project.name + ' is ready.' + (res.shareErrors && res.shareErrors.length ? ' Couldn\'t share with: ' + res.shareErrors.join(', ') : ''));
       openProject(res.project.id, 'info');
       return;
     }
@@ -3084,14 +3240,14 @@ async function submitDrawer(e) {
     closeDrawer();
     render(true);
   } catch (err) {
-    btn.disabled = false; btn.textContent = st.kind === 'newproject' ? 'Bikin project' : 'Simpan';
+    btn.disabled = false; btn.textContent = st.kind === 'newproject' ? 'Create project' : 'Save';
     handleError(err, () => { closeDrawer(); reloadProject(); });
   }
 }
 async function deleteFromDrawer() {
   const st = drawerState;
   if (!st || !st.row) return;
-  if (!confirm('Hapus ' + SCHEMA[st.kind].title + ' ini? Baris di GSheets juga ikut terhapus.')) return;
+  if (!confirm('Delete ' + SCHEMA[st.kind].title + '? The row in Google Sheets will be deleted too.')) return;
   localDelete(st.kind, liveRow(st.kind, st.row));
   closeDrawer();
   render(true);
@@ -3117,13 +3273,15 @@ document.addEventListener('click', async e => {
   if (!el) return;
   const a = el.dataset.action;
   if (el.tagName === 'A') return;
+  // kontrol di dalam baris project (status, prioritas) jangan ikut membuka project
+  if (a === 'open-project' && el !== e.target && e.target.closest('select, textarea, input, .meta-pop')) return;
   switch (a) {
     case 'toggle-nav': $('#shell').classList.toggle('nav-open'); break;
     case 'go': go(el.dataset.view); break;
     case 'open-project': e.stopPropagation(); openProject(el.dataset.id, el.dataset.tab); break;
     case 'toggle-archived': S.ui.showArchived = !S.ui.showArchived; renderSidebar(); break;
     case 'logout':
-      if (Q.jobs.length && !confirm('Masih ada perubahan yang sedang disimpan. Keluar sekarang?')) return;
+      if (Q.jobs.length && !confirm('Some changes are still being saved. Sign out now?')) return;
       call('logout').catch(() => {}); clearLocalData(); forceLogout(''); break;
     case 'refresh-home': case 'refresh-me': case 'refresh-all': refreshAll(); break;
     case 'reload-project': reloadProject(); break;
@@ -3149,7 +3307,7 @@ document.addEventListener('click', async e => {
     case 'close-drawer': closeDrawer(); break;
     case 'pick-buddy': closeNav(); openProfile(); break;
     case 'proj-filter': store.set('projFilter', el.dataset.v); renderSidebar(); break;
-    case 'new-choice': if (el.dataset.v === 'import') openConnectStep1(''); else openDrawer('newproject', null, { Stage: stages()[0], PIC: S.user.code }); break;
+    case 'new-choice': if (el.dataset.v === 'import') openConnectStep1(''); else openDrawer('newproject', null, { Stage: stages()[0], PIC: S.user.code, 'Current Status': 'Going' }); break;
     case 'auth': authPanel(el.dataset.mode, '', { ident: el.dataset.ident || ($('#lg-email') ? $('#lg-email').value.trim() : '') || ($('#fg-ident') ? $('#fg-ident').value.trim() : '') }); break;
     case 'profile-buddy': {
       document.querySelectorAll('.buddy-opt').forEach(b => b.setAttribute('aria-pressed', String(b === el)));
@@ -3182,11 +3340,21 @@ document.addEventListener('click', async e => {
     case 'dr-del': drDelete(); break;
     case 'cover-edit': openCoverEditor(); break;
     case 'cover-remove':
-      if (confirm('Hapus foto cover project ini? File di Drive nggak ikut terhapus.')) { saveInfo({ 'Cover Photo': '', 'Cover Crop': '' }); render(true); }
+      if (confirm('Remove this project\'s cover photo? The file in Drive won\'t be deleted.')) { saveInfo({ 'Cover Photo': '', 'Cover Crop': '' }); render(true); }
       break;
     case 'cover-src': coverSrcTab(el.dataset.v); break;
     case 'cover-use-link': coverUseLink(); break;
     case 'pick-color': e.stopPropagation(); openColorPop(el); break;
+    case 'edit-notes': e.stopPropagation(); openNotesPop(el); break;
+    case 'save-notes': {
+      e.stopPropagation();
+      const pop = $('#notes-pop'); if (!pop) break;
+      const pid = pop.dataset.id, v = pop.querySelector('textarea').value.replace(/\s+$/, '');
+      closeNotesPop();
+      if (v !== (projectById(pid).notes || '')) { saveInfo({ Notes: v }, pid); rerenderView(); }
+      break;
+    }
+    case 'cancel-notes': e.stopPropagation(); closeNotesPop(); break;
     case 'set-color': {
       e.stopPropagation();
       const pid = el.dataset.id, c = el.dataset.c;
@@ -3215,7 +3383,7 @@ document.addEventListener('click', async e => {
       let row = d && d.tasks.find(x => x._row === t._row && x.Task === t.Task);
       if (!row) { row = Object.assign({}, t); delete row._pid; delete row._pname; }
       localUpdate('tasks', row, { Status: 'Done' }, t._pid);
-      toast('Selesai: ' + t.Task);
+      toast('Done: ' + t.Task);
       setTimeout(() => { if (S.view === 'me') paintMe(); renderSidebar(); }, 180);
       break;
     }
@@ -3228,18 +3396,18 @@ document.addEventListener('click', async e => {
     }
     case 'item-to-task': {
       localAdd('tasks', { Task: el.dataset.item, PIC: '', Status: list('Status')[0] || '', Start: todayStr() });
-      toast('Task dibuat. Atur PIC dan deadline-nya di tab Tasks.');
+      toast('Task created. Set its PIC and deadline in the Tasks tab.');
       render(true);
       break;
     }
     case 'archive': {
       const v = el.dataset.v === 'true';
-      if (v && !confirm('Arsipkan project ini? Project hilang dari ringkasan, tapi sheet-nya tetap ada.')) return;
+      if (v && !confirm('Archive this project? It disappears from the overview, but the sheet stays.')) return;
       try {
         await call('archiveProject', { id: S.projectId, archived: v });
         invalidateOverview(); await refreshBootstrap();
         S.project.project = Object.assign({}, S.project.project, { archived: v });
-        toast(v ? 'Project diarsipkan.' : 'Project aktif lagi.');
+        toast(v ? 'Project archived.' : 'Project is active again.');
         renderProject();
       } catch (err) { handleError(err); }
       break;
@@ -3259,6 +3427,17 @@ document.addEventListener('change', e => {
   } else if (el.dataset.change === 'dr-move') { if (el.value) { const t = el.value.split('\u0001'); drMove(drSelected(), t[0], t[1], null); }
   } else if (el.dataset.change === 'dr-dup') { drDuplicate(el.value);
   } else if (el.dataset.change === 'drive-mode') { driveModeUi();
+  } else if (el.dataset.change === 'proj-meta') {
+    const ch = {}; ch[el.dataset.field] = el.value;
+    saveInfo(ch, el.dataset.id); rerenderView();
+  } else if (el.dataset.change === 'proj-status-filter') { store.set('projStatus', el.value); renderSidebar();
+  } else if (el.dataset.change === 'custom-color') {
+    const pid = el.dataset.id, c = el.value.toUpperCase();
+    closeColorPop();
+    if (projColor(pid) !== c) { saveInfo({ Color: c }, pid); rerenderView(); }
+  } else if (el.dataset.change === 'custom-color-field') {
+    const radio = el.closest('.swatches').querySelector('.swatch.custom input[type=radio]');
+    radio.value = el.value.toUpperCase(); radio.checked = true; radio.closest('.swatch').style.background = el.value;
   } else if (el.dataset.change === 'theme') {
     store.set('theme', el.value); applyTheme();
   } else if (el.dataset.change === 'task-pic') {
@@ -3266,7 +3445,7 @@ document.addEventListener('change', e => {
   }
 });
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') { if ($('#color-pop')) closeColorPop(); else if ($('#drawer-root')) closeDrawer(); else closeNav(); }
+  if (e.key === 'Escape') { if ($('#notes-pop')) closeNotesPop(); else if ($('#color-pop')) closeColorPop(); else if ($('#drawer-root')) closeDrawer(); else closeNav(); }
   if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.row.clickable')) { e.preventDefault(); e.target.click(); }
 });
 document.addEventListener('click', e => {
@@ -3297,8 +3476,8 @@ function checkVersion() {
   if (!window.HUB_VERSION || updateToast) return;
   fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(v => {
     if (!v || !v.version || v.version === window.HUB_VERSION || updateToast) return;
-    updateToast = toast('Ada versi baru aplikasi.', { sticky: true, action: 'Muat ulang', onAction: () => {
-      if (Q.jobs.length) { toast('Tunggu sebentar, masih menyimpan ke GSheets.'); updateToast = null; return; }
+    updateToast = toast('A new version of the app is available.', { sticky: true, action: 'Reload', onAction: () => {
+      if (Q.jobs.length) { toast('Hold on, still saving to Google Sheets.'); updateToast = null; return; }
       location.reload();
     } });
   }).catch(() => {});
