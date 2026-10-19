@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-145451"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-152216"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -2071,6 +2071,7 @@ async function runLayoutJob(job) {
 // ----- tampilan -----
 function tabDrawings() {
   const rows = S.project.drawings;
+  const noOf = new Map(rows.map((r, i) => [r, i + 1])); // No selalu urut 1..N sesuai urutan di tabel
   const eff = rows.map(drawingStatus);
   const done = eff.filter(isDone).length;
   const hold = eff.filter(s => statusKey(s) === 'hold').length;
@@ -2105,7 +2106,7 @@ function tabDrawings() {
     return '<div class="row draw-row' + (sel ? ' selected' : '') + '" data-key="' + k + '" data-tab="drawings">' +
       '<input type="checkbox" class="dr-check" data-action="dr-sel" data-key="' + k + '"' + (sel ? ' checked' : '') + ' aria-label="Pilih ' + esc(r.Code || r.Title) + '">' +
       '<span class="drag" draggable="' + (!filtering) + '" data-drag="' + k + '" title="Geser untuk pindah urutan" aria-hidden="true">⋮⋮</span>' +
-      '<span class="c-no num muted">' + esc(r.No || '') + '</span>' +
+      '<span class="c-no num muted">' + (noOf.get(r) || '') + '</span>' +
       '<input class="cell c-code num" data-f="Code" data-key="' + k + '" value="' + esc(r.Code) + '" aria-label="Kode">' +
       '<input class="cell c-title" data-f="Title" data-key="' + k + '" value="' + esc(r.Title) + '" aria-label="Judul">' +
       '<select class="cell c-pic" data-f="PIC" data-key="' + k + '" aria-label="PIC">' + picOpts(r.PIC) + '</select>' +
