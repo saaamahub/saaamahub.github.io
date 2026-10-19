@@ -1,6 +1,6 @@
 {
-  "name": "Studio SAAAMA \u00b7 Project Hub",
-  "short_name": "SAAAMA Hub",
+  "name": "Studio SAAAMA \u00b7 Project Hub (Preview)",
+  "short_name": "SAAAMA Hub (Preview)",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
