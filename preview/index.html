@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261019-194058"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261020-fee1"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -156,6 +156,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .nav-item[aria-current="page"] { background: rgba(255,255,255,.14); color: #fff; font-weight: 600; }
 .nav-item .count { margin-left: auto; font-size: 12px; color: rgba(255,255,255,.7); font-weight: 500; }
 .nav-item.muted { color: rgba(255,255,255,.66); }
+a.nav-item { text-decoration: none; }
 .nav-head { display: flex; align-items: center; justify-content: space-between; padding: 0 8px 6px; margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,.16); }
 .nav-head h2 { font-size: 11px; color: rgba(255,255,255,.7); margin: 0; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; }
 .nav-head > span { display: flex; flex: none; gap: 0; }
@@ -1228,6 +1229,7 @@ async function finishLogin(res) {
   call('onboard').catch(() => {}); // pertama kali masuk: sheet & folder project otomatis di-share
 }
 function clearLocalData() {
+  store.del('fee');
   try { Object.keys(localStorage).filter(k => k.indexOf(PREFIX + 'p:') === 0 || k === PREFIX + 'boot').forEach(k => localStorage.removeItem(k)); } catch (e) {}
   S.cache = {}; S.cacheAt = {}; S.overview = null;
 }
@@ -1270,6 +1272,7 @@ async function boot() {
     applyBoot(cached, false);
     S.overviewAt = Date.now(); // data terbaru sedang diambil lewat 'boot', jangan dobel
     startView();
+    checkFee();
     call('boot').then(d => {
       applyBoot(d, true);
       renderSidebar(); repaintOverviewViews();
@@ -1281,11 +1284,24 @@ async function boot() {
   try {
     applyBoot(await call('boot'), true);
     startView();
+    checkFee();
     prefetchAll();
   } catch (err) {
     if (err.code !== 'AUTH') $('#app').innerHTML = '<div class="loading">' + esc(err.message) + '</div>';
   }
 }
+
+// ---------- Fee Proposal (khusus akun tertentu, dicek di server) ----------
+const FEE_URL = window.HUB_FEE_URL || 'https://saaamahub.github.io/fee/';
+function feeAllowed() { return !!S.user && store.get('fee') === S.user.email; }
+function checkFee() {
+  const allow = () => { if (!feeAllowed()) { store.set('fee', S.user.email); renderSidebar(); } };
+  call('fee', { op: 'access' }).then(allow).catch(err => {
+    if (err.code === 'SETUP') return allow(); // akun berhak, tinggal jalankan feeSetup()
+    if (err.code === 'UNKNOWN_ACTION' && feeAllowed()) { store.del('fee'); renderSidebar(); }
+  });
+}
+function feeHref() { return FEE_URL + '#t=' + encodeURIComponent(S.token || ''); }
 
 async function refreshBootstrap() {
   const b = await call('bootstrap');
@@ -1546,6 +1562,7 @@ function renderSidebar() {
       '<button type="button" class="nav-item" data-action="go" data-view="home"' + (S.view === 'home' ? ' aria-current="page"' : '') + '>Overview</button>' +
       '<button type="button" class="nav-item" data-action="go" data-view="me"' + (S.view === 'me' ? ' aria-current="page"' : '') + '>My tasks' +
         (S.overview ? '<span class="count num">' + myOpen + '</span>' : '') + '</button>' +
+      (feeAllowed() ? '<a class="nav-item" href="' + esc(feeHref()) + '" target="_blank" rel="noopener" data-fee-link>Fee Proposal<span class="count" aria-hidden="true">↗</span></a>' : '') +
     '</nav>' +
     '<div><div class="nav-head"><h2>Project</h2><span>' +
       '<button type="button" class="btn small ghost" data-action="new-project" aria-label="New project or import a sheet">+ New</button></span></div>' +

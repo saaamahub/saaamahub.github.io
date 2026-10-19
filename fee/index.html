@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#3B5E45">
+<link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Fee Proposal · SAAAMA Hub</title>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec";</script>
+<style>
+/* layout: green project rail (TOC style) | cream form | green board with A4 pages */
+:root {
+  --green: #3b5e45;
+  --green-deep: #2f4c38;
+  --green-soft: #e3e8df;
+  --cream: #f3f1ea;
+  --paper: #fbfaf6;
+  --ink: #1d231f;
+  --muted: #66705f;
+  --line: #cdd3c6;
+  --warn: #b5532f;
+  --ok: #3b5e45;
+  --font: 'SaaamaSans', 'Open Sauce Sans', 'Helvetica Neue', Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--cream); color: var(--ink); font: 400 14px/1.45 var(--font); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--cream); }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+.app { display: grid; grid-template-columns: 264px minmax(360px, 440px) minmax(0, 1fr); height: 100%; }
+
+/* ---------- project rail ---------- */
+.rail { background: var(--green); color: var(--cream); display: flex; flex-direction: column; min-height: 0; padding-left: env(safe-area-inset-left, 0px); }
+.rail-head { padding: 22px 20px 14px; display: flex; flex-direction: column; gap: 14px; }
+.brand { display: flex; align-items: flex-end; gap: 10px; }
+.brand svg { display: block; height: 22px; width: auto; }
+.brand span { font-size: 11px; letter-spacing: .14em; text-transform: lowercase; opacity: .8; padding-bottom: 2px; }
+.rail-title { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .75; display: flex; justify-content: space-between; align-items: center; }
+.btn-new { background: var(--cream); color: var(--green); border: 0; border-radius: 999px; padding: 9px 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; justify-content: center; }
+.btn-new:hover { background: #fff; }
+.search { background: rgba(243,241,234,.1); border: 1px solid rgba(243,241,234,.25); border-radius: 8px; padding: 8px 10px; color: var(--cream); width: 100%; }
+.search::placeholder { color: rgba(243,241,234,.6); }
+.plist { flex: 1; overflow: auto; padding: 4px 8px 24px; }
+.pitem { border-radius: 10px; }
+.prow { width: 100%; background: none; border: 0; color: inherit; text-align: left; padding: 10px 12px; display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: baseline; border-radius: 10px; }
+.prow:hover { background: rgba(243,241,234,.08); }
+.pitem.on > .prow { background: rgba(243,241,234,.14); }
+.pname { font-weight: 700; text-transform: lowercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 130px; }
+.pleader { border-bottom: 1px dashed rgba(243,241,234,.45); transform: translateY(-4px); min-width: 12px; }
+.pmeta { font-size: 12px; opacity: .75; white-space: nowrap; }
+.vlist { list-style: none; margin: 0 0 6px; padding: 0 0 0 14px; display: grid; gap: 2px; }
+.vbtn { width: 100%; background: none; border: 0; color: var(--cream); text-align: left; padding: 6px 10px; border-radius: 8px; display: flex; justify-content: space-between; gap: 8px; font-size: 13px; }
+.vbtn:hover { background: rgba(243,241,234,.08); }
+.vbtn.on { background: var(--cream); color: var(--green); }
+.vbtn small { opacity: .75; font-variant-numeric: tabular-nums; }
+.empty-rail { padding: 18px 14px; font-size: 13px; opacity: .8; line-height: 1.5; }
+
+/* ---------- editor ---------- */
+.editor { display: flex; flex-direction: column; min-height: 0; background: var(--paper); border-right: 1px solid var(--line); }
+.ed-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; background: var(--paper); }
+.ed-title { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.ed-title h1 { margin: 0; font-size: 22px; font-weight: 700; color: var(--green); text-transform: lowercase; line-height: 1.15; text-wrap: balance; overflow-wrap: anywhere; }
+.chip { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; color: var(--muted); white-space: nowrap; }
+.chip.dirty { border-color: var(--warn); color: var(--warn); }
+.chip.saved { border-color: var(--green); color: var(--green); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 1px solid var(--green); background: var(--green); color: var(--cream); border-radius: 8px; padding: 8px 12px; font-weight: 700; font-size: 13px; }
+.btn:hover { background: var(--green-deep); }
+.btn.ghost { background: transparent; color: var(--green); }
+.btn.ghost:hover { background: var(--green-soft); }
+.btn[disabled] { opacity: .5; cursor: default; }
+.notice { font-size: 12.5px; color: var(--muted); min-height: 1em; }
+.notice.err { color: var(--warn); }
+.ed-body { flex: 1; overflow: auto; padding: 8px 22px 60px; }
+
+.sec { border-bottom: 1px solid var(--line); padding: 16px 0 18px; display: grid; gap: 12px; }
+.sec h2 { margin: 0; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--green); display: flex; justify-content: space-between; align-items: center; }
+.sec h2 em { font-style: normal; color: var(--muted); letter-spacing: 0; text-transform: none; font-size: 12px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid3 { display: grid; grid-template-columns: 96px 1fr; gap: 10px; }
+label.f { display: grid; gap: 4px; font-size: 12px; color: var(--muted); min-width: 0; }
+.f input, .f select, .f textarea, .in { width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; color: var(--ink); font-size: 14px; }
+.f textarea { resize: vertical; min-height: 60px; line-height: 1.4; }
+.f input:focus, .f textarea:focus, .f select:focus, .in:focus { border-color: var(--green); outline: none; box-shadow: 0 0 0 3px rgba(59,94,69,.15); }
+.hint { font-size: 11.5px; color: var(--muted); }
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--green-soft); border-radius: 9px; padding: 3px; gap: 3px; }
+.seg button { border: 0; background: transparent; border-radius: 7px; padding: 8px; font-weight: 700; color: var(--green); font-size: 13px; }
+.seg button.on { background: var(--green); color: var(--cream); }
+.toggle { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); font-size: 13.5px; }
+.toggle input { width: 18px; height: 18px; accent-color: var(--green); }
+.sub { display: grid; gap: 10px; padding: 12px; background: var(--cream); border-radius: 10px; }
+.money { background: var(--green); color: var(--cream); border-radius: 12px; padding: 14px 16px; display: grid; gap: 4px; }
+.money .lbl { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; opacity: .75; }
+.money .big { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.money .say { font-size: 13px; opacity: .9; }
+.money .was { font-size: 12.5px; opacity: .75; text-decoration: line-through; font-variant-numeric: tabular-nums; }
+
+.rows { display: grid; gap: 8px; }
+.row { display: grid; grid-template-columns: 1fr 74px 30px; gap: 8px; align-items: start; }
+.row.dur { grid-template-columns: 1fr 110px 30px; }
+.row .amt { grid-column: 1 / -1; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; margin-top: -4px; }
+.x { width: 30px; height: 36px; border: 1px solid var(--line); background: #fff; border-radius: 7px; color: var(--muted); font-size: 16px; line-height: 1; }
+.x:hover { color: var(--warn); border-color: var(--warn); }
+.add { justify-self: start; background: none; border: 1px dashed var(--green); color: var(--green); border-radius: 8px; padding: 6px 12px; font-weight: 700; font-size: 12.5px; }
+.add:hover { background: var(--green-soft); }
+.sum { font-size: 12.5px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sum.bad { color: var(--warn); }
+.phase { display: grid; gap: 6px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.phase-h { display: grid; grid-template-columns: 22px 1fr 30px; gap: 8px; align-items: center; }
+.phase-h b { color: var(--green); }
+.cover-pick { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cover-opt { border: 2px solid var(--line); background: #fff; border-radius: 10px; padding: 8px; display: grid; gap: 6px; text-align: left; font-size: 12.5px; font-weight: 700; color: var(--ink); }
+.cover-opt.on { border-color: var(--green); }
+.cover-opt .thumb { aspect-ratio: 210 / 297; max-width: 100%; border-radius: 4px; background: #fff; border: 1px solid var(--line); position: relative; overflow: hidden; }
+.cover-opt .thumb i { position: absolute; left: 8%; right: 8%; height: 5%; background: var(--green); border-radius: 2px; }
+.cover-opt .thumb .ph { position: absolute; inset: 0 0 7%; background: linear-gradient(160deg, #cfd6cb, #e8ebe4); opacity: .9; }
+.cover-opt .thumb .ft { position: absolute; left: 0; right: 0; bottom: 0; height: 7%; background: var(--green); }
+.file-btn { display: inline-flex; align-items: center; gap: 8px; }
+.file-btn input { display: none; }
+.photo-prev { width: 100%; aspect-ratio: 16 / 10; max-width: 100%; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+
+/* ---------- preview board ---------- */
+.board { background: var(--green); min-height: 0; display: flex; flex-direction: column; padding-right: env(safe-area-inset-right, 0px); }
+.board-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 24px; color: var(--cream); }
+.board-head .lbl { font-size: 11px; letter-spacing: .16em; text-transform: uppercase; opacity: .8; }
+.warns { display: flex; gap: 6px; flex-wrap: wrap; }
+.warns span { background: #f6e3d9; color: #7a3016; border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+.pages { flex: 1; overflow: auto; padding: 6px 24px 40px; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+.pwrap { position: relative; width: 100%; max-width: 640px; }
+.pscale { position: relative; width: 100%; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,.22); background: #fff; }
+.page { position: absolute; left: 0; top: 0; width: 793.7px; height: 1122.5px; transform-origin: 0 0; background: #fff; overflow: hidden; font-kerning: normal; font-variant-ligatures: none; }
+.pnum { color: var(--cream); font-size: 11px; letter-spacing: .14em; opacity: .7; margin-bottom: 6px; text-transform: uppercase; }
+
+/* ---------- modal ---------- */
+.modal { position: fixed; inset: 0; background: rgba(29,35,31,.45); display: grid; place-items: center; z-index: 20; padding: 16px max(16px, env(safe-area-inset-right, 0px)) 16px max(16px, env(safe-area-inset-left, 0px)); }
+.dialog { background: var(--paper); border-radius: 14px; width: min(440px, 100%); padding: 20px; display: grid; gap: 14px; box-shadow: 0 20px 50px rgba(0,0,0,.25); }
+.dialog h3 { margin: 0; color: var(--green); font-size: 18px; text-transform: lowercase; }
+.dialog p { margin: 0; color: var(--muted); font-size: 13.5px; }
+.dialog .actions { justify-content: flex-end; }
+
+.mob-tabs { display: none; }
+.rail-toggle { display: none; }
+
+@media (max-width: 1180px) {
+  .app { grid-template-columns: minmax(340px, 420px) minmax(0, 1fr); }
+  .rail { position: fixed; inset: 0 auto 0 0; width: min(300px, 86vw); z-index: 15; transform: translateX(-105%); transition: transform .2s ease; box-shadow: 0 0 40px rgba(0,0,0,.3); padding-top: env(safe-area-inset-top, 0px); }
+  .app.rail-open .rail { transform: none; }
+  .rail-toggle { display: inline-flex; }
+}
+@media (max-width: 760px) {
+  .app { display: flex; flex-direction: column; height: auto; min-height: 100%; }
+  .editor, .board { border: 0; }
+  .ed-head { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .ed-body { overflow: visible; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .pages { overflow: visible; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .board-head { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .mob-tabs { display: grid; }
+  .app[data-view="form"] .board { display: none; }
+  .app[data-view="preview"] .ed-body { display: none; }
+  .grid2 { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .rail { transition: none; } }
+
+/* ---------- hub link & gate ---------- */
+.hub-link { color: var(--cream); font-size: 12px; opacity: .8; text-decoration: none; display: inline-flex; gap: 6px; align-items: center; }
+.hub-link:hover { opacity: 1; text-decoration: underline; text-underline-offset: 3px; }
+.vrow { display: flex; align-items: stretch; gap: 2px; }
+.vrow .vbtn { flex: 1; min-width: 0; }
+.vrow .vbtn small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vpdf { color: var(--cream); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; text-decoration: none; padding: 6px 8px; border-radius: 8px; opacity: .8; display: flex; align-items: center; }
+.vpdf:hover { background: rgba(243,241,234,.12); opacity: 1; }
+.pfolder { display: block; font-size: 12px; color: var(--cream); opacity: .75; padding: 2px 12px 8px 24px; text-decoration: none; }
+.pfolder:hover { opacity: 1; text-decoration: underline; }
+.gate { position: fixed; inset: 0; z-index: 30; background: var(--green); color: var(--cream); display: grid; place-items: center; padding: 24px; }
+.gate-box { width: min(380px, 100%); display: grid; gap: 14px; }
+.gate-box .brand svg { height: 30px; }
+.gate-box h1 { margin: 6px 0 0; font-size: 26px; text-transform: lowercase; }
+.gate-box p { margin: 0; opacity: .85; font-size: 14px; }
+.gate-box label { display: grid; gap: 5px; font-size: 12px; opacity: .9; }
+.gate-box input { background: rgba(243,241,234,.1); border: 1px solid rgba(243,241,234,.35); border-radius: 8px; padding: 10px 12px; color: var(--cream); font-size: 15px; }
+.gate-box input:focus { outline: none; border-color: var(--cream); }
+.gate-box .btn-new { padding: 11px 14px; }
+.gate-err { min-height: 1.2em; color: #f6c9b4; font-size: 13px; font-weight: 700; }
+.gate-box a { color: var(--cream); }
+</style>
+</head>
+<body>
+
+<div class="app" id="app" data-view="form">
+  <aside class="rail" id="rail" aria-label="Daftar proyek">
+    <div class="rail-head">
+      <div class="brand" aria-label="studio saaama">
+        <svg viewBox="0 0 82 26" aria-hidden="true"><text x="0" y="20" font-family="SaaamaSans, sans-serif" font-weight="700" font-size="21.1" fill="#f3f1ea">s</text><rect x="15.5" y="8.6" width="5.7" height="5.7" fill="#f3f1ea"/><path d="M27.65 8.6 30.9 14.3H24.4Z" fill="#f3f1ea"/><circle cx="43.4" cy="11.4" r="2.3" fill="#f3f1ea"/><path id="d1" d="M13.1 20.4C13.1 16.4 15.1 14.6 18.4 14.6S23.6 16.4 23.6 20.4Z" fill="#f3f1ea"/><path d="M25.6 20.4C25.6 16.4 27.6 14.6 30.9 14.6S36.1 16.4 36.1 20.4Z" fill="#f3f1ea"/><path d="M38.1 20.4C38.1 16.4 40.1 14.6 43.4 14.6S48.6 16.4 48.6 20.4Z" fill="#f3f1ea"/><text x="49.4" y="20" font-family="SaaamaSans, sans-serif" font-weight="700" font-size="21.1" fill="#f3f1ea">ma</text></svg>
+        <span>fee proposal</span>
+      </div>
+      <a class="hub-link" id="hubLink" href="#">← kembali ke Project Hub</a>
+      <button class="btn-new" id="btnNew" type="button"><span aria-hidden="true">+</span> proyek baru</button>
+      <input class="search" id="search" type="search" placeholder="Cari proyek atau klien" aria-label="Cari proyek">
+      <div class="rail-title"><span>proyek</span><span id="pcount"></span></div>
+    </div>
+    <div class="plist" id="plist"><div class="empty-rail">Memuat daftar proyek…</div></div>
+  </aside>
+
+  <section class="editor" aria-label="Isi proposal">
+    <div class="ed-head">
+      <div class="ed-title">
+        <button class="btn ghost rail-toggle" id="railToggle" type="button" aria-label="Buka daftar proyek">proyek</button>
+        <h1 id="edTitle">proposal baru</h1>
+        <span class="chip" id="stateChip">draf</span>
+      </div>
+      <div class="actions">
+        <button class="btn" id="btnSaveNew" type="button">Simpan versi baru</button>
+        <button class="btn ghost" id="btnSaveOver" type="button" hidden>Timpa versi ini</button>
+        <button class="btn ghost" id="btnPdf" type="button">Unduh PDF</button>
+        <button class="btn ghost" id="btnJson" type="button">Unduh file editable</button>
+        <label class="btn ghost file-btn" for="importJson">Buka file<input id="importJson" type="file" accept=".json,application/json"></label>
+      </div>
+      <div class="notice" id="notice" role="status" aria-live="polite"></div>
+      <div class="seg mob-tabs" role="tablist"><button type="button" class="on" data-view="form">Isi</button><button type="button" data-view="preview">Pratinjau</button></div>
+    </div>
+    <div class="ed-body" id="form">
+
+      <div class="sec">
+        <h2>bahasa proposal</h2>
+        <div class="seg" role="radiogroup" aria-label="Bahasa proposal">
+          <button type="button" data-lang="id">Default (Indonesia)</button>
+          <button type="button" data-lang="en">Full English</button>
+        </div>
+        <span class="hint">Teks template ikut berganti. Isian yang sudah kamu ubah sendiri tidak diterjemahkan.</span>
+      </div>
+
+      <div class="sec">
+        <h2>klien &amp; proyek</h2>
+        <label class="f">Nama proyek (cover &amp; judul) <textarea id="f_projectName" rows="2" placeholder="F HOUSE"></textarea><span class="hint">Tekan Enter untuk memecah judul cover jadi dua baris.</span></label>
+        <label class="f">Nama proyek di kalimat <input id="f_projectTitleCase" placeholder="F House"><span class="hint">Dipakai di baris ketiga “Kepada Yth”, surat, dan Informasi Proyek. Kosongkan untuk mengikuti nama proyek.</span></label>
+        <div class="grid3">
+          <label class="f">Sapaan <input id="f_clientTitle" list="sapaan" placeholder="Mr."></label>
+          <label class="f">Nama klien <input id="f_clientName" placeholder="Frans"></label>
+        </div>
+        <datalist id="sapaan"><option value="Mr."><option value="Mrs."><option value="Ms."><option value="Bapak"><option value="Ibu"></datalist>
+        <label class="f">Lokasi <input id="f_location" placeholder="BSD"></label>
+        <div class="grid2">
+          <label class="f">Luasan (m²) <input id="f_area" type="number" min="0" step="0.01" inputmode="decimal"></label>
+          <label class="f">Tanggal proposal <input id="f_date" type="date"></label>
+        </div>
+        <span class="hint">Satu tanggal ini dipakai di cover dan surat.</span>
+      </div>
+
+      <div class="sec">
+        <h2>ruang lingkup pekerjaan</h2>
+        <div class="rows" id="scopeRows"></div>
+        <button class="add" type="button" id="addPhase">+ tambah tahap</button>
+        <span class="hint">Satu item per baris. Tulis _teks_ untuk huruf miring, **teks** untuk tebal.</span>
+      </div>
+
+      <div class="sec">
+        <h2>investasi desain</h2>
+        <div class="seg" role="radiogroup" aria-label="Jenis harga">
+          <button type="button" data-mode="perm2">Harga per m²</button>
+          <button type="button" data-mode="unit">Harga satuan</button>
+        </div>
+        <label class="f" id="w_perm2">Harga desain per m² (Rp) <input id="f_pricePerM2" inputmode="numeric" autocomplete="off"></label>
+        <label class="f" id="w_unit" hidden>Harga satuan total (Rp) <input id="f_unitPrice" inputmode="numeric" autocomplete="off"></label>
+        <label class="toggle"><input type="checkbox" id="f_cashbackOn"> Pakai cashback</label>
+        <div class="sub" id="w_cashback" hidden>
+          <div class="grid2">
+            <label class="f">Jenis <select id="f_cashbackType"><option value="percent">Persen (%)</option><option value="nominal">Nominal (Rp)</option></select></label>
+            <label class="f">Nilai <input id="f_cashbackValue" type="number" min="0" step="any" inputmode="decimal"></label>
+          </div>
+          <label class="toggle"><input type="checkbox" id="f_cashbackShowPct"> Tulis nilai cashback di proposal</label>
+        </div>
+        <label class="toggle"><input type="checkbox" id="f_bonusOn"> Sudah termasuk bonus</label>
+        <div class="sub" id="w_bonus" hidden>
+          <label class="f">Bonus, satu per baris <textarea id="f_bonusText" rows="3" placeholder="Include FREE design facade"></textarea></label>
+        </div>
+        <div class="money" id="moneyBox"></div>
+      </div>
+
+      <div class="sec">
+        <h2>termin pembayaran <em id="pctSum" class="sum"></em></h2>
+        <div class="rows" id="termRows"></div>
+        <button class="add" type="button" id="addTerm">+ tambah termin</button>
+      </div>
+
+      <div class="sec">
+        <h2>durasi pekerjaan</h2>
+        <div class="rows" id="durRows"></div>
+        <button class="add" type="button" id="addDur">+ tambah tahap</button>
+        <label class="f">Total estimasi <input id="f_durationTotal" placeholder="±12 minggu"><span class="hint" id="durHint"></span></label>
+      </div>
+
+      <div class="sec">
+        <h2>cover</h2>
+        <div class="cover-pick">
+          <button type="button" class="cover-opt" data-cover="plain"><span class="thumb"><i style="top:30%;width:50%"></i><i style="top:12%;width:34%;height:3%"></i><span class="ft"></span></span>Polos</button>
+          <button type="button" class="cover-opt" data-cover="photo"><span class="thumb"><span class="ph"></span><i style="top:8%;width:28%;height:4%"></i><i style="top:22%;width:60%"></i><span class="ft"></span></span>Dengan foto</button>
+        </div>
+        <div class="sub" id="w_photo" hidden>
+          <img class="photo-prev" id="photoPrev" alt="Foto cover" hidden>
+          <label class="btn ghost file-btn" for="photoFile" id="photoBtn">Pilih foto…<input id="photoFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
+          <label class="f">Baris kedua judul (opsional) <input id="f_coverSubtitle" placeholder="PIK OFFICE"></label>
+          <span class="hint" id="photoHint">Foto diberi lapisan putih 46% seperti cover Star Omega.</span>
+        </div>
+      </div>
+
+      <div class="sec">
+        <h2>teks tetap <em>jarang diubah</em></h2>
+        <div class="grid2">
+          <label class="f">Kota <input id="f_city"></label>
+          <label class="f">Berlaku (hari) <input id="f_validityDays" type="number" min="1"></label>
+        </div>
+        <label class="f">Jenis jasa di surat <input id="f_serviceType" placeholder="arsitektur-interior"></label>
+        <div class="grid2">
+          <label class="f">Penanda tangan <input id="f_signer"></label>
+          <label class="f">Perusahaan <input id="f_signCompany"></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="board" aria-label="Pratinjau proposal">
+    <div class="board-head"><span class="lbl" id="pageCount">pratinjau a4</span><div class="warns" id="warns"></div></div>
+    <div class="pages" id="pages"></div>
+  </section>
+</div>
+
+<div class="modal" id="modal" hidden><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="mTitle"><h3 id="mTitle"></h3><p id="mText"></p><div id="mBody"></div><div class="actions"><button class="btn ghost" type="button" id="mCancel">Batal</button><button class="btn" type="button" id="mOk">OK</button></div></div></div>
+
+
+<div class="gate" id="gate">
+  <form class="gate-box" id="gateForm" novalidate>
+    <div class="brand" aria-label="studio saaama"><svg viewBox="0 0 82 26" aria-hidden="true"><text x="0" y="20" font-family="SaaamaSans, sans-serif" font-weight="700" font-size="21.1" fill="#f3f1ea">s</text><rect x="15.5" y="8.6" width="5.7" height="5.7" fill="#f3f1ea"/><path d="M27.65 8.6 30.9 14.3H24.4Z" fill="#f3f1ea"/><circle cx="43.4" cy="11.4" r="2.3" fill="#f3f1ea"/><path d="M13.1 20.4C13.1 16.4 15.1 14.6 18.4 14.6S23.6 16.4 23.6 20.4Z" fill="#f3f1ea"/><path d="M25.6 20.4C25.6 16.4 27.6 14.6 30.9 14.6S36.1 16.4 36.1 20.4Z" fill="#f3f1ea"/><path d="M38.1 20.4C38.1 16.4 40.1 14.6 43.4 14.6S48.6 16.4 48.6 20.4Z" fill="#f3f1ea"/><text x="49.4" y="20" font-family="SaaamaSans, sans-serif" font-weight="700" font-size="21.1" fill="#f3f1ea">ma</text></svg></div>
+    <h1>fee proposal</h1>
+    <p id="gateText">Memeriksa sesi Project Hub…</p>
+    <div id="gateFields" hidden style="display:grid;gap:12px">
+      <label>Email atau username <input id="gIdent" autocomplete="username" autocapitalize="none"></label>
+      <label>Password <input id="gPass" type="password" autocomplete="current-password"></label>
+      <button class="btn-new" type="submit" id="gBtn">Masuk</button>
+    </div>
+    <div class="gate-err" id="gateErr" role="alert"></div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/opentype.js@1.3.4/dist/opentype.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+<script src="engine.js"></script>
+<script>
+(function () {
+  'use strict';
+  var E = window.SaaamaEngine;
+  var $ = function (id) { return document.getElementById(id); };
+
+  // ---------- defaults (from the latest Canva proposal) ----------
+  function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function template() {
+    return {
+      projectName: '', projectTitleCase: '', clientTitle: 'Mr.', clientName: '', clientCompany: '',
+      location: '', area: 0, date: today(), city: 'Bogor', serviceType: 'arsitektur-interior',
+      scope: [
+        { title: 'Concept & Schematic Design', items: ['Studi kebutuhan ruang (space program)', 'Konsep desain & moodboard (narasi desain)', 'Sketsa layout & zoning alternatif', '3D konsep awal (mass plan & basic perspective)'] },
+        { title: 'Design Development', items: ['Pengembangan desain 3D arsitektur dan interior', 'Detailing area & space planning', 'Pemilihan & material', 'MEP', 'Final 3D concept (rendering visual)'] },
+        { title: 'Final design', items: ['Gambar kerja (tampak, denah, potongan) arsitektur PDF dan CAD', 'Schedule material _(finishing list)_'] }
+      ],
+      pricing: { mode: 'perm2', pricePerM2: 200000, unitPrice: 0, cashbackOn: false, cashbackType: 'percent', cashbackValue: 20, cashbackShowPct: false, bonusOn: false, bonusItems: [] },
+      terms: [
+        { label: 'Down Payment – Commencement Fee ( Konsep desain layout + 3D Concept )', pct: 40 },
+        { label: 'Milestone Design Development ( Pengembangan + Detailing Desain )', pct: 30 },
+        { label: 'Final Design Completion (penyerahan gambar kerja + rendering final)', pct: 30 }
+      ],
+      duration: [{ label: 'Concept & Schematic Design', value: '2 Minggu' }, { label: 'Design Development', value: '5 Minggu' }, { label: 'Final Design + Gambar Kerja', value: '5 Minggu' }],
+      durationTotal: '', durationAuto: true,
+      validityDays: 14, signer: 'Jamie Wijaya Halim', signCompany: 'WMW Construction',
+      coverMode: 'plain', coverAsset: null, coverSubtitle: '', lang: 'id'
+    };
+  }
+  var PAIRS = [
+    ['Studi kebutuhan ruang (space program)', 'Space requirement study (space program)'],
+    ['Konsep desain & moodboard (narasi desain)', 'Design concept & moodboard (design narrative)'],
+    ['Sketsa layout & zoning alternatif', 'Layout sketches & alternative zoning'],
+    ['3D konsep awal (mass plan & basic perspective)', 'Initial 3D concept (mass plan & basic perspective)'],
+    ['Pengembangan desain 3D arsitektur dan interior', '3D architecture and interior design development'],
+    ['Detailing area & space planning', 'Area detailing & space planning'],
+    ['Pemilihan & material', 'Material selection'],
+    ['Final 3D concept (rendering visual)', 'Final 3D concept (visual rendering)'],
+    ['Gambar kerja (tampak, denah, potongan) arsitektur PDF dan CAD', 'Architectural working drawings (elevations, plans, sections) in PDF and CAD'],
+    ['Schedule material _(finishing list)_', 'Material schedule _(finishing list)_'],
+    ['Down Payment – Commencement Fee ( Konsep desain layout + 3D Concept )', 'Down Payment – Commencement Fee ( Layout design concept + 3D Concept )'],
+    ['Milestone Design Development ( Pengembangan + Detailing Desain )', 'Design Development Milestone ( Design Development + Detailing )'],
+    ['Final Design Completion (penyerahan gambar kerja + rendering final)', 'Final Design Completion (handover of working drawings + final rendering)'],
+    ['Final Design + Gambar Kerja', 'Final Design + Working Drawings'],
+    ['Termin', 'Payment stage']
+  ];
+  function tr(str, to) {
+    var a = to === 'en' ? 0 : 1, b = 1 - a, t = String(str == null ? '' : str).trim();
+    for (var i = 0; i < PAIRS.length; i++) if (PAIRS[i][a] === t) return PAIRS[i][b];
+    return str;
+  }
+  function trWeeks(v, to) {
+    var m = /^\s*([\d.,]+(?:\s*-\s*[\d.,]+)?)\s*(minggu|weeks?)\s*$/i.exec(v || '');
+    if (!m) return v;
+    var n = m[1].replace(/\s+/g, '');
+    if (to === 'en') return n + (n === '1' ? ' Week' : ' Weeks');
+    return n + ' Minggu';
+  }
+  function translateData(d, to) {
+    d.scope.forEach(function (ph) { ph.title = tr(ph.title, to); ph.items = ph.items.map(function (x) { return tr(x, to); }); });
+    d.terms.forEach(function (t) { t.label = tr(t.label, to); });
+    d.duration.forEach(function (r) { r.label = tr(r.label, to); r.value = trWeeks(r.value, to); });
+    if (d.durationAuto === false && d.durationTotal) d.durationTotal = d.durationTotal.replace(/minggu/i, to === 'en' ? 'weeks' : 'minggu').replace(/weeks?/i, to === 'en' ? 'weeks' : 'minggu');
+    d.lang = to;
+  }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function norm(d) {
+    var t = template(); d = d || {};
+    var out = Object.assign(t, d);
+    out.pricing = Object.assign(template().pricing, d.pricing || {});
+    return out;
+  }
+
+  // ---------- state ----------
+  var S = {
+    data: norm(null), projectId: null, versionId: null, versionN: null, dirty: false,
+    projects: [], versions: [], online: false, listLoaded: false,
+    coverUrl: null, search: ''
+  };
+  try { var draft = JSON.parse(localStorage.getItem('saaama-fee-draft') || 'null'); if (draft && !draft.projectId) { S.data = norm(draft.data); var hadDraft = true; } } catch (e) {}
+
+  // ---------- Project Hub API (Apps Script) ----------
+  // Sesi sama dengan Project Hub. Hub membuka halaman ini dengan #t=<token>; token disimpan di browser ini.
+  var API = window.HUB_API, TOKEN_KEY = 'saaamafee:token';
+  var TOKEN = null;
+  try { TOKEN = localStorage.getItem(TOKEN_KEY); } catch (e) {}
+  (function () {
+    var m = /[#&]t=([^&]+)/.exec(location.hash || '');
+    if (m) { TOKEN = decodeURIComponent(m[1]); try { localStorage.setItem(TOKEN_KEY, TOKEN); } catch (e) {} history.replaceState(null, '', location.pathname + location.search); }
+  })();
+  function api(action, payload) {
+    return fetch(API, { method: 'POST', redirect: 'follow', cache: 'no-store', body: JSON.stringify({ action: action, payload: payload || {}, token: TOKEN }) })
+      .catch(function () { throw new Error('Server tidak bisa dihubungi. Cek koneksi internet.'); })
+      .then(function (r) { if (!r.ok) throw new Error('Server tidak merespons (' + r.status + ').'); return r.text(); })
+      .then(function (t) {
+        var j; try { j = JSON.parse(t); } catch (e) { throw new Error('Balasan server tidak terbaca.'); }
+        if (j.ok) return j.data;
+        var err = new Error(j.message || 'Terjadi kesalahan.'); err.code = j.code; throw err;
+      });
+  }
+  function fee(op, p) {
+    return api('fee', Object.assign({ op: op }, p || {})).catch(function (e) {
+      if (e.code === 'AUTH') { gateLogin('Sesi habis. Masuk lagi untuk melanjutkan.'); }
+      else if (e.code === 'UNKNOWN_ACTION') { gateDeny(); }
+      throw e;
+    });
+  }
+  function blobToB64(blob) {
+    return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(String(r.result).split(',')[1] || ''); }; r.onerror = rej; r.readAsDataURL(blob); });
+  }
+  function bufToB64(buf) {
+    var u = new Uint8Array(buf), s = '', CH = 0x8000;
+    for (var i = 0; i < u.length; i += CH) s += String.fromCharCode.apply(null, u.subarray(i, i + CH));
+    return btoa(s);
+  }
+
+  // ---------- helpers ----------
+  function notice(msg, err) { var n = $('notice'); n.textContent = msg || ''; n.className = 'notice' + (err ? ' err' : ''); }
+  function setDirty(v) {
+    S.dirty = v;
+    var c = $('stateChip');
+    if (!S.projectId) { c.textContent = 'draf baru'; c.className = 'chip dirty'; }
+    else if (v) { c.textContent = 'v' + S.versionN + ' · diubah'; c.className = 'chip dirty'; }
+    else { c.textContent = 'v' + S.versionN + ' · tersimpan'; c.className = 'chip saved'; }
+    $('btnSaveOver').hidden = !S.projectId;
+    if (S.projectId) $('btnSaveOver').textContent = 'Timpa v' + S.versionN;
+    saveDraft();
+  }
+  function saveDraft() {
+    try { if (S.pristine) localStorage.removeItem('saaama-fee-draft'); else localStorage.setItem('saaama-fee-draft', JSON.stringify({ projectId: S.projectId, data: S.data })); } catch (e) {}
+  }
+  function displayName(d) { return (d.projectName || '').replace(/\n/g, ' ').trim(); }
+  function fmtDate(ts) { try { return new Date(ts).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }); } catch (e) { return ''; } }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  // ---------- duration total ----------
+  function autoDuration(rows) {
+    var lo = 0, hi = 0, ok = rows.length > 0, range = false;
+    rows.forEach(function (r) {
+      var m = /^\s*(\d+(?:[.,]\d+)?)\s*(?:-\s*(\d+(?:[.,]\d+)?))?\s*(?:minggu|weeks?)/i.exec(r.value || '');
+      if (!m) { ok = false; return; }
+      var a = parseFloat(m[1].replace(',', '.')), b = m[2] ? parseFloat(m[2].replace(',', '.')) : a;
+      if (m[2]) range = true; lo += a; hi += b;
+    });
+    if (!ok) return null;
+    var f = function (n) { return String(Math.round(n * 10) / 10).replace('.', ','); };
+    var u = S.data && S.data.lang === 'en' ? (hi === 1 && !range ? ' week' : ' weeks') : ' minggu';
+    return range ? f(lo) + '-' + f(hi) + u : '±' + f(lo) + u;
+  }
+
+  // ---------- form binding ----------
+  var simple = ['projectName', 'projectTitleCase', 'clientTitle', 'clientName', 'location', 'area', 'date', 'city', 'serviceType', 'validityDays', 'signer', 'signCompany', 'coverSubtitle', 'durationTotal'];
+  var pricingF = ['pricePerM2', 'unitPrice', 'cashbackOn', 'cashbackType', 'cashbackValue', 'cashbackShowPct', 'bonusOn'];
+  function fillForm() {
+    var d = S.data;
+    simple.forEach(function (k) { var el = $('f_' + k); if (el) el.value = d[k] == null ? '' : d[k]; });
+    pricingF.forEach(function (k) { var el = $('f_' + k); if (!el) return; if (el.type === 'checkbox') el.checked = !!d.pricing[k]; else if (MONEY[k]) el.value = grpDigits(d.pricing[k]).txt; else el.value = d.pricing[k] == null ? '' : d.pricing[k]; });
+    $('f_bonusText').value = (d.pricing.bonusItems || []).join('\n');
+    if (d.durationAuto !== false) $('f_durationTotal').value = autoDuration(d.duration) || d.durationTotal || '';
+    renderLists(); syncVisibility(); syncCover();
+  }
+  simple.forEach(function (k) {
+    var el = $('f_' + k); if (!el) return;
+    el.addEventListener('input', function () {
+      var v = el.value;
+      if (el.type === 'number') v = v === '' ? 0 : +v;
+      S.data[k] = v;
+      if (k === 'durationTotal') S.data.durationAuto = v.trim() === '';
+      changed();
+    });
+  });
+  var MONEY = { pricePerM2: 1, unitPrice: 1 };
+  function grpDigits(v) { var r = String(v || '').replace(/\D/g, '').replace(/^0+(?=\d)/, ''); return { n: r ? +r : 0, txt: r ? r.replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '' }; }
+  Object.keys(MONEY).forEach(function (k) {
+    $('f_' + k).addEventListener('input', function () { var g = grpDigits(this.value); this.value = g.txt; S.data.pricing[k] = g.n; changed(); });
+  });
+  pricingF.forEach(function (k) {
+    var el = $('f_' + k); if (!el || MONEY[k]) return;
+    el.addEventListener(el.type === 'checkbox' || el.tagName === 'SELECT' ? 'change' : 'input', function () {
+      S.data.pricing[k] = el.type === 'checkbox' ? el.checked : (el.type === 'number' ? (el.value === '' ? 0 : +el.value) : el.value);
+      syncVisibility(); changed();
+    });
+  });
+  $('f_bonusText').addEventListener('input', function () { S.data.pricing.bonusItems = this.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean); changed(); });
+  document.querySelectorAll('[data-mode]').forEach(function (b) {
+    b.addEventListener('click', function () { S.data.pricing.mode = b.dataset.mode; syncVisibility(); changed(); });
+  });
+  document.querySelectorAll('[data-lang]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var to = b.dataset.lang; if ((S.data.lang || 'id') === to) return;
+      translateData(S.data, to);
+      fillForm(); changed();
+      notice(to === 'en' ? 'Proposal diubah ke full English. Cek ulang isian yang kamu tulis sendiri.' : 'Proposal kembali ke bahasa Indonesia.');
+    });
+  });
+  function syncVisibility() {
+    document.querySelectorAll('[data-lang]').forEach(function (b) { var on = b.dataset.lang === (S.data.lang || 'id'); b.classList.toggle('on', on); b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', on); });
+    var p = S.data.pricing;
+    document.querySelectorAll('[data-mode]').forEach(function (b) { var on = b.dataset.mode === p.mode; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); b.setAttribute('role', 'radio'); });
+    $('w_perm2').hidden = p.mode === 'unit'; $('w_unit').hidden = p.mode !== 'unit';
+    $('w_cashback').hidden = !p.cashbackOn; $('w_bonus').hidden = !p.bonusOn;
+  }
+
+  // dynamic lists
+  function renderLists() {
+    var d = S.data, m = E.compute(d);
+    // terms
+    var tr = $('termRows'); tr.innerHTML = '';
+    d.terms.forEach(function (t, i) {
+      var row = document.createElement('div'); row.className = 'row';
+      row.innerHTML = '<label class="f"><span>Termin ' + (i + 1) + '</span><textarea rows="2" id="term_l_' + i + '">' + esc(t.label) + '</textarea></label>' +
+        '<label class="f"><span>%</span><input type="number" min="0" max="100" step="any" id="term_p_' + i + '" value="' + esc(t.pct) + '"></label>' +
+        '<button class="x" type="button" aria-label="Hapus termin ' + (i + 1) + '" style="margin-top:20px">×</button>' +
+        '<div class="amt" id="term_a_' + i + '">' + E.rupiah(m.terms[i] || 0) + '</div>';
+      row.querySelector('textarea').addEventListener('input', function () { t.label = this.value.replace(/\n/g, ' '); changed(); });
+      row.querySelector('input').addEventListener('input', function () { t.pct = this.value === '' ? 0 : +this.value; changed(); });
+      row.querySelector('.x').addEventListener('click', function () { d.terms.splice(i, 1); renderLists(); changed(); });
+      tr.appendChild(row);
+    });
+    // duration
+    var dr = $('durRows'); dr.innerHTML = '';
+    d.duration.forEach(function (r, i) {
+      var row = document.createElement('div'); row.className = 'row dur';
+      row.innerHTML = '<input class="in" id="dur_l_' + i + '" aria-label="Tahap ' + (i + 1) + '" value="' + esc(r.label) + '">' +
+        '<input class="in" id="dur_v_' + i + '" aria-label="Lama tahap ' + (i + 1) + '" value="' + esc(r.value) + '" placeholder="2 Minggu">' +
+        '<button class="x" type="button" aria-label="Hapus tahap ' + (i + 1) + '">×</button>';
+      var ins = row.querySelectorAll('input');
+      ins[0].addEventListener('input', function () { r.label = this.value; changed(); });
+      ins[1].addEventListener('input', function () { r.value = this.value; if (S.data.durationAuto !== false) $('f_durationTotal').value = autoDuration(d.duration) || ''; changed(); });
+      row.querySelector('.x').addEventListener('click', function () { d.duration.splice(i, 1); renderLists(); changed(); });
+      dr.appendChild(row);
+    });
+    // scope
+    var sr = $('scopeRows'); sr.innerHTML = '';
+    d.scope.forEach(function (ph, i) {
+      var box = document.createElement('div'); box.className = 'phase';
+      box.innerHTML = '<div class="phase-h"><b>' + String.fromCharCode(97 + i) + '.</b><input class="in" id="ph_t_' + i + '" aria-label="Nama tahap ' + (i + 1) + '" value="' + esc(ph.title) + '"><button class="x" type="button" aria-label="Hapus tahap ' + (i + 1) + '">×</button></div>' +
+        '<label class="f"><textarea rows="' + Math.max(2, ph.items.length) + '" id="ph_i_' + i + '" aria-label="Item tahap ' + (i + 1) + '">' + esc(ph.items.join('\n')) + '</textarea></label>';
+      box.querySelector('input').addEventListener('input', function () { ph.title = this.value; changed(); });
+      box.querySelector('textarea').addEventListener('input', function () { ph.items = this.value.split('\n').filter(function (s) { return s.trim(); }); changed(); });
+      box.querySelector('.x').addEventListener('click', function () { d.scope.splice(i, 1); renderLists(); changed(); });
+      sr.appendChild(box);
+    });
+  }
+  $('addTerm').addEventListener('click', function () { S.data.terms.push({ label: 'Termin', pct: 0 }); renderLists(); changed(); });
+  $('addDur').addEventListener('click', function () { S.data.duration.push({ label: '', value: '1 Minggu' }); renderLists(); changed(); });
+  $('addPhase').addEventListener('click', function () { S.data.scope.push({ title: '', items: [] }); renderLists(); changed(); });
+
+  // ---------- cover ----------
+  document.querySelectorAll('[data-cover]').forEach(function (b) {
+    b.addEventListener('click', function () { S.data.coverMode = b.dataset.cover; syncCover(); changed(); });
+  });
+  function syncCover() {
+    var photo = S.data.coverMode === 'photo';
+    document.querySelectorAll('[data-cover]').forEach(function (b) { b.classList.toggle('on', b.dataset.cover === S.data.coverMode); });
+    $('w_photo').hidden = !photo;
+    var url = S.coverUrl;
+    $('photoPrev').hidden = !url; if (url) $('photoPrev').src = url;
+    $('photoBtn').firstChild.textContent = url ? 'Ganti foto…' : 'Pilih foto…';
+  }
+  $('photoFile').addEventListener('change', async function () {
+    var f = this.files && this.files[0]; this.value = '';
+    if (!f) return;
+    var blob = await downscale(f, 2400);
+    S.coverUrl = URL.createObjectURL(blob);
+    S.pendingCover = blob;
+    S.data.coverAsset = null;
+    syncCover(); changed();
+    notice('Mengunggah foto cover ke Drive…');
+    try {
+      var r = await fee('uploadCover', { data: await blobToB64(blob) });
+      S.data.coverAsset = r.id; S.pendingCover = null; changed();
+      notice('Foto cover terunggah. Masuk ke folder versi saat kamu simpan versi.');
+    } catch (e) { notice('Foto belum terunggah (' + e.message + '). Foto tetap dipakai di PDF ini.', true); }
+  });
+  function downscale(file, max) {
+    return new Promise(function (res, rej) {
+      var img = new Image(); img.onload = function () {
+        var s = Math.min(1, max / Math.max(img.width, img.height));
+        var c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob(function (b) { res(b); }, 'image/jpeg', 0.9);
+      }; img.onerror = rej; img.src = URL.createObjectURL(file);
+    });
+  }
+  // build the washed, cover-cropped photo used in the PDF (white + 46% photo)
+  function coverForPdf() {
+    var url = S.coverUrl;
+    if (!url) return Promise.resolve(null);
+    return new Promise(function (res) {
+      var img = new Image(); img.crossOrigin = 'anonymous';
+      img.onload = function () {
+        var W = 1588, Hh = Math.round(1588 * 1043.1496 / 793.7008);
+        var c = document.createElement('canvas'); c.width = W; c.height = Hh; var g = c.getContext('2d');
+        g.fillStyle = '#fff'; g.fillRect(0, 0, W, Hh); g.globalAlpha = 0.46;
+        var s = Math.max(W / img.width, Hh / img.height), w = img.width * s, h = img.height * s;
+        g.drawImage(img, (W - w) / 2, (Hh - h) / 2, w, h);
+        res(c.toDataURL('image/jpeg', 0.88));
+      }; img.onerror = function () { res(null); }; img.src = url;
+    });
+  }
+
+  // ---------- preview ----------
+  var timer = null, lastLayout = null, READY = false;
+  function changed() {
+    S.pristine = false;
+    setDirty(true);
+    if (S.data.durationAuto !== false) S.data.durationTotal = autoDuration(S.data.duration) || S.data.durationTotal;
+    clearTimeout(timer); timer = setTimeout(render, 90);
+  }
+  function viewData() {
+    var d = clone(S.data);
+    if (!d.projectTitleCase) d.projectTitleCase = E.titleCase(d.projectName);
+    d.coverPhoto = d.coverMode === 'photo' && !!S.coverUrl;
+    return d;
+  }
+  function render() {
+    if (!READY) return;
+    var d = viewData();
+    E.images.coverPhoto = S.coverUrl || null;
+    var L = E.layout(d); lastLayout = L;
+    var host = $('pages');
+    if (host.children.length !== L.pages.length) {
+      host.innerHTML = L.pages.map(function (p, i) { return '<div class="pwrap"><div class="pnum">halaman ' + (i + 1) + '</div><div class="pscale"><div class="page"></div></div></div>'; }).join('');
+    }
+    $('pageCount').textContent = 'pratinjau a4 · ' + L.pages.length + ' halaman';
+    var pgs = host.querySelectorAll('.page');
+    L.pages.forEach(function (p, i) { pgs[i].innerHTML = E.renderHTML(p); });
+    fit();
+    // money box
+    var m = L.money, p = S.data.pricing, mb = $('moneyBox');
+    var h = '<span class="lbl">' + (p.cashbackOn ? 'fee setelah cashback' : 'total fee desain') + '</span>';
+    if (p.cashbackOn) h += '<span class="was">' + E.rupiah(m.base) + '</span>';
+    h += '<span class="big">' + E.rupiah(m.final) + '</span><span class="say">' + E.terbilang(m.final, S.data.lang) + '</span>';
+    mb.innerHTML = h;
+    // term amounts + sum
+    S.data.terms.forEach(function (t, i) { var a = $('term_a_' + i); if (a) a.textContent = E.rupiah(m.terms[i] || 0) + ' · ' + E.terbilang(m.terms[i] || 0, S.data.lang); });
+    var ps = $('pctSum'); ps.textContent = 'total ' + E.num(m.pctSum) + '%'; ps.className = 'sum' + (Math.abs(m.pctSum - 100) > 0.001 ? ' bad' : '');
+    if (S.data.durationAuto !== false) $('durHint').textContent = autoDuration(S.data.duration) ? 'Dihitung otomatis dari tahap di atas. Ketik sendiri untuk mengganti.' : 'Isi sendiri, format lama tahap tidak bisa dijumlah otomatis.';
+    else $('durHint').textContent = 'Diisi manual. Kosongkan untuk kembali otomatis.';
+    // warnings
+    var w = [];
+    if (Math.abs(m.pctSum - 100) > 0.001) w.push('termin ' + E.num(m.pctSum) + '%, belum 100%');
+    L.pages.forEach(function (pg, i) { if (pg.overflow) w.push('halaman ' + (i + 1) + ' terlalu panjang'); });
+    if (!displayName(S.data)) w.push('nama proyek kosong');
+    $('warns').innerHTML = w.map(function (x) { return '<span>' + esc(x) + '</span>'; }).join('');
+    $('edTitle').textContent = displayName(S.data).toLowerCase() || 'proposal baru';
+  }
+  function fit() {
+    document.querySelectorAll('.pscale').forEach(function (ps) {
+      var w = ps.clientWidth, s = w / 793.7008;
+      ps.style.height = (1122.5197 * s) + 'px';
+      ps.firstChild.style.transform = 'scale(' + s + ')';
+    });
+  }
+  window.addEventListener('resize', fit);
+
+  // ---------- files ----------
+  // Template nama file: 20260831_SAAAMA_Fee Proposal_F HOUSE (versi dibedakan lewat folder V01, V02, …)
+  function baseName() {
+    var d = String(S.data.date || '').replace(/-/g, '');
+    return d + '_SAAAMA_Fee Proposal_' + displayName(S.data).replace(/\s+/g, ' ').toUpperCase().replace(/[\\/:*?"<>|]/g, '');
+  }
+  function vName(n) { return 'V' + (n < 10 ? '0' + n : n); }
+  async function makePdfBlob() {
+    var d = viewData(), coverImg = null;
+    if (d.coverPhoto) { coverImg = await coverForPdf(); if (!coverImg) d.coverPhoto = false; }
+    E.images.coverPhoto = coverImg || E.images.coverPhoto;
+    var L = E.layout(d);
+    var doc = E.toPDF(L.pages, coverImg);
+    return doc.output('blob');
+  }
+  function download(filename, data) {
+    var blob = data instanceof Blob ? data : new Blob([data], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob); a.download = filename; a.rel = 'noopener';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 2000);
+    return true;
+  }
+  $('btnPdf').addEventListener('click', async function () {
+    var b = this; b.disabled = true; notice('Menyusun PDF…');
+    try {
+      var blob = await makePdfBlob();
+      download(baseName() + '.pdf', blob);
+      if (S.projectId && !S.dirty) {
+        notice('PDF diunduh. Menyimpan salinannya ke Drive (folder ' + vName(S.versionN) + ')…');
+        try {
+          var res = await fee('pdf', { projectId: S.projectId, n: S.versionN, data: await blobToB64(blob) });
+          setList(res.list);
+          notice('PDF ' + vName(S.versionN) + ' diunduh dan tersimpan di Drive.');
+        } catch (e) { notice('PDF diunduh, tapi belum tersimpan ke Drive: ' + e.message, true); }
+      } else {
+        notice('PDF diunduh. Simpan sebagai versi dulu supaya PDF-nya ikut tersimpan di folder proyek.');
+      }
+    } catch (e) { notice('PDF gagal dibuat: ' + (e.message || e), true); }
+    b.disabled = false;
+  });
+  $('btnJson').addEventListener('click', function () {
+    var payload = { app: 'saaama-fee-proposal', format: 1, project: displayName(S.data), version: S.versionN, data: S.data };
+    download(baseName() + '.json', JSON.stringify(payload, null, 2));
+    notice('File editable diunduh. Buka lagi lewat tombol “Buka file”.');
+  });
+  $('importJson').addEventListener('change', function () {
+    var f = this.files && this.files[0]; this.value = ''; if (!f) return;
+    var r = new FileReader(); r.onload = function () {
+      try {
+        var j = JSON.parse(r.result); var d = j.data || j;
+        S.data = norm(d); S.projectId = null; S.versionId = null; S.versionN = null; S.versions = [];
+        S.coverUrl = null; S.data.coverAsset = null;
+        fillForm(); render(); setDirty(true); renderRail();
+        notice('File dibuka sebagai draf baru. Simpan versi untuk mencatatnya ke proyek.' + (d.coverMode === 'photo' ? ' Pilih ulang foto cover-nya.' : ''));
+      } catch (e) { notice('File ini bukan file editable fee proposal.', true); }
+    }; r.readAsText(f);
+  });
+
+  // ---------- projects & versions (Drive 007 FEE PROPOSAL lewat Project Hub) ----------
+  function money(n) { return E.rupiah(n || 0).replace(',-', ''); }
+  function setList(list) {
+    S.projects = list || []; S.listLoaded = true;
+    var p = curProject(); S.versions = p ? p.versions : [];
+    renderRail();
+  }
+  function curProject() { return S.projects.filter(function (p) { return p.id === S.projectId; })[0] || null; }
+  function renderRail() {
+    var host = $('plist');
+    if (!S.listLoaded) { host.innerHTML = '<div class="empty-rail">' + (S.online ? 'Memuat daftar proyek…' : 'Daftar proyek muncul setelah masuk.') + '</div>'; $('pcount').textContent = ''; return; }
+    var q = S.search.toLowerCase();
+    var list = S.projects.filter(function (p) { return !q || (p.name + ' ' + (p.client || '')).toLowerCase().indexOf(q) >= 0; });
+    $('pcount').textContent = S.projects.length || '';
+    if (!S.projects.length) { host.innerHTML = '<div class="empty-rail">Belum ada proyek. Isi form di kanan lalu tekan <b>Simpan versi baru</b>, proyek dan V01 akan muncul di sini.</div>'; return; }
+    if (!list.length) { host.innerHTML = '<div class="empty-rail">Tidak ada proyek yang cocok.</div>'; return; }
+    host.innerHTML = '';
+    list.forEach(function (p) {
+      var on = p.id === S.projectId;
+      var wrap = document.createElement('div'); wrap.className = 'pitem' + (on ? ' on' : '');
+      wrap.innerHTML = '<button class="prow" type="button"><span class="pname">' + esc((p.name || '').toLowerCase()) + '</span><span class="pleader"></span><span class="pmeta">v' + (p.latest || 1) + '</span></button>';
+      wrap.querySelector('.prow').addEventListener('click', function () { openProject(p.id); });
+      if (on && p.versions.length) {
+        var ul = document.createElement('ul'); ul.className = 'vlist';
+        p.versions.forEach(function (v) {
+          var li = document.createElement('li'); li.className = 'vrow';
+          li.innerHTML = '<button class="vbtn' + (v.n === S.versionN ? ' on' : '') + '" type="button"><span>v' + v.n + '</span><small>' + esc(fmtDate(String(v.created || '').replace(' ', 'T'))) + ' · ' + esc(money(v.total)) + '</small></button>' +
+            (v.pdf ? '<a class="vpdf" href="' + esc(v.pdf) + '" target="_blank" rel="noopener" title="Buka PDF ' + vName(v.n) + ' di Drive">pdf</a>' : '');
+          li.firstChild.addEventListener('click', function () { openVersion(v.n); });
+          ul.appendChild(li);
+        });
+        wrap.appendChild(ul);
+        if (p.folder) { var a = document.createElement('a'); a.className = 'pfolder'; a.href = p.folder; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'buka folder di Drive ↗'; wrap.appendChild(a); }
+      }
+      host.appendChild(wrap);
+    });
+  }
+  function guardDirty(next) {
+    if (!S.dirty || S.pristine) return next();
+    ask('Perubahan belum disimpan', 'Kalau lanjut, perubahan di form ini hilang. Simpan dulu sebagai versi kalau masih dibutuhkan.', 'Lanjut tanpa simpan', next);
+  }
+  function openProject(pid) {
+    guardDirty(function () {
+      $('app').classList.remove('rail-open');
+      S.projectId = pid;
+      var p = curProject(); S.versions = p ? p.versions : [];
+      renderRail();
+      if (S.versions.length) loadVersion(S.versions[0].n);
+    });
+  }
+  var loadSeq = 0;
+  async function loadVersion(n) {
+    var seq = ++loadSeq, pid = S.projectId;
+    notice('Membuka v' + n + '…');
+    try {
+      var res = await fee('load', { projectId: pid, n: n });
+      if (seq !== loadSeq) return;
+      S.versionId = n; S.versionN = n; S.data = norm(res.data); S.coverUrl = null; S.pendingCover = null;
+      fillForm(); render(); setDirty(false); renderRail();
+      notice('Membuka v' + n + '.');
+      if (S.data.coverMode === 'photo' && S.data.coverAsset) {
+        try {
+          var c = await fee('cover', { id: S.data.coverAsset });
+          if (seq !== loadSeq) return;
+          S.coverUrl = c.data; syncCover(); render();
+        } catch (e) { notice('Foto cover v' + n + ' tidak bisa dimuat: ' + e.message, true); }
+      }
+    } catch (e) { if (seq === loadSeq) notice('Versi tidak bisa dibuka: ' + e.message, true); }
+  }
+  function openVersion(n) { if (n === S.versionN && !S.dirty) return; guardDirty(function () { loadVersion(n); $('app').classList.remove('rail-open'); }); }
+  var saving = false;
+  async function saveVersion(overwrite) {
+    if (saving) return;
+    if (!S.online) { notice('Masuk dulu supaya bisa menyimpan. Sementara pakai “Unduh file editable”.', true); return; }
+    if (!displayName(S.data)) { notice('Isi nama proyek dulu.', true); $('f_projectName').focus(); return; }
+    if (S.data.coverMode === 'photo' && S.coverUrl && !S.data.coverAsset) notice('Catatan: foto cover belum terunggah, jadi versi ini tanpa foto.', true);
+    saving = true; $('btnSaveNew').disabled = true; $('btnSaveOver').disabled = true;
+    var m = E.compute(viewData());
+    notice(overwrite ? 'Menimpa v' + S.versionN + '…' : 'Menyimpan versi baru ke Drive…');
+    try {
+      var res = await fee('save', { projectId: S.projectId, n: S.versionN, overwrite: !!overwrite, data: clone(S.data), total: m.final });
+      var wasNew = !S.projectId;
+      S.projectId = res.projectId; S.versionId = res.n; S.versionN = res.n;
+      S.data.coverAsset = res.data.coverAsset;
+      setList(res.list); setDirty(false);
+      notice(wasNew ? 'Proyek baru tersimpan sebagai V01 di Drive.' : overwrite ? 'v' + res.n + ' ditimpa. Unduh PDF lagi supaya PDF di Drive ikut baru.' : 'Tersimpan sebagai v' + res.n + ' (folder ' + vName(res.n) + ').');
+    } catch (e) {
+      if (e.code !== 'AUTH' && e.code !== 'UNKNOWN_ACTION') notice('Gagal menyimpan: ' + e.message, true);
+    }
+    saving = false; $('btnSaveNew').disabled = false; $('btnSaveOver').disabled = false;
+  }
+  $('btnSaveNew').addEventListener('click', function () { saveVersion(false); });
+  $('btnSaveOver').addEventListener('click', function () { ask('Timpa v' + S.versionN + '?', 'Isi v' + S.versionN + ' akan diganti dengan isi form sekarang. PDF lama di folder ' + vName(S.versionN) + ' dipindah ke Trash.', 'Timpa', function () { saveVersion(true); }); });
+  $('btnNew').addEventListener('click', function () {
+    guardDirty(function () {
+      S.projectId = null; S.versionId = null; S.versionN = null; S.versions = []; S.coverUrl = null;
+      S.data = norm(null); fillForm(); render(); setDirty(true); S.pristine = true; renderRail();
+      $('app').classList.remove('rail-open'); $('f_projectName').focus();
+      notice('Draf baru dengan template standar SAAAMA.');
+    });
+  });
+  $('search').addEventListener('input', function () { S.search = this.value; renderRail(); });
+  $('railToggle').addEventListener('click', function () { $('app').classList.toggle('rail-open'); });
+  document.querySelectorAll('.mob-tabs button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      $('app').dataset.view = b.dataset.view;
+      document.querySelectorAll('.mob-tabs button').forEach(function (x) { x.classList.toggle('on', x === b); });
+      fit();
+    });
+  });
+
+  // modal
+  var mOk = null;
+  function ask(title, text, okLabel, onOk) {
+    $('mTitle').textContent = title; $('mText').textContent = text; $('mOk').textContent = okLabel; $('mBody').innerHTML = '';
+    mOk = onOk; $('modal').hidden = false; $('mOk').focus();
+  }
+  $('mCancel').addEventListener('click', function () { $('modal').hidden = true; });
+  $('mOk').addEventListener('click', function () { $('modal').hidden = true; var f = mOk; mOk = null; if (f) f(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') $('modal').hidden = true; });
+  window.addEventListener('beforeunload', function (e) {
+    saveDraft();
+    if (saving) { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  // ---------- gerbang masuk ----------
+  $('hubLink').href = API || '#';
+  function gateShow(text, withFields) {
+    $('gate').hidden = false; $('gateText').textContent = text;
+    $('gateFields').hidden = !withFields; $('gateErr').textContent = '';
+    if (withFields) setTimeout(function () { ($('gIdent').value ? $('gPass') : $('gIdent')).focus(); }, 30);
+  }
+  function gateLogin(msg) {
+    S.online = false; TOKEN = null; try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    try { $('gIdent').value = localStorage.getItem('saaamafee:ident') || ''; } catch (e) {}
+    gateShow(msg || 'Masuk dengan akun Project Hub kamu.', true);
+  }
+  function gateDeny() {
+    S.online = false; TOKEN = null; try { localStorage.removeItem(TOKEN_KEY); } catch (e) {}
+    gateShow('Akun ini tidak punya akses ke Fee Proposal. Masuk dengan akun lain, atau kembali ke Project Hub.', true);
+  }
+  $('gateForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var ident = $('gIdent').value.trim(), pass = $('gPass').value;
+    if (!ident || !pass) { $('gateErr').textContent = 'Isi email/username dan password.'; return; }
+    $('gBtn').disabled = true; $('gBtn').textContent = 'Memproses…'; $('gateErr').textContent = '';
+    try {
+      var res = await api('login', { ident: ident, password: pass });
+      if (res.needSetup) { $('gateErr').textContent = 'Akun ini belum punya password. Atur dulu lewat Project Hub.'; }
+      else {
+        TOKEN = res.token; try { localStorage.setItem(TOKEN_KEY, TOKEN); localStorage.setItem('saaamafee:ident', ident); } catch (err) {}
+        $('gPass').value = '';
+        await start();
+      }
+    } catch (err) { $('gateErr').textContent = err.message; }
+    $('gBtn').disabled = false; $('gBtn').textContent = 'Masuk';
+  });
+
+  // ---------- boot ----------
+  var FONT_KEYS = ['L', 'LI', 'R', 'RI', 'M', 'B', 'BI'];
+  var fontsP = Promise.all(FONT_KEYS.map(function (k) {
+    return fetch('fonts/' + k + '.ttf').then(function (r) { if (!r.ok) throw new Error('fonts/' + k + '.ttf'); return r.arrayBuffer(); }).then(function (b) { return [k, bufToB64(b)]; });
+  })).then(function (arr) { var o = {}; arr.forEach(function (x) { o[x[0]] = x[1]; }); return o; });
+  var iconP = fetch('footer-icon.png').then(function (r) { return r.blob(); }).then(function (b) {
+    return new Promise(function (res) { var fr = new FileReader(); fr.onload = function () { res(fr.result); }; fr.readAsDataURL(b); });
+  });
+  var engineReady = null;
+  function initEngine(signature) {
+    if (!engineReady) {
+      engineReady = Promise.all([fontsP, iconP]).then(function (r) {
+        return E.init(r[0], { icon: r[1], signature: signature });
+      }).then(function () { READY = true; render(); window.__ready = true; })
+        .catch(function (e) { engineReady = null; notice('Font gagal dimuat: ' + e.message, true); throw e; });
+    } else if (signature) E.images.signature = signature;
+    return engineReady;
+  }
+  async function start() {
+    if (!TOKEN) { gateLogin(); return; }
+    gateShow('Memeriksa akses…', false);
+    try {
+      var a = await fee('assets');
+      S.online = true; $('gate').hidden = true;
+      await initEngine(a.signature);
+      renderRail();
+      setList(await fee('list'));
+    } catch (e) {
+      if (e.code === 'AUTH' || e.code === 'UNKNOWN_ACTION') return;
+      if (!S.online) gateShow('Tidak bisa terhubung ke Project Hub: ' + e.message, false);
+      else notice('Daftar proyek tidak bisa dimuat: ' + e.message, true);
+    }
+  }
+  S.pristine = !hadDraft;
+  fillForm(); setDirty(!S.projectId); renderRail();
+  start();
+})();
+</script>
+</body>
+</html>
