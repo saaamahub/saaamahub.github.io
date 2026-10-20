@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261020-fee2"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261020-100825"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -280,8 +280,14 @@ a.nav-item { text-decoration: none; }
 .pp-low { background-color: #D6E8D0 !important; color: #2F6B3A !important; }
 .pp-very-low { background-color: #D7E3F2 !important; color: #2F5683 !important; }
 .pp-none { color: var(--muted) !important; }
-.nav-group { font-size: 10.5px; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,.6); margin: 10px 8px 2px; }
-.nav-group:first-child { margin-top: 2px; }
+.nav-grp { --g: rgba(255,255,255,.5); margin: 8px 0 0; padding: 2px 0 4px; border-left: 3px solid var(--g); border-radius: 0 var(--radius) var(--radius) 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--g) 16%, transparent), transparent 85%); }
+.nav-grp:first-child { margin-top: 2px; }
+.nav-grp .nav-item { padding-left: 10px; }
+.nav-grp .nav-group { font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--g); margin: 6px 10px 2px; display: flex; align-items: center; gap: 6px; }
+.nav-grp .nav-group .num { margin-left: auto; font-weight: 600; letter-spacing: 0; opacity: .8; }
+.nav-grp .nav-group .sdot { background: var(--g) !important; background-color: var(--g) !important; }
+.g-going { --g: #8FD39C; } .g-waiting { --g: #F2A9C8; } .g-delayed { --g: #9DC1F0; } .g-inactive { --g: #EDB07E; } .g-completed { --g: #C9C9C0; }
 .side-status { width: calc(100% - 16px); margin: 8px 8px 4px; font-size: 13px; padding: 5px 8px; background-color: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.18); }
 .side-status option { color: #222; }
 .swatch.custom { display: inline-grid; place-items: center; background: conic-gradient(#e57373, #ffd54f, #81c784, #64b5f6, #ba68c8, #e57373); }
@@ -1556,10 +1562,13 @@ function renderSidebar() {
     (a => '<span class="stage-dot' + (p.stage === 'Completed' ? ' s-done' : '') + a.cls + '"' + a.style + ' title="' + esc(p.stage) + '"></span>')(colorAttr(projColor(p.id), true)) +
     '<span class="pname">' + esc(p.name || p.code) + '</span></button>';
   // daftar project dikelompokkan per status (Going → Completed)
-  const grouped = list => {
-    let last = null;
-    return list.map(p => { const st = pStatus(p); const h = st !== last ? '<p class="nav-group"><i class="sdot ps-' + pKey(st) + '"></i>' + esc(st) + '</p>' : ''; last = st; return h + item(p); }).join('');
-  };
+  // tiap status punya blok sendiri: judul berwarna + garis kiri, supaya gampang dibedakan
+  const grouped = list => PSTATUS.map(st => {
+    const ps = list.filter(p => pStatus(p) === st);
+    if (!ps.length) return '';
+    return '<div class="nav-grp g-' + pKey(st) + '"><p class="nav-group"><i class="sdot ps-' + pKey(st) + '"></i>' + esc(st) +
+      '<span class="num">' + ps.length + '</span></p>' + ps.map(item).join('') + '</div>';
+  }).join('');
   el.innerHTML =
     '<div class="brand"><div>' + wordmarkSvg(S.studio) + '<small>Project Hub</small></div>' +
       '<button type="button" class="side-refresh" data-action="refresh-all" title="Muat ulang semua data dari Sheets" aria-label="Muat ulang semua data">' +
