@@ -893,12 +893,14 @@ label.f { display: grid; gap: 4px; font-size: 12px; color: var(--muted); min-wid
   });
 
   // ---------- gerbang masuk ----------
+  // balik ke Project Hub versi GitHub (preview dulu; ganti ke '../' setelah versi utama di-publish)
+  var HUB_HOME = '../preview/';
   var EMBED = window.top !== window.self;
   if (EMBED) {
     // dibuka di dalam Project Hub: link ini membuka Fee Proposal sendiri di tab baru
     var hl = $('hubLink'); hl.textContent = 'buka di tab baru ↗'; hl.target = '_blank'; hl.rel = 'noopener';
     hl.addEventListener('click', function () { hl.href = location.pathname + (TOKEN ? '#t=' + encodeURIComponent(TOKEN) : ''); });
-  } else $('hubLink').href = API || '#';
+  } else $('hubLink').href = HUB_HOME;
   function gateShow(text, withFields) {
     $('gate').hidden = false; $('gateText').textContent = text;
     $('gateFields').hidden = !withFields; $('gateErr').textContent = '';
