@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261020-100825"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261020-102457"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -294,7 +294,11 @@ a.nav-item { text-decoration: none; }
 .swatch.custom .plus { color: #fff; font-weight: 700; font-size: 16px; text-shadow: 0 0 3px rgba(0,0,0,.5); pointer-events: none; }
 .swatch.custom[style] .plus { display: none; }
 .swatch.custom input[type=radio] { display: none; }
-.task-row, .task-head { grid-template-columns: 28px minmax(160px, 1fr) 76px 110px 84px 130px; }
+.task-row, .task-head { grid-template-columns: 44px minmax(160px, 1fr) 76px 110px 84px 130px; }
+.t-lead { display: flex; align-items: center; gap: 4px; }
+.task-row .drag { width: 16px; }
+.task-row:hover .drag { opacity: 1; }
+.task-row.dragging { opacity: .4; }
 .dl-row { display: flex; align-items: baseline; gap: 12px; }
 .dl-row > div:first-child { min-width: 0; }
 .dl-row .lead { flex: 1; min-width: 24px; border-bottom: 1px solid var(--line-strong); transform: translateY(-4px); }
@@ -734,7 +738,7 @@ html[data-theme="dark"] .load .av, html[data-theme="forest"] .load .av { backgro
   .proj-row .c-prio, .proj-row .c-pic, .proj-row .c-draw, .proj-row .c-rev, .proj-row .c-late { display: none; }
   .proj-row .m-stats { display: flex !important; order: 5; }
   .notes-empty { opacity: 1; }
-  .task-row { grid-template-columns: 28px 1fr auto; gap: 6px 10px; }
+  .task-row { grid-template-columns: 44px 1fr auto; gap: 6px 10px; }
   .task-row > .c-pic, .task-row > .c-prio { display: none; }
   .task-row > .c-date { grid-column: 2; grid-row: 2; font-size: 13px; }
   .task-row > .c-status { grid-column: 3; grid-row: 1 / span 2; width: 118px; }
@@ -1426,6 +1430,12 @@ async function runJob(job) {
     return;
   }
   if (job.type === 'layout') { await runLayoutJob(job); return; }
+  if (job.type === 'taskorder') {
+    const res = await call('tasksOrder', { id: job.pid, order: job.order });
+    const d = S.cache[job.pid];
+    if (d) { d._fresh = d._fresh || {}; d._fresh.tasks = res.rows; }
+    return;
+  }
   const row = job.row;
   const base = { id: job.pid, tab: job.tab };
   let res;
@@ -1971,10 +1981,8 @@ function tabTasks() {
   const f = S.ui.taskFilter;
   let rows = all.filter(t => f === 'all' ? true : f === 'done' ? isDone(t.Status) : !isDone(t.Status));
   if (S.ui.taskPic) rows = rows.filter(t => t.PIC === S.ui.taskPic);
-  rows.sort((a, b) => {
-    if (isDone(a.Status) !== isDone(b.Status)) return isDone(a.Status) ? 1 : -1;
-    return String(a.Deadline || '9999') < String(b.Deadline || '9999') ? -1 : 1;
-  });
+  // urutan manual = urutan baris di TIMELINE (bisa digeser)
+  const canDrag = S.ui.taskView !== 'timeline';
   const toolbar = '<div class="toolbar">' +
     '<div class="seg-ctl" role="group" aria-label="Filter status">' +
       [['open', 'Open'], ['done', 'Done'], ['all', 'All']].map(o => '<button type="button" data-action="task-filter" data-v="' + o[0] + '" aria-pressed="' + (f === o[0]) + '">' + o[1] + '</button>').join('') +
@@ -1993,7 +2001,8 @@ function tabTasks() {
     '<div class="rows">' + rows.map(t => {
       const done = isDone(t.Status);
       return '<div class="row task-row clickable' + (done ? ' task-done' : '') + '" data-action="edit" data-tab="tasks" data-key="' + esc(rowKey(t)) + '">' +
-        '<button type="button" class="check' + (done ? ' on' : '') + '" data-action="toggle-done" data-key="' + esc(rowKey(t)) + '" aria-label="' + (done ? 'Reopen' : 'Mark as done') + ': ' + esc(t.Task) + '"></button>' +
+        '<div class="t-lead"><span class="drag" draggable="' + canDrag + '" data-tdrag="' + esc(rowKey(t)) + '" title="Drag to reorder" aria-hidden="true">⋮⋮</span>' +
+        '<button type="button" class="check' + (done ? ' on' : '') + '" data-action="toggle-done" data-key="' + esc(rowKey(t)) + '" aria-label="' + (done ? 'Reopen' : 'Mark as done') + ': ' + esc(t.Task) + '"></button></div>' +
         '<div style="min-width:0"><div class="title">' + esc(t.Task) + '</div>' + (t.Start ? '<div class="sub num">Start ' + esc(fmtDate(t.Start)) + '</div>' : '') + '</div>' +
         '<div class="c-pic">' + chip(t.PIC) + '</div>' +
         '<div class="c-date num ' + dateClass(t.Deadline, done) + '">' + esc(t.Deadline ? fmtDate(t.Deadline) : '–') + '</div>' +
@@ -2002,6 +2011,60 @@ function tabTasks() {
       '</div>';
     }).join('') + '</div></div>';
 }
+/** Geser task: urutan baru dikirim ke TIMELINE (isi baris ditukar, gantt ikut). */
+function taskMove(key, targetKey, after) {
+  const p = S.project;
+  const all = p.tasks.filter(t => t.Task);
+  if (all.some(t => !t._row || t._pending)) { toast('Hold on, some changes are still being saved.'); return; }
+  const a = all.find(t => rowKey(t) === key), b = all.find(t => rowKey(t) === targetKey);
+  if (!a || !b || a === b) return;
+  const order = all.slice().sort((x, y) => x._row - y._row);
+  const slots = order.map(t => t._row);
+  const payload = order.map(t => ({ row: t._row, task: (t._base || t).Task }));
+  const list = order.filter(t => t !== a);
+  list.splice(list.indexOf(b) + (after ? 1 : 0), 0, a);
+  const sent = list.map(t => payload[order.indexOf(t)]);
+  if (sent.every((o, i) => o.row === slots[i])) return;
+  // langsung tampil: baris ikut nomor slot barunya
+  list.forEach((t, i) => { t._row = slots[i]; if (t._base) t._base._row = slots[i]; });
+  p.tasks = list.concat(p.tasks.filter(t => !t.Task));
+  enqueue({ pid: S.projectId, tab: 'tasks', type: 'taskorder', order: sent, rows: list });
+  list.forEach(t => { t._pending = (t._pending || 0) + 1; });
+  render(true);
+}
+const TD = { drag: null };
+document.addEventListener('dragstart', e => {
+  const h = e.target.closest && e.target.closest('[data-tdrag]');
+  if (!h) return;
+  TD.drag = h.dataset.tdrag;
+  e.dataTransfer.effectAllowed = 'move';
+  try { e.dataTransfer.setData('text/plain', TD.drag); } catch (err) {}
+  const row = h.closest('.task-row');
+  if (row) { e.dataTransfer.setDragImage(row, 20, 16); row.classList.add('dragging'); }
+});
+document.addEventListener('dragover', e => {
+  if (!TD.drag) return;
+  const t = e.target.closest && e.target.closest('#tab-body .task-row');
+  if (!t) return;
+  e.preventDefault();
+  document.querySelectorAll('.task-row.drop-before, .task-row.drop-after').forEach(x => x.classList.remove('drop-before', 'drop-after'));
+  const r = t.getBoundingClientRect();
+  t.classList.add(e.clientY < r.top + r.height / 2 ? 'drop-before' : 'drop-after');
+});
+document.addEventListener('dragend', () => {
+  TD.drag = null;
+  document.querySelectorAll('.task-row.drop-before, .task-row.drop-after, .task-row.dragging').forEach(x => x.classList.remove('drop-before', 'drop-after', 'dragging'));
+});
+document.addEventListener('drop', e => {
+  if (!TD.drag) return;
+  const t = e.target.closest && e.target.closest('#tab-body .task-row');
+  const key = TD.drag; TD.drag = null;
+  document.querySelectorAll('.task-row.drop-before, .task-row.drop-after').forEach(x => x.classList.remove('drop-before', 'drop-after'));
+  if (!t) return;
+  e.preventDefault();
+  const r = t.getBoundingClientRect();
+  taskMove(key, t.dataset.key, e.clientY >= r.top + r.height / 2);
+});
 function timelineHtml(rows) {
   const dated = rows.filter(t => isYmd(t.Start) || isYmd(t.Deadline));
   if (!dated.length) return '<div class="section">' + emptyState('No dates yet', 'Fill in Start or Deadline so the task shows up on the timeline.') + '</div>';
@@ -3345,7 +3408,7 @@ document.addEventListener('click', async e => {
       openDrawer(el.dataset.tab, null, defaults); break;
     }
     case 'edit': {
-      if (e.target.closest('select, .check, a')) return;
+      if (e.target.closest('select, .check, a, .drag')) return;
       const row = findRow(el.dataset.tab, el.dataset.key);
       if (row) openDrawer(el.dataset.tab, row);
       break;
