@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261021-123341"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261022-134823"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -163,7 +163,7 @@ a.nav-item { text-decoration: none; }
 .fee-host iframe { border: 0; width: 100%; height: 100%; display: block; }
 @media (max-width: 820px) { .fee-host { height: calc(100vh - 56px); height: calc(100dvh - 56px); } }
 .nav-head { display: flex; align-items: center; justify-content: space-between; padding: 0 8px 6px; margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,.16); }
-.nav-head h2 { font-size: 11px; color: rgba(255,255,255,.7); margin: 0; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; }
+.nav-head h2 { font-size: 13px; color: rgba(255,255,255,.72); margin: 0; font-weight: 500; }
 .nav-head > span { display: flex; flex: none; gap: 0; }
 .sidebar .btn.ghost { color: #fff; }
 .sidebar .btn.ghost:hover { background: rgba(255,255,255,.1); }
@@ -212,7 +212,7 @@ a.nav-item { text-decoration: none; }
 
 .journey.big { gap: 3px; }
 .journey.big .seg {
-  height: auto; min-height: 58px; padding: 10px 12px; text-align: left; cursor: pointer;
+  height: auto; min-height: 46px; padding: 7px 12px; text-align: left; cursor: pointer;
   background: var(--paper); color: var(--ink); border-radius: 0; display: flex; flex-direction: column; justify-content: space-between;
   box-shadow: inset 0 0 0 1px var(--line); transition: background .12s;
 }
@@ -229,7 +229,7 @@ a.nav-item { text-decoration: none; }
 .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
 .section-head h2 { margin: 0; font-size: 17px; font-weight: 700; color: var(--ink); }
 .section-head .muted { font-size: 13px; }
-.grid-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 22px; margin-bottom: 22px; }
+.grid-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 22px; margin: 22px 0; align-items: start; }
 .grid-2 .section + .section { margin-top: 0; }
 
 .rows { display: grid; }
@@ -242,7 +242,15 @@ a.nav-item { text-decoration: none; }
 .row.clickable:hover { background: var(--hover); }
 .row .title { font-weight: 600; color: var(--ink); min-width: 0; overflow-wrap: anywhere; }
 .row .sub { font-size: 13px; color: var(--muted); font-weight: 300; }
-.thead { font-size: 11px; font-weight: 600; color: var(--muted); padding: 0 6px 8px; display: grid; gap: 14px; letter-spacing: 1px; text-transform: uppercase; }
+.sub .by { margin-left: 8px; }
+.sync-btn { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); padding: 6px 8px; border-radius: 4px; }
+.sync-btn:hover { background: var(--hover); color: var(--ink); }
+.sync-btn:focus-visible { outline: 2px solid var(--accent); }
+.sync-btn.busy svg { animation: spin 1s linear infinite; }
+.head-summary b { color: var(--ink); font-weight: 600; }
+.head-summary .late { color: var(--terra-ink); font-weight: 600; }
+.arch-tag { display: inline-block; margin-left: 10px; font-size: 13px; font-weight: 600; padding: 2px 8px; border-radius: 3px; background: var(--cream); color: var(--ink); vertical-align: 2px; }
+.thead { font-size: 12.5px; font-weight: 500; color: var(--muted); padding: 0 6px 8px; display: grid; gap: 14px; }
 
 .proj-row, .proj-head { grid-template-columns: 112px minmax(160px, 1.3fr) minmax(150px, 1.1fr) 104px 56px minmax(170px, 1.5fr) 72px 44px 44px; }
 .ov-scroll { overflow-x: auto; margin: 0 -6px; padding: 0 6px; }
@@ -261,6 +269,9 @@ a.nav-item { text-decoration: none; }
 .notes-list { margin: 0; padding-left: 16px; font-size: 13px; line-height: 1.45; color: var(--ink); }
 .notes-list li { overflow-wrap: anywhere; }
 .notes-empty { font-size: 13px; opacity: 0; }
+.pill-select.pp-none { background-color: transparent !important; color: var(--muted) !important; font-weight: 400; opacity: 0; transition: opacity .12s; }
+.proj-row:hover .pill-select.pp-none, .pill-select.pp-none:focus { opacity: 1; background-color: var(--hover) !important; }
+@media (hover: none) { .pill-select.pp-none, .notes-empty { opacity: 1; } }
 .proj-row:hover .notes-empty, .notes-btn:focus-visible .notes-empty { opacity: 1; }
 .meta-pop { position: absolute; z-index: 70; background: var(--paper); border: 1px solid var(--line-strong); box-shadow: var(--shadow-panel); padding: 12px; width: min(360px, calc(100vw - 16px)); display: grid; gap: 8px; }
 .meta-pop b { color: var(--ink); font-size: 14px; }
@@ -285,7 +296,7 @@ a.nav-item { text-decoration: none; }
   background: linear-gradient(90deg, color-mix(in srgb, var(--g) 16%, transparent), transparent 85%); }
 .nav-grp:first-child { margin-top: 2px; }
 .nav-grp .nav-item { padding-left: 10px; }
-.nav-grp .nav-group { font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--g); margin: 6px 10px 2px; display: flex; align-items: center; gap: 6px; }
+.nav-grp .nav-group { font-size: 12.5px; font-weight: 600; color: var(--g); margin: 6px 10px 2px; display: flex; align-items: center; gap: 6px; }
 .nav-grp .nav-group .num { margin-left: auto; font-weight: 600; letter-spacing: 0; opacity: .8; }
 .nav-grp .nav-group .sdot { background: var(--g) !important; background-color: var(--g) !important; }
 .g-going { --g: #8FD39C; } .g-waiting { --g: #F2A9C8; } .g-delayed { --g: #9DC1F0; } .g-inactive { --g: #EDB07E; } .g-completed { --g: #C9C9C0; }
@@ -356,7 +367,7 @@ select.cell { appearance: none; -webkit-appearance: none; cursor: pointer; font-
 .rev-row, .rev-head { grid-template-columns: 96px minmax(160px, 1fr) 120px 76px 130px; }
 .file-row { grid-template-columns: minmax(0, 1fr) auto; }
 .file-row.placeholder .title { color: var(--muted); font-weight: 400; }
-.sub-group { font-size: 11px; font-weight: 600; color: var(--muted); padding: 10px 6px 2px; letter-spacing: 1.2px; text-transform: uppercase; }
+.sub-group { font-size: 13px; font-weight: 600; color: var(--muted); padding: 10px 6px 2px; }
 .c-rev .pill { font-size: 12px; padding: 1px 7px; }
 .ptag { display: inline-block; padding: 1px 8px; border-radius: 3px; line-height: 1.45; }
 .title .ptag { margin-left: -8px; }
@@ -495,7 +506,7 @@ input[type=range] { accent-color: var(--accent); }
 .cover .head-actions { position: absolute; top: 18px; right: 18px; z-index: 2; }
 .cover .head-actions .btn { background: rgba(255,255,255,.92); border-color: transparent; color: #2E4A36; }
 .meta { display: grid; grid-template-columns: repeat(6, minmax(0, auto)); justify-content: start; gap: 8px 40px; margin-bottom: 24px; }
-.meta div span { display: block; font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+.meta div span { display: block; font-size: 13px; color: var(--muted); }
 .meta div b { color: var(--text); font-weight: 600; }
 .tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--line-strong); margin: 28px 0 20px; overflow-x: auto; scrollbar-width: none; }
 .tab {
@@ -998,7 +1009,7 @@ function sortProjects(arr) {
 }
 function metaSelect(id, field, cur, opts, cls, label) {
   return '<select class="pill-select ' + cls + '" data-change="proj-meta" data-id="' + esc(id) + '" data-field="' + esc(field) + '" aria-label="' + esc(label) + '">' +
-    (cur ? '' : '<option value="" selected>–</option>') +
+    (cur ? '' : '<option value="" selected>Set ' + esc(label.toLowerCase()) + '</option>') +
     opts.map(o => '<option' + (o === cur ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select>';
 }
 function statusSelect2(p) { const st = pStatus(p); return metaSelect(p.id, 'Current Status', st, PSTATUS, 'ps ps-' + pKey(st), 'Project status'); }
@@ -1586,7 +1597,7 @@ function renderSidebar() {
   }).join('');
   el.innerHTML =
     '<div class="brand"><div>' + wordmarkSvg(S.studio) + '<small>Project Hub</small></div>' +
-      '<button type="button" class="side-refresh" data-action="refresh-all" title="Muat ulang semua data dari Sheets" aria-label="Muat ulang semua data">' +
+      '<button type="button" class="side-refresh" data-action="refresh-all" title="Reload all projects from Google Sheets" aria-label="Reload all projects">' +
       '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg></button></div>' +
     '<nav class="nav">' +
       '<button type="button" class="nav-item" data-action="go" data-view="home"' + (S.view === 'home' ? ' aria-current="page"' : '') + '>Overview</button>' +
@@ -1595,7 +1606,7 @@ function renderSidebar() {
       (feeAllowed() ? '<a class="nav-item" href="' + esc(feeHref()) + '" target="_blank" rel="noopener" data-fee-link' + (S.view === 'fee' ? ' aria-current="page"' : '') + '>Fee Proposal</a>' : '') +
     '</nav>' +
     '<div><div class="nav-head"><h2>Project</h2><span>' +
-      '<button type="button" class="btn small ghost" data-action="new-project" aria-label="New project or import a sheet">+ New</button></span></div>' +
+      '<button type="button" class="btn small ghost" data-action="new-project" aria-label="New project or import a sheet">New</button></span></div>' +
       '<div class="proj-filter" role="group" aria-label="Filter project">' + [['all', 'All'], ['pic', 'My PIC'], ['task', 'My tasks']].map(o =>
         '<button type="button" data-action="proj-filter" data-v="' + o[0] + '" aria-pressed="' + (pf === o[0]) + '" title="' + (o[0] === 'pic' ? 'Projects where you\'re the PIC' : o[0] === 'task' ? 'Projects with tasks/drawings/revisions assigned to you' : 'All projects') + '">' + o[1] + '</button>').join('') + '</div>' +
       '<select class="select side-status" data-change="proj-status-filter" aria-label="Filter by project status"><option value="">All statuses</option>' +
@@ -1606,8 +1617,8 @@ function renderSidebar() {
         (S.ui.showArchived ? 'Hide archive' : 'Show archive') + '<span class="count num">' + archived.length + '</span></button>' +
         (S.ui.showArchived ? '<nav class="nav">' + archived.map(item).join('') + '</nav>' : '') : '') +
     '</div>' +
-    '<div class="side-foot"><button type="button" class="me-avatar" data-action="pick-buddy" title="Profil kamu" aria-label="Buka profil">' + buddySvg(memberBuddy(S.user.code)) + '</button>' +
-      '<button type="button" class="who" data-action="pick-buddy"><b>' + esc(S.user.name) + '</b><span class="muted">' + esc(S.user.code) + (S.user.role ? ' · ' + esc(S.user.role) : '') + '</span></button>' +
+    '<div class="side-foot"><button type="button" class="me-avatar" data-action="pick-buddy" title="Your profile" aria-label="Open your profile">' + buddySvg(memberBuddy(S.user.code)) + '</button>' +
+      '<button type="button" class="who" data-action="pick-buddy"><b>' + esc(S.user.name) + '</b><span class="muted">' + esc(S.user.role || S.user.code) + '</span></button>' +
       '<button type="button" class="btn small ghost" data-action="logout" style="margin-left:auto">Sign out</button></div>' +
     '<label class="theme-pick">Theme<select data-change="theme" aria-label="Display mode">' +
       THEMES.map(t => '<option value="' + t[0] + '"' + (themePref() === t[0] ? ' selected' : '') + '>' + t[1] + '</option>').join('') + '</select></label>';
@@ -1666,16 +1677,10 @@ function myTasks() { return allOpenTasks().filter(t => S.user && t.PIC === S.use
 // ---------- Home ----------
 async function renderHome(force) {
   const page = $('#page');
-  const now = new Date();
-  const head =
-    '<div class="page-head"><div><h1>' + greeting() + ', ' + esc(firstName(S.user.name)) + '</h1>' +
-    '<p>' + DAYS[now.getDay()] + ', ' + fmtDate(todayStr(), true) + '</p></div>' +
-    '<div class="head-actions"><span class="sync" id="sync"></span>' +
-    '<button type="button" class="btn" data-action="refresh-home">Reload</button>' +
-    '<button type="button" class="btn primary" data-action="new-project">+ New project</button></div></div>';
+  const head = homeHead();
   if (S.overview) paintHome(); else page.innerHTML = head + '<div class="loading">Loading all projects…</div>';
   const btn = page.querySelector('[data-action=refresh-home]');
-  if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Loading…'; }
+  if (force && btn) { btn.classList.add('busy'); btn.querySelector('span').textContent = 'Loading…'; }
   call('activity', { limit: 12 }).then(a => { S.activity = a; const el = $('#activity'); if (el && S.view === 'home') el.innerHTML = activityHtml(); }).catch(() => {});
   if (Q.jobs.length && !force) return;
   try {
@@ -1689,13 +1694,31 @@ async function renderHome(force) {
   }
   if (S.view === 'home') paintHome();
 }
-function homeHead() {
+const REFRESH_SVG = '<svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 11a8 8 0 1 0-2.3 5.7M20 5v6h-6"/></svg>';
+/** Kalimat ringkas di bawah judul Overview: apa yang perlu diperhatikan minggu ini. */
+function homeSummary() {
   const now = new Date();
-  return '<div class="page-head"><div><h1>' + greeting() + ', ' + esc(firstName(S.user.name)) + '</h1>' +
-    '<p>' + DAYS[now.getDay()] + ', ' + fmtDate(todayStr(), true) + '</p></div>' +
-    '<div class="head-actions"><span class="sync" id="sync"></span>' +
-    '<button type="button" class="btn" data-action="refresh-home">Reload</button>' +
-    '<button type="button" class="btn primary" data-action="new-project">+ New project</button></div></div>';
+  const day = DAYS[now.getDay()] + ' ' + fmtDate(todayStr(), true);
+  if (!S.overview) return day;
+  const today = todayStr(), horizon = addDays(today, 7);
+  const open = allOpenTasks();
+  const late = open.filter(t => isYmd(t.Deadline) && t.Deadline < today).length;
+  const week = open.filter(t => isYmd(t.Deadline) && t.Deadline >= today && t.Deadline <= horizon).length;
+  const n = (k, w) => '<b class="num">' + k + '</b> ' + w + (k === 1 ? '' : 's');
+  const parts = [];
+  if (week) parts.push(n(week, 'task') + ' due this week');
+  if (late) parts.push('<span class="late num">' + late + ' past deadline</span>');
+  return day + '. ' + (parts.length ? parts.join(', ') + '.' : 'Nothing due this week.');
+}
+function syncLabel() {
+  const at = S.overview && S.overview.generatedAt;
+  return at ? 'Updated ' + new Date(at).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : 'Reload';
+}
+function homeHead() {
+  return '<div class="page-head"><div><h1>Overview</h1>' +
+    '<p class="head-summary">' + homeSummary() + '</p></div>' +
+    '<div class="head-actions"><button type="button" class="sync-btn" id="sync" data-action="refresh-home" title="Reload all projects from Google Sheets">' + REFRESH_SVG + '<span>' + syncLabel() + '</span></button>' +
+    '<button type="button" class="btn primary" data-action="new-project">New project</button></div></div>';
 }
 function paintHome() {
   const page = $('#page');
@@ -1707,7 +1730,7 @@ function paintHome() {
   if (!projects.length) {
     page.innerHTML = head + '<div class="section">' + emptyState('No projects yet',
       'Create a new project from the template, or connect an existing Google Sheets dashboard so you can use it here right away.',
-      '<button type="button" class="btn primary" data-action="new-project">+ New project</button>') + '</div>';
+      '<button type="button" class="btn primary" data-action="new-project">New project</button>') + '</div>';
     return;
   }
 
@@ -1720,7 +1743,7 @@ function paintHome() {
     ? '<div class="rows">' + upcoming.slice(0, 12).map(t =>
         '<div class="row dl-row clickable" data-action="open-project" data-id="' + esc(t._pid) + '" data-tab="tasks">' +
           '<div style="min-width:0"><div class="title">' + esc(t.Task) + '</div>' +
-          '<div class="sub">' + ptag(t._pid, t._pname) + (t.PIC ? ' · ' + esc(memberName(t.PIC)) : '') + '</div></div>' +
+          '<div class="sub">' + ptag(t._pid, t._pname) + (t.PIC ? ', ' + esc(firstName(memberName(t.PIC))) : '') + '</div></div>' +
           '<span class="lead"></span><div class="num ' + dateClass(t.Deadline) + '" style="text-align:right">' + esc(relDay(t.Deadline)) + '</div>' +
         '</div>').join('') + '</div>' +
       (upcoming.length > 12 ? '<p class="muted" style="margin:10px 6px 0;font-size:14px">and ' + (upcoming.length - 12) + ' more tasks.</p>' : '')
@@ -1737,14 +1760,12 @@ function paintHome() {
       '<section class="section"><div class="section-head"><h2>Team workload</h2><span class="muted">open tasks</span></div>' + workloadHtml() + '</section>' +
     '</div>' +
     '<section class="section"><div class="section-head"><h2>Recent activity</h2></div><div id="activity">' + activityHtml() + '</div></section>';
-  const sync = $('#sync');
-  if (sync) sync.textContent = 'Updated ' + new Date(ov.generatedAt).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 }
 function projRowHtml(p) {
   const meta = Object.assign({}, p, projectById(p.id).id ? projectById(p.id) : {});
   const name = '<div class="proj-name"><div style="min-width:0"><div class="title"><span class="ptag-wrap">' + ptag(p.id, projectName(p)) +
     '<button type="button" class="color-btn" data-action="pick-color" data-id="' + esc(p.id) + '" title="Label color" aria-label="Label color for ' + esc(projectName(p)) + '"></button></span></div>' +
-    '<div class="sub">' + esc([meta.category, p.info && p.info.Client, p.info && p.info.Location].filter(Boolean).join(' · ') || p.code) + '</div></div></div>';
+    '<div class="sub">' + esc([meta.category, p.info && p.info.Client, p.info && p.info.Location].filter(Boolean).join(', ') || p.code) + '</div></div></div>';
   if (p.error) {
     return '<div class="row proj-row"><div>' + statusSelect2(meta) + '</div>' + name + '<div class="muted" style="grid-column:3/-1">Can\'t open the sheet: ' + esc(p.error) + '</div></div>';
   }
@@ -1761,7 +1782,7 @@ function projRowHtml(p) {
     '<div class="c-draw">' + draw + '</div>' +
     '<div class="c-rev"><span class="stat num' + (p.revisions.open ? '' : ' zero') + '">' + p.revisions.open + '</span></div>' +
     '<div class="c-late"><span class="stat num' + (p.tasks.overdue ? ' alert' : ' zero') + '">' + p.tasks.overdue + '</span></div>' +
-    '<div class="m-stats"><span>' + (dr.total ? 'Drawings ' + dr.progress + '%' : 'No drawings') + '</span><span>' + p.revisions.open + ' revisions</span>' +
+    '<div class="m-stats"><span>' + (dr.total ? 'Drawings ' + dr.progress + '%' : 'No drawings') + '</span><span>' + p.revisions.open + (p.revisions.open === 1 ? ' revision' : ' revisions') + '</span>' +
       '<span' + (p.tasks.overdue ? ' class="date-late"' : '') + '>' + p.tasks.overdue + ' late</span></div>' +
   '</div>';
 }
@@ -1814,11 +1835,11 @@ function activityHtml() {
 // ---------- My tasks ----------
 async function renderMe(force) {
   const page = $('#page');
-  const head = '<div class="page-head"><div><h1>My tasks</h1><p>All open tasks assigned to ' + esc(S.user.name) + ' across all projects.</p></div>' +
-    '<div class="head-actions"><button type="button" class="btn" data-action="refresh-me">Reload</button></div></div>';
+  const head = '<div class="page-head"><div><h1>My tasks</h1><p>Everything assigned to you, across all projects.</p></div>' +
+    '<div class="head-actions"><button type="button" class="sync-btn" data-action="refresh-me" title="Reload all projects from Google Sheets">' + REFRESH_SVG + '<span>' + syncLabel() + '</span></button></div></div>';
   if (S.overview) paintMe(); else page.innerHTML = head + '<div class="loading">Collecting tasks…</div>';
   const btn = page.querySelector('[data-action=refresh-me]');
-  if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Loading…'; }
+  if (force && btn) { btn.classList.add('busy'); btn.querySelector('span').textContent = 'Loading…'; }
   if (Q.jobs.length && !force) return;
   try { await loadOverview(force); } catch (err) {
     if (err.code === 'AUTH' || S.view !== 'me') return;
@@ -1831,8 +1852,8 @@ async function renderMe(force) {
 function paintMe() {
   const page = $('#page');
   if (!page || !S.overview) return;
-  const head = '<div class="page-head"><div><h1>My tasks</h1><p>All open tasks assigned to ' + esc(S.user.name) + ' across all projects.</p></div>' +
-    '<div class="head-actions"><button type="button" class="btn" data-action="refresh-me">Reload</button></div></div>';
+  const head = '<div class="page-head"><div><h1>My tasks</h1><p>Everything assigned to you, across all projects.</p></div>' +
+    '<div class="head-actions"><button type="button" class="sync-btn" data-action="refresh-me" title="Reload all projects from Google Sheets">' + REFRESH_SVG + '<span>' + syncLabel() + '</span></button></div></div>';
   const today = todayStr(), week = addDays(today, 7);
   const tasks = myTasks().sort((a, b) => String(a.Deadline || '9999') < String(b.Deadline || '9999') ? -1 : 1);
   const groups = [
@@ -1872,7 +1893,7 @@ async function openProject(id, tab, force) {
     const age = Date.now() - (S.cacheAt[id] || 0);
     if (!force && (age < 15000 || hasPending(id))) return;
     const btn = $('[data-action=reload-project]');
-    if (force && btn) { btn.classList.add('busy'); btn.textContent = 'Loading…'; }
+    if (force && btn) { btn.classList.add('busy'); btn.querySelector('span').textContent = 'Loading…'; }
     try {
       const before = JSON.stringify(cleanProject(cached));
       const data = await fetchProject(id, force);
@@ -1943,9 +1964,9 @@ function renderProject() {
   const archived = p.project && p.project.archived;
   const cover = coverUrl(info['Cover Photo']);
   const titleHtml = '<div style="min-width:0"><h1 class="proj-title">' + esc(projectName(p)) + '</h1>' +
-    '<p class="proj-sub">' + esc([info.Category, info.Type, info.Scope].filter(Boolean).join(' · ') || 'Type and scope not set') + (archived ? ' · <b>Archived</b>' : '') + '</p></div>';
+    '<p class="proj-sub">' + esc([info.Category, info.Type, info.Scope].filter(Boolean).join(', ') || 'Type and scope not set') + (archived ? '<span class="arch-tag">Archived</span>' : '') + '</p></div>';
   const actionsHtml = '<div class="head-actions">' + (cover ? '<button type="button" class="btn" data-action="cover-edit">Edit cover</button>' : '') +
-    '<button type="button" class="btn" data-action="reload-project">Reload</button>' +
+    '<button type="button" class="sync-btn" data-action="reload-project" title="Reload this project from Google Sheets">' + REFRESH_SVG + '<span>Reload</span></button>' +
     '<a class="btn" href="' + esc(p.url) + '" target="_blank" rel="noopener">Open Google Sheets</a></div>';
   $('#page').innerHTML =
     '<button type="button" class="crumb" data-action="go" data-view="home">← Overview</button>' +
@@ -2309,7 +2330,7 @@ function tabDrawings() {
   const match = r => (!q || (String(r.Code) + ' ' + r.Title + ' ' + (r.Notes || '')).toLowerCase().indexOf(q) > -1) &&
     (!fPic || r.PIC === fPic) && (!fSt || drawingStatus(r) === fSt);
   const toolbar = '<div class="toolbar">' +
-    (rows.length ? '<div style="min-width:200px;flex:1;max-width:360px"><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px"><b style="color:var(--ink)" class="num">' + done + ' of ' + rows.length + ' drawings done</b><span class="muted num">' + pct + '%' + (hold ? ' · ' + hold + ' on hold' : '') + '</span></div><div class="meter"><i style="width:' + pct + '%"></i></div></div>' : '') +
+    (rows.length ? '<div style="min-width:200px;flex:1;max-width:360px"><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px"><b style="color:var(--ink)" class="num">' + done + ' of ' + rows.length + ' drawings done</b><span class="muted num">' + pct + '%' + (hold ? ', ' + hold + ' on hold' : '') + '</span></div><div class="meter"><i style="width:' + pct + '%"></i></div></div>' : '') +
     '<span class="spacer"></span>' +
     '<input class="input dr-search" type="search" placeholder="Search code / title" aria-label="Search drawings" value="' + esc(S.ui.drQuery || '') + '" data-input="dr-query">' +
     '<select class="select" data-change="dr-pic" aria-label="Filter PIC"><option value="">All PICs</option>' + S.team.map(m => '<option' + (fPic === m.code ? ' selected' : '') + '>' + esc(m.code) + '</option>').join('') + '</select>' +
@@ -2347,7 +2368,7 @@ function tabDrawings() {
     '<div class="row draw-add" data-series="' + esc(g.name) + '" data-sub="' + esc(sb.name) + '">' +
       '<span></span><span class="drag" aria-hidden="true">+</span><span></span>' +
       '<input class="cell c-code num add-code" placeholder="' + esc(nextCode(g, sb.name)) + '" aria-label="New drawing code">' +
-      '<input class="cell c-title add-title" placeholder="Tambah gambar… (Enter) · bisa paste banyak baris" aria-label="Judul gambar baru">' +
+      '<input class="cell c-title add-title" placeholder="Add a drawing. Enter to save, or paste several lines" aria-label="New drawing title">' +
     '</div>';
   const body = groups.map(g => {
     const all = [].concat.apply([], g.subs.map(s => s.rows));
@@ -2706,7 +2727,7 @@ function tabRevisions() {
   return toolbar + '<div class="section"><div class="thead rev-head"><span>Date</span><span>Item</span><span>Related drawing</span><span>PIC</span><span>Status</span></div><div class="rows">' +
     rows.map(r => '<div class="row rev-row clickable" data-action="edit" data-tab="revisions" data-key="' + esc(rowKey(r)) + '">' +
       '<div class="c-date num">' + esc(fmtDate(r.Date) || '–') + '</div>' +
-      '<div style="min-width:0"><div class="title">' + esc(r.Item) + '</div><div class="sub">' + esc([r['Requested By'] ? 'of ' + r['Requested By'] : '', r.Description].filter(Boolean).join(' · ')) + '</div></div>' +
+      '<div style="min-width:0"><div class="title">' + esc(r.Item) + '</div><div class="sub">' + esc([r['Requested By'] ? 'Requested by ' + r['Requested By'] : '', r.Description].filter(Boolean).join('. ')) + '</div></div>' +
       '<div class="c-ref num muted" style="overflow-wrap:anywhere">' + esc(r['Related Drawing'] || '–') + '</div>' +
       '<div class="c-pic">' + chip(r.PIC) + '</div><div class="c-status">' + statusSelect('revisions', r) + '</div></div>').join('') +
     '</div></div>';
@@ -2753,7 +2774,7 @@ function tabFiles() {
         return '<div class="row file-row' + (url ? '' : ' placeholder') + '"><div style="min-width:0">' +
           (url ? '<a class="title" href="' + esc(url) + '" target="_blank" rel="noopener" style="text-decoration:none">' + esc(r.Name || url) + '</a>' : '<div class="title">' + esc(r.Name) + '</div>') +
           '<div class="sub">' + (url ? esc(url.replace(/^https?:\/\//, '').slice(0, 60)) : 'No link yet') +
-          (pdf ? ' · <a href="' + esc(pdf) + '" target="_blank" rel="noopener">PDF</a>' : '') + '</div></div>' +
+          (pdf ? '<a class="by" href="' + esc(pdf) + '" target="_blank" rel="noopener">PDF</a>' : '') + '</div></div>' +
           '<button type="button" class="btn small ' + (url ? 'ghost' : '') + '" data-action="edit" data-tab="files" data-key="' + esc(rowKey(r)) + '" aria-label="Edit ' + esc(r.Name) + '">' + (url ? 'Edit' : 'Add link') + '</button></div>';
       }).join('') + '</div>';
   }).join('') + '</div>';
@@ -2899,7 +2920,7 @@ function fieldHtml(f, value) {
   if (f.t === 'area') {
     control = '<textarea class="area" id="' + id + '" name="' + esc(f.k) + '">' + esc(v) + '</textarea>';
   } else if (f.t === 'pic' || f.t === 'list') {
-    const opts = f.t === 'pic' ? S.team.map(m => [m.code, m.code + ' · ' + m.name]) : (f.opts || list(f.list)).map(o => [o, o]);
+    const opts = f.t === 'pic' ? S.team.map(m => [m.code, m.name + ' (' + m.code + ')']) : (f.opts || list(f.list)).map(o => [o, o]);
     if (v && !opts.some(o => o[0] === String(v))) opts.unshift([String(v), String(v)]);
     control = '<select class="select" id="' + id + '" name="' + esc(f.k) + '"><option value="">–</option>' +
       opts.map(o => '<option value="' + esc(o[0]) + '"' + (String(v) === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>').join('') + '</select>';
@@ -3032,9 +3053,9 @@ function openConnectStep2(url, pv) {
   const stat = (n, label) => '<div class="imp-stat"><b class="num">' + n + '</b><span>' + label + '</span></div>';
   const sample = (rows, fmt) => rows.map(r => '<div>' + fmt(r) + '</div>').join('');
   const samples = [
-    sample(pv.samples.drawings.slice(0, 2), r => '<b>' + esc(r.Code) + '</b> ' + esc(r.Title) + ' · ' + esc(r.Progress || '–')),
-    sample(pv.samples.daily.slice(0, 2), r => '<b>' + esc(fmtDate(r.Date)) + '</b> ' + esc(r.PIC) + ' · ' + esc(r.Task || r.Notes)),
-    sample(pv.samples.tasks.slice(0, 2), r => '<b>Task</b> ' + esc(r.Task) + (r.Deadline ? ' · ' + esc(fmtDate(r.Deadline)) : '')),
+    sample(pv.samples.drawings.slice(0, 2), r => '<b>' + esc(r.Code) + '</b> ' + esc(r.Title) + ', ' + esc(r.Progress || '–')),
+    sample(pv.samples.daily.slice(0, 2), r => '<b>' + esc(fmtDate(r.Date)) + '</b> ' + esc(r.PIC) + ', ' + esc(r.Task || r.Notes)),
+    sample(pv.samples.tasks.slice(0, 2), r => '<b>Task</b> ' + esc(r.Task) + (r.Deadline ? ', due ' + esc(fmtDate(r.Deadline)) : '')),
   ].join('');
   const nothing = !c.tasks && !c.daily && !c.drawings && !c.files && !pv.info.Client;
   const wrap = mountDrawer('Connect an existing dashboard',
