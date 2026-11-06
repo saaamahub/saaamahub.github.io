@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261022-134823"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261106-094457"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -269,6 +269,7 @@ a.nav-item { text-decoration: none; }
 .notes-list { margin: 0; padding-left: 16px; font-size: 13px; line-height: 1.45; color: var(--ink); }
 .notes-list li { overflow-wrap: anywhere; }
 .notes-empty { font-size: 13px; opacity: 0; }
+.field-hint { display: block; margin-top: 6px; font-size: 13px; color: var(--muted); line-height: 1.4; }
 .pill-select.pp-none { background-color: transparent !important; color: var(--muted) !important; font-weight: 400; opacity: 0; transition: opacity .12s; }
 .proj-row:hover .pill-select.pp-none, .pill-select.pp-none:focus { opacity: 1; background-color: var(--hover) !important; }
 @media (hover: none) { .pill-select.pp-none, .notes-empty { opacity: 1; } }
@@ -284,8 +285,9 @@ a.nav-item { text-decoration: none; }
 .ps-delayed { background-color: #D7E3F2 !important; color: #2F5683 !important; }
 .ps-inactive { background-color: #F0DCCB !important; color: #8A4B22 !important; }
 .ps-completed { background-color: #E3E3DE !important; color: #55554F !important; }
+.ps-prospective { background-color: #DDE3EA !important; color: #3E4C5E !important; }
 .sdot.ps-going { background: #4E9A5B !important; } .sdot.ps-waiting { background: #B5577D !important; } .sdot.ps-delayed { background: #4B7BB5 !important; }
-.sdot.ps-inactive { background: #B8692F !important; } .sdot.ps-completed { background: #8C8C84 !important; }
+.sdot.ps-inactive { background: #B8692F !important; } .sdot.ps-completed { background: #8C8C84 !important; } .sdot.ps-prospective { background: #6B7B90 !important; }
 .pp-very-high { background-color: #F6D3CF !important; color: #A1281B !important; }
 .pp-high { background-color: #F8DFC6 !important; color: #A24B0E !important; }
 .pp-medium { background-color: #F3E6B8 !important; color: #6E5710 !important; }
@@ -299,7 +301,7 @@ a.nav-item { text-decoration: none; }
 .nav-grp .nav-group { font-size: 12.5px; font-weight: 600; color: var(--g); margin: 6px 10px 2px; display: flex; align-items: center; gap: 6px; }
 .nav-grp .nav-group .num { margin-left: auto; font-weight: 600; letter-spacing: 0; opacity: .8; }
 .nav-grp .nav-group .sdot { background: var(--g) !important; background-color: var(--g) !important; }
-.g-going { --g: #8FD39C; } .g-waiting { --g: #F2A9C8; } .g-delayed { --g: #9DC1F0; } .g-inactive { --g: #EDB07E; } .g-completed { --g: #C9C9C0; }
+.g-going { --g: #8FD39C; } .g-waiting { --g: #F2A9C8; } .g-delayed { --g: #9DC1F0; } .g-inactive { --g: #EDB07E; } .g-completed { --g: #C9C9C0; } .g-prospective { --g: #B4C2D3; }
 .side-status { width: calc(100% - 16px); margin: 8px 8px 4px; font-size: 13px; padding: 5px 8px; background-color: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.18); }
 .side-status option { color: #222; }
 .swatch.custom { display: inline-grid; place-items: center; background: conic-gradient(#e57373, #ffd54f, #81c784, #64b5f6, #ba68c8, #e57373); }
@@ -690,6 +692,7 @@ html[data-theme="dark"] .ps-waiting, html[data-theme="forest"] .ps-waiting { bac
 html[data-theme="dark"] .ps-delayed, html[data-theme="forest"] .ps-delayed { background-color: #233650 !important; color: #AFC8EA !important; }
 html[data-theme="dark"] .ps-inactive, html[data-theme="forest"] .ps-inactive { background-color: #4A3021 !important; color: #F0BE96 !important; }
 html[data-theme="dark"] .ps-completed, html[data-theme="forest"] .ps-completed { background-color: #3A3A36 !important; color: #CFCFC6 !important; }
+html[data-theme="dark"] .ps-prospective, html[data-theme="forest"] .ps-prospective { background-color: #2E3743 !important; color: #BCC8D8 !important; }
 html[data-theme="dark"] .pp-very-high, html[data-theme="forest"] .pp-very-high { background-color: #4E2420 !important; color: #F4AFA6 !important; }
 html[data-theme="dark"] .pp-high, html[data-theme="forest"] .pp-high { background-color: #4A3020 !important; color: #F3C391 !important; }
 html[data-theme="dark"] .pp-medium, html[data-theme="forest"] .pp-medium { background-color: #45391A !important; color: #EBD58C !important; }
@@ -997,12 +1000,14 @@ function ptag(id, text) {
   return '<span class="ptag' + a.cls + '"' + a.style + '>' + esc(text) + '</span>';
 }
 // Status, prioritas & kategori project (disimpan di registry)
-const PSTATUS = ['Going', 'Waiting', 'Delayed', 'Inactive', 'Completed'];
+const PSTATUS = ['Prospective', 'Going', 'Waiting', 'Delayed', 'Inactive', 'Completed'];
+/** Prospective (calon project) cuma bisa dipilih akun yang diizinkan (Settings PROSPECT_VIEWERS). */
+function statusOpts(cur) { return PSTATUS.filter(x => x !== 'Prospective' || S.canProspect || cur === 'Prospective'); }
 const PRIORITIES = ['Very High', 'High', 'Medium', 'Low', 'Very Low'];
 const CATEGORIES = ['Residential', 'Commercial', 'F&B', 'Office', 'Retail', 'Hospitality', 'Healthcare', 'Sport', 'Education', 'Other'];
 function pStatus(p) { const s = String((p && p.status) || '').trim(); return PSTATUS.indexOf(s) > -1 ? s : 'Going'; }
 function pKey(v) { return String(v || '').toLowerCase().replace(/[^a-z]+/g, '-'); }
-/** Urutkan project: Going → Waiting → Delayed → Inactive → Completed (urutan registry dipertahankan di dalam grup). */
+/** Urutkan project: Prospective → Going → Waiting → Delayed → Inactive → Completed (urutan registry dipertahankan di dalam grup). */
 function statusOf(p) { const r = projectById(p.id); return pStatus(r.id ? r : p); }
 function sortProjects(arr) {
   return arr.map((p, i) => [p, i]).sort((a, b) => PSTATUS.indexOf(statusOf(a[0])) - PSTATUS.indexOf(statusOf(b[0])) || a[1] - b[1]).map(x => x[0]);
@@ -1012,7 +1017,7 @@ function metaSelect(id, field, cur, opts, cls, label) {
     (cur ? '' : '<option value="" selected>Set ' + esc(label.toLowerCase()) + '</option>') +
     opts.map(o => '<option' + (o === cur ? ' selected' : '') + '>' + esc(o) + '</option>').join('') + '</select>';
 }
-function statusSelect2(p) { const st = pStatus(p); return metaSelect(p.id, 'Current Status', st, PSTATUS, 'ps ps-' + pKey(st), 'Project status'); }
+function statusSelect2(p) { const st = pStatus(p); return metaSelect(p.id, 'Current Status', st, statusOpts(st), 'ps ps-' + pKey(st), 'Project status'); }
 function prioritySelect(p) {
   const pr = projectById(p.id).priority || p.priority || '';
   return metaSelect(p.id, 'Priority', pr, PRIORITIES, 'pp ' + (pr ? 'pp-' + pKey(pr) : 'pp-none'), 'Priority');
@@ -1279,7 +1284,7 @@ function readBootCache() {
 }
 function applyBoot(d, fresh) {
   const b = d.bootstrap;
-  Object.assign(S, { user: b.user, studio: b.studio, team: b.team, lists: b.lists, projects: b.projects, palette: b.palette || [] });
+  Object.assign(S, { user: b.user, studio: b.studio, team: b.team, lists: b.lists, projects: b.projects, palette: b.palette || [], canProspect: !!b.canProspect });
   S.overview = d.overview; S.overviewAt = fresh ? Date.now() : 0;
   document.title = S.studio + ' · Project Hub';
   if (fresh) store.set('boot', JSON.stringify({ email: store.get('email'), data: d }));
@@ -1287,7 +1292,7 @@ function applyBoot(d, fresh) {
 function saveBootCache() {
   if (!S.user || !S.overview) return;
   store.set('boot', JSON.stringify({ email: store.get('email'), data: {
-    bootstrap: { user: S.user, studio: S.studio, team: S.team, lists: S.lists, projects: S.projects, palette: S.palette }, overview: S.overview } }));
+    bootstrap: { user: S.user, studio: S.studio, team: S.team, lists: S.lists, projects: S.projects, palette: S.palette, canProspect: S.canProspect }, overview: S.overview } }));
 }
 function startView() {
   renderShell();
@@ -1336,7 +1341,7 @@ function feeHref() { return FEE_URL + '#t=' + encodeURIComponent(S.token || '');
 
 async function refreshBootstrap() {
   const b = await call('bootstrap');
-  Object.assign(S, { team: b.team, lists: b.lists, projects: b.projects, palette: b.palette || [] });
+  Object.assign(S, { team: b.team, lists: b.lists, projects: b.projects, palette: b.palette || [], canProspect: !!b.canProspect });
   renderSidebar(); saveBootCache();
 }
 
@@ -1587,7 +1592,7 @@ function renderSidebar() {
     (S.view === 'project' && S.projectId === p.id ? ' aria-current="page"' : '') + '>' +
     (a => '<span class="stage-dot' + (p.stage === 'Completed' ? ' s-done' : '') + a.cls + '"' + a.style + ' title="' + esc(p.stage) + '"></span>')(colorAttr(projColor(p.id), true)) +
     '<span class="pname">' + esc(p.name || p.code) + '</span></button>';
-  // daftar project dikelompokkan per status (Going → Completed)
+  // daftar project dikelompokkan per status (Prospective → Completed)
   // tiap status punya blok sendiri: judul berwarna + garis kiri, supaya gampang dibedakan
   const grouped = list => PSTATUS.map(st => {
     const ps = list.filter(p => pStatus(p) === st);
@@ -1610,7 +1615,7 @@ function renderSidebar() {
       '<div class="proj-filter" role="group" aria-label="Filter project">' + [['all', 'All'], ['pic', 'My PIC'], ['task', 'My tasks']].map(o =>
         '<button type="button" data-action="proj-filter" data-v="' + o[0] + '" aria-pressed="' + (pf === o[0]) + '" title="' + (o[0] === 'pic' ? 'Projects where you\'re the PIC' : o[0] === 'task' ? 'Projects with tasks/drawings/revisions assigned to you' : 'All projects') + '">' + o[1] + '</button>').join('') + '</div>' +
       '<select class="select side-status" data-change="proj-status-filter" aria-label="Filter by project status"><option value="">All statuses</option>' +
-        PSTATUS.map(x => '<option' + (sf === x ? ' selected' : '') + '>' + x + '</option>').join('') + '</select>' +
+        statusOpts().map(x => '<option' + (sf === x ? ' selected' : '') + '>' + x + '</option>').join('') + '</select>' +
       '<nav class="nav">' + (active.length ? grouped(active) :
         '<p class="muted" style="padding:0 8px;font-size:14px">' + (all.length ? 'No projects match this filter.' : 'No projects yet.') + '</p>') + '</nav>' +
       (archived.length ? '<button type="button" class="nav-item muted" data-action="toggle-archived" style="margin-top:6px;font-size:13px">' +
@@ -2790,7 +2795,8 @@ const INFO_FIELDS = [
   { k: 'Scope', label: 'Scope', t: 'text', hint: 'Interior Design, Architecture…' },
   { k: 'PIC', label: 'PIC', t: 'pic' },
   { k: 'Stage', label: 'Stage', t: 'list', list: 'Stage' },
-  { k: 'Current Status', label: 'Project status', t: 'list', opts: PSTATUS },
+  { k: 'Current Status', label: 'Project status', t: 'list', get opts() { return statusOpts(); },
+    get hint() { return S.canProspect ? 'Prospective: only you can see it, and its files aren\'t shared with the team yet' : ''; } },
   { k: 'Priority', label: 'Priority', t: 'list', opts: PRIORITIES },
   { k: 'Category', label: 'Category', t: 'list', opts: CATEGORIES },
   { k: 'Start Date', label: 'Start', t: 'date' },
@@ -2923,7 +2929,8 @@ function fieldHtml(f, value) {
     const opts = f.t === 'pic' ? S.team.map(m => [m.code, m.name + ' (' + m.code + ')']) : (f.opts || list(f.list)).map(o => [o, o]);
     if (v && !opts.some(o => o[0] === String(v))) opts.unshift([String(v), String(v)]);
     control = '<select class="select" id="' + id + '" name="' + esc(f.k) + '"><option value="">–</option>' +
-      opts.map(o => '<option value="' + esc(o[0]) + '"' + (String(v) === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>').join('') + '</select>';
+      opts.map(o => '<option value="' + esc(o[0]) + '"' + (String(v) === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>').join('') + '</select>' +
+      (f.t === 'list' && f.hint ? '<small class="field-hint">' + esc(f.hint) + '</small>' : '');
   } else {
     const type = f.t === 'date' ? (isYmd(v) || v === '' ? 'date' : 'text') : f.t === 'url' ? 'url' : 'text';
     control = '<input class="input" id="' + id + '" name="' + esc(f.k) + '" type="' + type + '" value="' + esc(v) + '"' +
@@ -3564,7 +3571,12 @@ document.addEventListener('change', e => {
   } else if (el.dataset.change === 'drive-mode') { driveModeUi();
   } else if (el.dataset.change === 'proj-meta') {
     const ch = {}; ch[el.dataset.field] = el.value;
+    const was = pStatus(projectById(el.dataset.id));
     saveInfo(ch, el.dataset.id); rerenderView();
+    if (el.dataset.field === 'Current Status') {
+      if (el.value === 'Prospective') toast('Now hidden from the team in the Hub. Files already shared in Drive stay shared.');
+      else if (was === 'Prospective') toast('Visible to the team now. Sheet and folder are being shared with them.');
+    }
   } else if (el.dataset.change === 'proj-status-filter') { store.set('projStatus', el.value); renderSidebar();
   } else if (el.dataset.change === 'custom-color') {
     const pid = el.dataset.id, c = el.value.toUpperCase();
