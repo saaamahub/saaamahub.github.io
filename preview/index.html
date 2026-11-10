@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261106-094457"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261110-101040"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -251,6 +251,16 @@ a.nav-item { text-decoration: none; }
 .head-summary .late { color: var(--terra-ink); font-weight: 600; }
 .arch-tag { display: inline-block; margin-left: 10px; font-size: 13px; font-weight: 600; padding: 2px 8px; border-radius: 3px; background: var(--cream); color: var(--ink); vertical-align: 2px; }
 .thead { font-size: 12.5px; font-weight: 500; color: var(--muted); padding: 0 6px 8px; display: grid; gap: 14px; }
+.sort-btn { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; border-radius: 3px; padding: 2px 4px; margin: -2px -4px; white-space: nowrap; }
+.sort-btn:hover { color: var(--ink); background: var(--hover); }
+.sort-btn:focus-visible { outline: 2px solid var(--accent); }
+.sort-btn.on { color: var(--ink); font-weight: 600; }
+.sort-btn svg { width: 10px; height: 10px; opacity: 0; flex: none; }
+.sort-btn:hover svg { opacity: .45; }
+.sort-btn.on svg { opacity: 1; }
+.sort-btn.desc svg { transform: rotate(180deg); }
+.sort-reset { all: unset; cursor: pointer; font-size: 13px; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; margin-left: 14px; }
+.sort-reset:hover { color: var(--ink); }
 
 .proj-row, .proj-head { grid-template-columns: 112px minmax(160px, 1.3fr) minmax(150px, 1.1fr) 104px 56px minmax(170px, 1.5fr) 72px 44px 44px; }
 .ov-scroll { overflow-x: auto; margin: 0 -6px; padding: 0 6px; }
@@ -1012,6 +1022,61 @@ function statusOf(p) { const r = projectById(p.id); return pStatus(r.id ? r : p)
 function sortProjects(arr) {
   return arr.map((p, i) => [p, i]).sort((a, b) => PSTATUS.indexOf(statusOf(a[0])) - PSTATUS.indexOf(statusOf(b[0])) || a[1] - b[1]).map(x => x[0]);
 }
+// ---------- Sort tabel Project overview (per user, cuma di browser; sheet tidak berubah) ----------
+// arah pertama per kolom = yang paling berguna; klik lagi = dibalik; klik ketiga = urutan default
+const OV_COLS = [
+  ['status', 'Status', 1], ['name', 'Project', 1], ['stage', 'Stage', 1], ['priority', 'Priority', 1],
+  ['pic', 'PIC', 1], ['notes', 'Notes', 1], ['drawings', 'Drawings', -1], ['rev', 'Rev.', -1], ['late', 'Late', -1],
+];
+function ovSortKey() { return 'ovsort:' + ((S.user && S.user.email) || ''); }
+function ovSort() { try { const v = JSON.parse(store.get(ovSortKey()) || 'null'); return v && OV_COLS.some(c => c[0] === v.k) ? v : null; } catch (e) { return null; } }
+function setOvSort(k) {
+  const col = OV_COLS.find(c => c[0] === k), cur = ovSort();
+  if (!col) return;
+  let next = { k: k, d: col[2] };
+  if (cur && cur.k === k) next = cur.d === col[2] ? { k: k, d: -col[2] } : null;
+  if (next) store.set(ovSortKey(), JSON.stringify(next)); else store.del(ovSortKey());
+}
+/** Nilai untuk sort; null = kosong, selalu ditaruh paling bawah. */
+function ovValue(p, k) {
+  const meta = Object.assign({}, p, projectById(p.id).id ? projectById(p.id) : {});
+  const txt = v => { v = String(v || '').trim().toLowerCase(); return v || null; };
+  const idx = (list, v) => { const i = list.indexOf(v); return i > -1 ? i : null; };
+  switch (k) {
+    case 'status': return PSTATUS.indexOf(statusOf(p));
+    case 'name': return txt(projectName(p));
+    case 'stage': { const st = (p.info && p.info.Stage) || p.stage; if (!st) return null; const i = stages().indexOf(st); return i > -1 ? i : 99; }
+    case 'priority': return idx(PRIORITIES, meta.priority || '');
+    case 'pic': { const c = (p.info && p.info.PIC) || p.pic; return c ? txt(memberName(c)) : null; }
+    case 'notes': return txt(meta.notes);
+    case 'drawings': return p.drawings && p.drawings.total ? p.drawings.progress : null;
+    case 'rev': return p.revisions ? p.revisions.open : null;
+    case 'late': return p.tasks ? p.tasks.overdue : null;
+  }
+  return null;
+}
+function sortOverview(arr) {
+  const base = sortProjects(arr), so = ovSort();
+  if (!so) return base;
+  const rows = base.map((p, i) => [p, i, ovValue(p, so.k)]);
+  rows.sort((a, b) => {
+    if (a[2] === null || b[2] === null) return (a[2] === null) - (b[2] === null) || a[1] - b[1];
+    const c = typeof a[2] === 'string' ? a[2].localeCompare(b[2]) : a[2] - b[2];
+    return c * so.d || a[1] - b[1];
+  });
+  return rows.map(r => r[0]);
+}
+const SORT_SVG = '<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 2 9 8H1z" fill="currentColor"/></svg>';
+function ovHeadHtml() {
+  const so = ovSort();
+  return '<div class="thead proj-head">' + OV_COLS.map(c => {
+    const on = so && so.k === c[0];
+    const asc = on ? so.d === 1 : true;
+    return '<span><button type="button" class="sort-btn' + (on ? ' on' + (asc ? '' : ' desc') : '') + '" data-action="ov-sort" data-k="' + c[0] + '"' +
+      ' aria-pressed="' + (on ? 'true' : 'false') + '" title="Sort by ' + c[1].replace('.', '') + '">' + c[1] + SORT_SVG + '</button></span>';
+  }).join('') + '</div>';
+}
+
 function metaSelect(id, field, cur, opts, cls, label) {
   return '<select class="pill-select ' + cls + '" data-change="proj-meta" data-id="' + esc(id) + '" data-field="' + esc(field) + '" aria-label="' + esc(label) + '">' +
     (cur ? '' : '<option value="" selected>Set ' + esc(label.toLowerCase()) + '</option>') +
@@ -1756,9 +1821,10 @@ function paintHome() {
 
   page.innerHTML = head +
     '<section class="section"><div class="section-head"><h2>Project overview</h2><span class="muted num status-count">' +
-        PSTATUS.map(st => [st, projects.filter(p => statusOf(p) === st).length]).filter(x => x[1]).map(x => '<span><i class="sdot ps-' + pKey(x[0]) + '"></i>' + x[0] + ' ' + x[1] + '</span>').join('') + '</span></div>' +
-      '<div class="ov-scroll"><div class="ov-table"><div class="thead proj-head"><span>Status</span><span>Project</span><span>Stage</span><span>Priority</span><span>PIC</span><span>Notes</span><span>Drawings</span><span>Rev.</span><span>Late</span></div>' +
-      '<div class="rows">' + sortProjects(projects).map(projRowHtml).join('') + '</div></div></div></section>' +
+        PSTATUS.map(st => [st, projects.filter(p => statusOf(p) === st).length]).filter(x => x[1]).map(x => '<span><i class="sdot ps-' + pKey(x[0]) + '"></i>' + x[0] + ' ' + x[1] + '</span>').join('') +
+        (ovSort() ? '<button type="button" class="sort-reset" data-action="ov-sort-reset">Reset sort</button>' : '') + '</span></div>' +
+      '<div class="ov-scroll"><div class="ov-table">' + ovHeadHtml() +
+      '<div class="rows">' + sortOverview(projects).map(projRowHtml).join('') + '</div></div></div></section>' +
     '<div class="grid-2">' +
       '<section class="section"><div class="section-head"><h2>Due in the next 7 days</h2>' +
         '<span class="muted num">' + upcoming.length + (upcoming.length === 1 ? ' task' : ' tasks') + '</span></div>' + deadlines + '</section>' +
@@ -3449,6 +3515,8 @@ document.addEventListener('click', async e => {
     case 'close-drawer': closeDrawer(); break;
     case 'pick-buddy': closeNav(); openProfile(); break;
     case 'proj-filter': store.set('projFilter', el.dataset.v); renderSidebar(); break;
+    case 'ov-sort': setOvSort(el.dataset.k); rerenderView(); { const b = $('.sort-btn[data-k="' + el.dataset.k + '"]'); if (b) b.focus(); } break;
+    case 'ov-sort-reset': store.del(ovSortKey()); rerenderView(); break;
     case 'new-choice': if (el.dataset.v === 'import') openConnectStep1(''); else openDrawer('newproject', null, { Stage: stages()[0], PIC: S.user.code, 'Current Status': 'Going' }); break;
     case 'auth': authPanel(el.dataset.mode, '', { ident: el.dataset.ident || ($('#lg-email') ? $('#lg-email').value.trim() : '') || ($('#fg-ident') ? $('#fg-ident').value.trim() : '') }); break;
     case 'profile-buddy': {
