@@ -334,6 +334,7 @@
       s3: '3.  Investasi Desain ( Fee Proposal )',
       areaCalc: 'Luas Area Design Terhitung : ', perM2: 'Harga Desain per m² : ',
       totalFee: 'TOTAL FEE DESAIN ARSITEKTUR ( ', afterCb: 'Fee After Cashback',
+      cbNote: 'Client mendapatkan fasilitas cashback apabila scope pekerjaan dilanjutkan sampai tahap konstruksi.',
       bonusIntro: 'Nilai tersebut sudah termasuk beberapa fasilitas tambahan seperti :',
       s4a: '4.  ', s4b: 'Term Of Payment', tableHead: 'Tahap Pembayaran Persentase Nominal',
       terms: 'Ketentuan:', termsNote: 'Invoice jatuh tempo maksimal 7 hari kalender setelah dikirimkan. Bila terdapat keterlambatan pembayaran > 14 hari, pekerjaan dihentikan sementara hingga pembayaran diterima.',
@@ -360,6 +361,7 @@
       s3: '3.  Design Investment ( Fee Proposal )',
       areaCalc: 'Calculated Design Area : ', perM2: 'Design Fee per m² : ',
       totalFee: 'TOTAL ARCHITECTURAL DESIGN FEE ( ', afterCb: 'Fee After Cashback',
+      cbNote: 'The client is entitled to this cashback if the scope of work continues through to the construction stage.',
       bonusIntro: 'This fee already includes the following additional facilities :',
       s4a: '4.  ', s4b: 'Terms Of Payment', tableHead: 'Payment Stage Percentage Amount',
       terms: 'Terms:', termsNote: 'Invoices are due no later than 7 calendar days after issuance. If payment is delayed by more than 14 days, work will be suspended until payment is received.',
@@ -493,6 +495,9 @@
       var cbr = [R('>', 700, { c: BLACK }), R('CASHBACK', 700, { c: BLACK, u: true })];
       if (p.cashbackShowPct) cbr.push(R(' ' + (p.cashbackType === 'nominal' ? E.rupiah(money.cashback) : E.num(+p.cashbackValue || 0) + '%'), 700, { c: BLACK }));
       inv.push(P(cbr));
+      // cashback hanya berlaku kalau konstruksi juga dikerjakan studio
+      inv.push(P([R(S.cbNote, 700, { c: BLACK })]));
+      inv.push(BLANK);
       inv.push(P([R(S.afterCb, 700, { c: BLACK })]));
       inv.push(P([R(E.rupiah(money.final) + ' ( ' + E.terbilang(money.final, lang) + ' )', 700, { c: GREEN })]));
     }
