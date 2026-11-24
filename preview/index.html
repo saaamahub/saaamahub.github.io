@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261124-155912"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261124-171651"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -904,6 +904,7 @@ if (darkMq && darkMq.addEventListener) darkMq.addEventListener('change', () => {
 // Dua mode: dibuka dari link Apps Script (google.script.run), atau dari saaamahub.github.io (fetch ke Web app URL).
 const API_URL = window.HUB_API || '';
 const VIA_FETCH = !(window.google && window.google.script && window.google.script.run) && !!API_URL;
+let lastCallAt = Date.now(); // dipakai warmServer()
 const READ_ACTIONS = { boot: 1, bootstrap: 1, overview: 1, project: 1, activity: 1, previewConnect: 1 };
 function handleRaw(action, raw, sentToken) {
   let res;
@@ -931,6 +932,7 @@ function fetchApi(action, payload, attempt) {
   });
 }
 function call(action, payload) {
+  lastCallAt = Date.now();
   const tok = S.token;
   if (VIA_FETCH) return fetchApi(action, payload).then(raw => handleRaw(action, raw, tok));
   return new Promise((resolve, reject) => {
@@ -1516,7 +1518,9 @@ function prefetchAll() {
 
 // ---------- Simpan di belakang (optimistic) ----------
 // Perubahan langsung tampil, lalu dikirim ke GSheets satu per satu sesuai urutan klik.
-const Q = { jobs: [], busy: false, failed: {} };
+const Q = { jobs: [], busy: false, failed: {}, inflight: 0 };
+let BATCH_OK = true; // false kalau server belum punya Speed.gs (rute batch)
+const BATCH_MAX = 30;
 function hasPending(pid) { return Q.jobs.some(j => j.pid === pid); }
 function cleanRow(r) { const o = {}; Object.keys(r || {}).forEach(k => { if (k[0] !== '_' || k === '_row') o[k] = r[k]; }); return o; }
 function markBase(row) { if (!row._base) row._base = cleanRow(row); row._pending = (row._pending || 0) + 1; }
@@ -1525,25 +1529,54 @@ function enqueue(job) {
   savebar();
   if (!Q.busy) runQueue();
 }
+const ROW_JOBS = { add: 1, update: 1, delete: 1 };
+/** Perubahan baris berurutan di project yang sama yang bisa dikirim sekaligus (baris yang barusan ditambah tidak ikut diubah). */
+function takeBatch() {
+  const head = Q.jobs[0];
+  if (!BATCH_OK || !ROW_JOBS[head.type]) return [head];
+  const out = [head], added = new Set(head.type === 'add' ? [head.row] : []);
+  for (let i = 1; i < Q.jobs.length && out.length < BATCH_MAX; i++) {
+    const j = Q.jobs[i];
+    if (j.pid !== head.pid || !ROW_JOBS[j.type]) break;
+    if (j.type !== 'add' && (added.has(j.row) || !j.row._row)) break;
+    if (j.type === 'add') added.add(j.row);
+    out.push(j);
+  }
+  return out;
+}
+function jobFailed(job, err) {
+  Q.failed[job.pid] = true;
+  const msg = String(err.message || 'Something went wrong.').replace(/\s*Muat ulang( data| dulu)?\.?\s*$/i, '');
+  toast('Couldn\'t save: ' + msg + ' Data reloaded from Google Sheets.', { error: true });
+  // perubahan lanjutan untuk baris yang gagal ditambahkan tidak bisa dikirim
+  if (job.type === 'add') Q.jobs = Q.jobs.filter(j => j === job || j.row !== job.row);
+}
 async function runQueue() {
   Q.busy = true;
   while (Q.jobs.length) {
-    const job = Q.jobs[0];
-    try { await runJob(job); }
-    catch (err) {
-      if (err.code === 'AUTH') { Q.jobs = []; break; }
-      Q.failed[job.pid] = true;
-      const msg = String(err.message || 'Something went wrong.').replace(/\s*Muat ulang( data| dulu)?\.?\s*$/i, '');
-      toast('Couldn\'t save: ' + msg + ' Data reloaded from Google Sheets.', { error: true });
-      // perubahan lanjutan untuk baris yang gagal ditambahkan tidak bisa dikirim
-      if (job.type === 'add') Q.jobs = Q.jobs.filter((j, i) => i === 0 || j.row !== job.row);
+    const batch = takeBatch();
+    Q.inflight = batch.length;
+    let stop = false;
+    try {
+      if (batch.length > 1) await runBatch(batch);
+      else await runJob(batch[0]);
+    } catch (err) {
+      if (err.code === 'AUTH') { Q.jobs = []; stop = true; }
+      else if (err.code === 'UNKNOWN_ACTION' && batch.length > 1) { BATCH_OK = false; Q.inflight = 0; continue; } // server lama: kirim satu-satu
+      else jobFailed(batch[0], err);
     }
-    Q.jobs.shift();
-    if (job.row && job.row._pending) job.row._pending--;
-    (job.rows || []).forEach(r => { if (r._pending) r._pending--; });
+    Q.inflight = 0;
+    if (stop) break;
+    batch.forEach(job => {
+      const i = Q.jobs.indexOf(job);
+      if (i > -1) Q.jobs.splice(i, 1);
+      if (job.row && job.row._pending) job.row._pending--;
+      (job.rows || []).forEach(r => { if (r._pending) r._pending--; });
+    });
     savebar();
-    if (!hasPending(job.pid)) settleProject(job.pid);
+    if (!hasPending(batch[0].pid)) settleProject(batch[0].pid);
   }
+  Q.inflight = 0;
   Q.busy = false;
   savebar(true);
   invalidateOverview();
@@ -1584,6 +1617,32 @@ async function runJob(job) {
     if (res.meta && res.meta.driveFolder !== undefined && d.info) d.info['Drive Folder'] = res.meta.driveFolder;
   }
 }
+/** Beberapa perubahan baris sekaligus (satu request). Hasil per baris sama seperti runJob. */
+async function runBatch(batch) {
+  const pid = batch[0].pid;
+  const ops = batch.map(job => {
+    const op = { type: job.type, tab: job.tab };
+    if (job.type === 'add') op.record = job.record;
+    else { op.row = job.row._row; op.orig = cleanRow(job.row._base || job.row); if (job.record) op.record = job.record; }
+    return op;
+  });
+  const res = await call('batch', { id: pid, ops: ops });
+  const d = S.cache[pid];
+  (res.results || []).forEach((r, i) => {
+    const job = batch[i];
+    if (r.error) { jobFailed(job, Object.assign(new Error(r.error.message), { code: r.error.code })); return; }
+    if (r.row && job.row) { job.row._row = r.row._row; job.row._base = cleanRow(r.row); delete job.row._tmp; }
+  });
+  if (d) {
+    Object.keys(res.tabs || {}).forEach(tab => {
+      const t = res.tabs[tab];
+      d._fresh = d._fresh || {};
+      d._fresh[tab] = t.rows;
+      if (t.meta) d._freshMeta = Object.assign(d._freshMeta || {}, t.meta);
+      if (t.meta && t.meta.driveFolder !== undefined && d.info) d.info['Drive Folder'] = t.meta.driveFolder;
+    });
+  }
+}
 /** Semua perubahan project ini sudah terkirim: pakai isi sheet terbaru (atau muat ulang kalau ada yang gagal). */
 function settleProject(pid) {
   const d = S.cache[pid];
@@ -1621,6 +1680,16 @@ function savebar(finished) {
 }
 window.addEventListener('beforeunload', e => { if (Q.jobs.length) { e.preventDefault(); e.returnValue = ''; } });
 
+// Jaga server tetap "hangat" selama Hub terbuka, supaya simpan pertama tidak kena jeda awal Apps Script.
+let PING_OK = true;
+function warmServer() {
+  if (!PING_OK || !S.token || document.hidden || Date.now() - lastCallAt < 3 * 60000) return;
+  lastCallAt = Date.now();
+  call('ping', {}).catch(err => { if (err && err.code === 'UNKNOWN_ACTION') PING_OK = false; });
+}
+setInterval(warmServer, 60000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) warmServer(); });
+
 /** Render ulang project tanpa mengganggu orang yang lagi ngetik. */
 let renderWaiting = false;
 function render(force) {
@@ -1641,9 +1710,15 @@ function localAdd(tab, record) {
   return row;
 }
 function localUpdate(tab, row, record, pid) {
-  markBase(row);
+  // edit beruntun di baris yang sama: digabung ke perubahan yang belum terkirim, jadi cukup sekali simpan
+  const target = pid || S.projectId;
+  let last = -1;
+  for (let i = Q.jobs.length - 1; i >= 0; i--) if (Q.jobs[i].row === row) { last = i; break; }
+  const j = last >= Q.inflight ? Q.jobs[last] : null;
+  if (j && j.type === 'update' && j.tab === tab && j.pid === target) { Object.assign(row, record); Object.assign(j.record, record); savebar(); return; }
+  markBase(row); // simpan isi sebelum diubah (untuk cek bentrok di sheet)
   Object.assign(row, record);
-  enqueue({ pid: pid || S.projectId, tab: tab, type: 'update', row: row, record: record });
+  enqueue({ pid: target, tab: tab, type: 'update', row: row, record: Object.assign({}, record) });
 }
 function localDelete(tab, row) {
   markBase(row);
