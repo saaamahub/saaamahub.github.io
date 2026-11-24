@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="SAAAMA Hub">
 <title>Studio SAAAMA · Project Hub</title>
-<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261124-155613"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
+<script>window.HUB_API = "https://script.google.com/macros/s/AKfycbyP2jilSa_YoqVroYIaqd3am96WO_LP7cX2ytUKd4uJmd7f8K-Mi6rcpJUT9Yz5IXza/exec"; window.HUB_VERSION = "20261124-155912"; window.HUB_STORE_PREFIX = "saaamapv:";</script>
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/open-sauce-one@5.3.0/latin-300.css">
@@ -599,6 +599,12 @@ button.gt-label:focus-visible { outline: 2px solid var(--accent); outline-offset
 .gt-head .gt-track { display: flex; }
 .gt-col { flex: none; font-size: 12px; color: var(--muted); padding: 10px 6px; border-left: 1px solid var(--line); font-weight: 500; white-space: nowrap; overflow: hidden; }
 .gt-col.now { color: var(--ink); font-weight: 600; }
+.gt-col.gt-day { padding: 4px 0 6px; text-align: center; display: flex; flex-direction: column; align-items: center; line-height: 1.25; font-size: 11px; }
+.gt-col.gt-day b { font-size: 13px; font-weight: 600; color: var(--ink); }
+.gt-col.gt-day .gt-mon { font-size: 10.5px; font-weight: 600; color: var(--ink); }
+.gt-col.gt-day.we { background: color-mix(in srgb, var(--line) 45%, transparent); }
+.gt-col.gt-day.now { background: var(--terra-bg); }
+.gt-col.gt-day.now b, .gt-col.gt-day.now span { color: var(--terra-ink); }
 .gt-grid { position: absolute; inset: 0; pointer-events: none; }
 .gt-sum { position: absolute; top: 12px; height: 14px; border-radius: 2px; background: var(--line-strong); opacity: .9; }
 .gt-sum.pc-custom, .gt-sum[class*="pc-"] { opacity: .85; }
@@ -1877,7 +1883,7 @@ function ovPrefKey(k) { return k + ':' + ((S.user && S.user.email) || ''); }
 function ovPref(k, def) { try { const v = store.get(ovPrefKey(k)); return v == null ? def : v; } catch (e) { return def; } }
 function setOvPref(k, v) { try { store.set(ovPrefKey(k), v); } catch (e) {} }
 function ovView() { return ovPref('ovview', 'table') === 'timeline' ? 'timeline' : 'table'; }
-function ovtlScale() { return ovPref('ovtl-scale', 'week') === 'month' ? 'month' : 'week'; }
+function ovtlScale() { const v = ovPref('ovtl-scale', 'week'); return v === 'month' || v === 'day' ? v : 'week'; }
 function ovtlOpen() { try { return new Set(JSON.parse(ovPref('ovtl-open', '[]'))); } catch (e) { return new Set(); } }
 function setOvtlOpen(set) { setOvPref('ovtl-open', JSON.stringify(Array.from(set))); }
 let OVTL_SCROLL = null; // posisi scroll horizontal dipertahankan saat render ulang
@@ -1898,7 +1904,7 @@ function taskCls(t, today) {
 function ovTimelineHtml(projects) {
   const list = ovtlData(projects);
   if (!list.length) return emptyState('No open tasks', 'Projects show up here once they have tasks that aren\'t done yet.');
-  const today = todayStr(), scale = ovtlScale(), PX = scale === 'month' ? 6 : 22;
+  const today = todayStr(), scale = ovtlScale(), PX = scale === 'month' ? 6 : scale === 'day' ? 34 : 22;
   let min = today, max = today;
   list.forEach(x => x.tasks.forEach(t => { const sp = taskSpan(t); if (sp) { if (sp[0] < min) min = sp[0]; if (sp[1] > max) max = sp[1]; } }));
   let start, end;
@@ -1906,8 +1912,9 @@ function ovTimelineHtml(projects) {
     start = min.slice(0, 8) + '01';
     const m = parseYmd(max), nx = new Date(m.getFullYear(), m.getMonth() + 2, 0); // sampai akhir bulan setelah deadline terakhir end = nx.getFullYear() + '-' + String(nx.getMonth() + 1).padStart(2, '0') + '-' + String(nx.getDate()).padStart(2, '0');
   } else {
+    // week & day: mulai Senin, selesai Minggu (2 minggu setelah deadline terakhir untuk week, 1 minggu untuk day)
     start = addDays(min, -((parseYmd(min).getDay() + 6) % 7));
-    end = addDays(max, 20 - ((parseYmd(max).getDay() + 6) % 7));
+    end = addDays(max, (scale === 'day' ? 13 : 20) - ((parseYmd(max).getDay() + 6) % 7));
   }
   const days = dayDiff(start, end) + 1, W = days * PX;
   const x = d => dayDiff(start, d) * PX;
@@ -1922,13 +1929,24 @@ function ovTimelineHtml(projects) {
       cols.push('<span class="gt-col num' + (today.slice(0, 7) === d.slice(0, 7) ? ' now' : '') + '" style="width:' + (n * PX) + 'px">' + MONTHS[dt.getMonth()] + ' ' + dt.getFullYear() + '</span>');
       d = nd;
     }
+  } else if (scale === 'day') {
+    const WD = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    for (let d = start; d <= end; d = addDays(d, 1)) {
+      const dt = parseYmd(d), first = d === start || dt.getDate() === 1;
+      cols.push('<span class="gt-col gt-day num' + (d === today ? ' now' : '') + ([0, 6].indexOf(dt.getDay()) > -1 ? ' we' : '') + '" style="width:' + PX + 'px"' +
+        ' title="' + esc(DAYS[dt.getDay()] + ' ' + fmtDate(d, true)) + '">' +
+        '<span class="gt-mon">' + (first ? MONTHS[dt.getMonth()] : '&nbsp;') + '</span><b>' + dt.getDate() + '</b><span>' + WD[dt.getDay()] + '</span></span>');
+    }
   } else {
     for (let d = start; d <= end; d = addDays(d, 7)) {
       const now = today >= d && today < addDays(d, 7);
       cols.push('<span class="gt-col num' + (now ? ' now' : '') + '" style="width:' + (7 * PX) + 'px">' + fmtDate(d) + '</span>');
     }
   }
-  const grid = '<span class="gt-grid" style="background:repeating-linear-gradient(90deg,transparent 0 ' + (7 * PX - 1) + 'px,var(--line) ' + (7 * PX - 1) + 'px ' + (7 * PX) + 'px);opacity:' + (scale === 'month' ? '.45' : '.8') + '"></span>';
+  const grid = scale === 'day'
+    // garis per hari + arsir Sabtu-Minggu (start selalu Senin)
+    ? '<span class="gt-grid" style="background:repeating-linear-gradient(90deg,transparent 0 ' + (5 * PX) + 'px,color-mix(in srgb,var(--line) 45%,transparent) ' + (5 * PX) + 'px ' + (7 * PX) + 'px),repeating-linear-gradient(90deg,transparent 0 ' + (PX - 1) + 'px,var(--line) ' + (PX - 1) + 'px ' + PX + 'px);opacity:.8"></span>'
+    : '<span class="gt-grid" style="background:repeating-linear-gradient(90deg,transparent 0 ' + (7 * PX - 1) + 'px,var(--line) ' + (7 * PX - 1) + 'px ' + (7 * PX) + 'px);opacity:' + (scale === 'month' ? '.45' : '.8') + '"></span>';
   const todayLine = '<span class="tl-today" style="left:' + (x(today) + PX / 2) + 'px" title="Today"></span>';
   const track = inner => '<div class="gt-track" style="width:' + W + 'px">' + grid + todayLine + inner + '</div>';
   const open = ovtlOpen();
@@ -1966,7 +1984,7 @@ function ovTimelineHtml(projects) {
   }).join('');
   const headRow = '<div class="gt-row gt-head"><div class="gt-label">Project</div><div class="gt-track" style="width:' + W + 'px">' + cols.join('') + '</div></div>';
   return '<div class="gt-bar-tools"><div class="seg-ctl" role="group" aria-label="Timeline scale">' +
-      ['week', 'month'].map(v => '<button type="button" data-action="ovtl-scale" data-v="' + v + '" aria-pressed="' + (scale === v) + '">' + (v === 'week' ? 'Week' : 'Month') + '</button>').join('') + '</div>' +
+      [['day', 'Day'], ['week', 'Week'], ['month', 'Month']].map(v => '<button type="button" data-action="ovtl-scale" data-v="' + v[0] + '" aria-pressed="' + (scale === v[0]) + '">' + v[1] + '</button>').join('') + '</div>' +
       '<div class="ov-tools"><button type="button" class="sort-reset" style="margin:0" data-action="ovtl-all" data-v="open">Expand all</button>' +
       '<button type="button" class="sort-reset" style="margin:0" data-action="ovtl-all" data-v="close">Collapse all</button></div></div>' +
     '<div class="gt-scroll" id="gt-scroll" data-today="' + x(today) + '">' + headRow + rows + '</div>' +
